@@ -16,38 +16,11 @@
 > 
 > You trust us enough to use our software. We ask that you trust us to say the truth on this. We need your help. Go out and protest this unnecessary war. Stop the bloodshed. Say "stop the war!"
 
-## Introduction
+## AIB Sales Funnnel Introduction
 
-This is a skeleton application using the Laminas MVC layer and module
-systems. This application is meant to be used as a starting place for those
-looking to get their feet wet with Laminas MVC.
+This is AIB insurance sales funnel logic designed to increase the use of social media as a sales funnel
 
-## Installation using Composer
 
-The easiest way to create a new Laminas MVC project is to use
-[Composer](https://getcomposer.org/). If you don't have it already installed,
-then please install as per the [documentation](https://getcomposer.org/doc/00-intro.md).
-
-To create your new Laminas MVC project:
-
-```bash
-$ composer create-project -sdev laminas/laminas-mvc-skeleton path/to/install
-```
-
-Once installed, you can test it out immediately using PHP's built-in web server:
-
-```bash
-$ cd path/to/install
-$ php -S 0.0.0.0:8080 -t public
-# OR use the composer alias:
-$ composer run --timeout 0 serve
-```
-
-This will start the cli-server on port 8080, and bind it to all network
-interfaces. You can then visit the site at http://localhost:8080/
-- which will bring up Laminas MVC Skeleton welcome page.
-
-**Note:** The built-in CLI server is *for development only*.
 
 ## Development mode
 

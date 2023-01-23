@@ -3,6 +3,7 @@
 
 namespace Application\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 class Roles {
@@ -32,6 +33,12 @@ class Roles {
     protected $parents;
 
 
+    public function __construct()
+    {
+        $this->parents = new ArrayCollection();
+    }
+
+
     public function getId(){
         return $this->id;
     }
@@ -53,6 +60,32 @@ class Roles {
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    
+
+    /**
+     * Get the value of parents
+     *
+     * @return  Array
+     */ 
+    public function getParents()
+    {
+        return $this->parents;
+    }
+
+    /**
+     * Set the value of parents
+     *
+     * @param  Array  $parents
+     *
+     * @return  self
+     */ 
+    public function setParents(Array $parents)
+    {
+        $this->parents = $parents;
 
         return $this;
     }

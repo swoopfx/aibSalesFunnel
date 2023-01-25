@@ -1,5 +1,4 @@
 <?php
-
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -62,11 +61,25 @@ class User {
     protected $registrationToken;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="email_confirmed", type="boolean", nullable=false)
      */
     protected $emailConfirmed;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \Datetime
+     */
+    protected $createdOn;
+
+     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \Datetime
+     */
+    protected $updatedOn;
 
     
 
@@ -178,6 +191,126 @@ class User {
     public function setRole(Roles $role)
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of registrationDate
+     *
+     * @return  \DateTime
+     */ 
+    public function getRegistrationDate()
+    {
+        return $this->registrationDate;
+    }
+
+    /**
+     * Set the value of registrationDate
+     *
+     * @param  \DateTime  $registrationDate
+     *
+     * @return  self
+     */ 
+    public function setRegistrationDate(\DateTime $registrationDate)
+    {
+        $this->registrationDate = $registrationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of registrationToken
+     *
+     * @return  string
+     */ 
+    public function getRegistrationToken()
+    {
+        return $this->registrationToken;
+    }
+
+    /**
+     * Set the value of registrationToken
+     *
+     * @param  string  $registrationToken
+     *
+     * @return  self
+     */ 
+    public function setRegistrationToken(string $registrationToken)
+    {
+        $this->registrationToken = $registrationToken;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of emailConfirmed
+     *
+     * @return  boolean
+     */ 
+    public function getEmailConfirmed()
+    {
+        return $this->emailConfirmed;
+    }
+
+    /**
+     * Set the value of emailConfirmed
+     *
+     * @param  boolean  $emailConfirmed
+     *
+     * @return  self
+     */ 
+    public function setEmailConfirmed(bool $emailConfirmed)
+    {
+        $this->emailConfirmed = $emailConfirmed;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of createdOn
+     *
+     * @return  Datetime
+     */ 
+    public function getCreatedOn()
+    {
+        return $this->createdOn;
+    }
+
+    /**
+     * Set the value of createdOn
+     *
+     * @param  \Datetime  $createdOn
+     *
+     * @return  self
+     */ 
+    public function setCreatedOn(\Datetime $createdOn)
+    {
+        $this->createdOn = $createdOn;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of updatedOn
+     *
+     * @return  \Datetime
+     */ 
+    public function getUpdatedOn()
+    {
+        return $this->updatedOn;
+    }
+
+    /**
+     * Set the value of updatedOn
+     *
+     * @param  \Datetime  $updatedOn
+     *
+     * @return  self
+     */ 
+    public function setUpdatedOn(\Datetime $updatedOn)
+    {
+        $this->updatedOn = $updatedOn;
 
         return $this;
     }

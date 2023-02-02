@@ -4,6 +4,10 @@ namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="uploads")
+ */
 class Uploads {
 
     /**
@@ -68,13 +72,13 @@ class Uploads {
      */
     private $docCode;
 
-    /**
-     *
-     * @var \GeneralServicer\Entity\DocumentStatus @ORM\ManyToOne(targetEntity="GeneralServicer\Entity\DocumentStatus")
-     *      @ORM\JoinColumns({
-     *      @ORM\JoinColumn(name="doc_status", referencedColumnName="id")
-     *      })
-     */
-    private $docStatus;
+    // /**
+    //  *
+    //  * @var \GeneralServicer\Entity\DocumentStatus @ORM\ManyToOne(targetEntity="GeneralServicer\Entity\DocumentStatus")
+    //  *      @ORM\JoinColumns({
+    //  *      @ORM\JoinColumn(name="doc_status", referencedColumnName="id")
+    //  *      })
+    //  */
+    // private $docStatus;
 
 }

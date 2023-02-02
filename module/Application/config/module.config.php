@@ -58,15 +58,15 @@ return [
 
     'doctrine' => [
         'doctrine' => [
-            // 'authentication' => [
-            //     'orm_default' => [
-            //         'object_manager' => EntityManager::class,
-            //         'identity_class' => User::class,
-            //         'identity_property' => 'username',
-            //         'credential_property' => 'password',
-            //         'credential_callable' => "Authentication\Service\AuthenticationService::verifyHashedPassword"
-            //     ],
-            // ],
+            'authentication' => [
+                'orm_default' => [
+                    'object_manager' => EntityManager::class,
+                    // 'identity_class' => User::class,
+                    'identity_property' => 'username',
+                    'credential_property' => 'password',
+                    'credential_callable' => "Authentication\Service\AuthenticationService::verifyHashedPassword"
+                ],
+            ],
         ],
 
         'driver' => [
@@ -84,4 +84,22 @@ return [
             )
         ]
     ],
+
+    // 'driver' => [
+    //     'orm_crawler_annotation' => [
+    //         'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
+    //         'cache' => 'array',
+    //         'paths' => [
+    //             __DIR__ . '/../src/Crawler/Entity',
+    //         ],
+    //     ],
+    //     'orm_crawler_chain' => [
+    //         'class'   => \Doctrine\ORM\Mapping\Driver\DriverChain::class,
+    //         'drivers' => [
+    //             'Crawler\Entity' =>  'orm_crawler_annotation',
+    //         ],
+    //     ],
+    // ],
+
+    
 ];

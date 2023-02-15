@@ -54,6 +54,8 @@ return [
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            "partials-rtl-menu" =>__DIR__ . '/../view/partial/rtl-menu.phtml',
+            "partials-top-menu" =>__DIR__ . '/../view/partial/top-menu.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',

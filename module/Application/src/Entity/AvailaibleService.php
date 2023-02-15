@@ -50,6 +50,13 @@ class AvailaibleService
      */
     private $createdOn;
 
+     /**
+     * Undocumented variable
+     * @ORM\Column(type="datetime", nullable=false)
+     * @var \Datetime
+     */
+    private $updatedOn;
+
 
     public function __construct()
     {

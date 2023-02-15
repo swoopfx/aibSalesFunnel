@@ -25,7 +25,11 @@ return [
             'application' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/application[/:action]',
+                    'route'    => '/app[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9]*'
+                    ),
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
                         'action'     => 'index',

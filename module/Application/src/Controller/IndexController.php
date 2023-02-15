@@ -55,4 +55,20 @@ class IndexController extends AbstractActionController
         $viewModel = new ViewModel();
         return $viewModel;
     }
+
+
+    public function motorAction(){
+        $viewModel = new ViewModel();
+
+        return $viewModel;
+    }
+
+
+    public function marineCargoAction(){
+        return new ViewModel();
+    }
+
+    public function travelinsuranceAction(){
+        return new ViewModel();
+    }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Application;
 
+use Application\Service\Factory\GeneralServiceFactory;
+use Application\Service\GeneralService;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
@@ -54,8 +56,8 @@ return [
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
-            "partials-rtl-menu" =>__DIR__ . '/../view/partial/rtl-menu.phtml',
-            "partials-top-menu" =>__DIR__ . '/../view/partial/top-menu.phtml',
+            "partials-rtl-menu" => __DIR__ . '/../view/partial/rtl-menu.phtml',
+            "partials-top-menu" => __DIR__ . '/../view/partial/top-menu.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
@@ -107,5 +109,14 @@ return [
     //     ],
     // ],
 
-    
+    'service_manager' => [
+        "factories" => [
+            GeneralService::class => GeneralServiceFactory::class,
+        ],
+        "aliases"=>[
+            "general_service"=>GeneralService::class,
+        ]
+    ]
+
+
 ];

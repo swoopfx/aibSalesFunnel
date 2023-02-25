@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Form;
 
 use Laminas\InputFilter\InputFilter;
@@ -8,13 +9,17 @@ use Laminas\Validator\EmailAddress;
 use Laminas\Validator\Identical;
 use Laminas\Validator\StringLength;
 
-class RegisterInputFilter extends InputFilter{
+class RegisterInputFilter extends InputFilter
+{
+
+    private $entityManager;
 
 
-    public function __construct(){
+    public function __construct()
+    {
 
         $this->add(array(
-            'name' => 'username',
+            'name' => 'phonenumber',
             'required' => true,
             "allow_empty" => false,
             'filters' => array(
@@ -44,7 +49,7 @@ class RegisterInputFilter extends InputFilter{
                             "username"
                         ],
                         "messages" => [
-                            NoObjectExists::ERROR_NO_OBJECT_FOUND => "please use another identity"
+                            NoObjectExists::ERROR_NO_OBJECT_FOUND => "please use another Phone number"
                         ]
                     ]
                 ],
@@ -52,11 +57,11 @@ class RegisterInputFilter extends InputFilter{
                     'name' => StringLength::class,
                     'options' => array(
                         'messages' => array(),
-                        'min' => 6,
-                        'max' => 256,
+                        'min' => 10,
+                        'max' => 11,
                         'messages' => array(
-                            StringLength::TOO_SHORT => 'Try Something more longer',
-                            StringLength::TOO_LONG => 'Could you really remember this long identity'
+                            StringLength::TOO_SHORT => 'Please provide a valid number',
+                            StringLength::TOO_LONG => 'We think this is not a valid Phone Number'
                         )
                     ),
                 ]
@@ -81,20 +86,20 @@ class RegisterInputFilter extends InputFilter{
                     'name' => 'NotEmpty',
                     'options' => array(
                         'messages' => array(
-                            'isEmpty' => 'Full Name is required'
+                            'isEmpty' => 'What do we call you, we need to know'
                         )
                     )
                 ),
-                
+
                 [
                     'name' => StringLength::class,
                     'options' => array(
                         'messages' => array(),
-                        'min' => 6,
+                        'min' => 2,
                         'max' => 256,
                         'messages' => array(
-                            StringLength::TOO_SHORT => 'Try Something more longer',
-                            StringLength::TOO_LONG => 'Could you really remember this long identity'
+                            StringLength::TOO_SHORT => 'We dont think you are Chinese',
+                            StringLength::TOO_LONG => 'How to you refer to such long name'
                         )
                     ),
                 ]
@@ -153,7 +158,7 @@ class RegisterInputFilter extends InputFilter{
                             )
                         ),
 
-                       
+
                     ),
                     array(
                         'name' => 'EmailAddress',
@@ -170,18 +175,12 @@ class RegisterInputFilter extends InputFilter{
             )
         ]);
 
+
+
         $this->add([
-            "password" => array(
+            "emailVerify" => array(
                 "required" => true,
                 "allow_empty" => false,
-                "filters" => array(
-                    array(
-                        'name' => 'StripTags'
-                    ),
-                    array(
-                        'name' => 'StringTrim'
-                    )
-                ),
                 "validators" => array(
                     array(
                         'name' => 'StringLength',
@@ -190,14 +189,52 @@ class RegisterInputFilter extends InputFilter{
                             'min' => 6,
                             'max' => 50,
                             "messages" => array(
-                                StringLength::TOO_SHORT => "The password must be more than 6 characters",
-                                StringLength::TOO_LONG => "This password is too long to memorize"
+                                StringLength::TOO_SHORT => "The email must be more than 6 characters",
+                                StringLength::TOO_LONG => "This email is too long to memorize"
+                            )
+                        )
+                    ),
+                    array(
+                        'name' => 'EmailAddress',
+
+                        'options' => array(
+
+                            'messages' => array(
+                                EmailAddress::INVALID_FORMAT => 'Please check your email something is not right'
+                            )
+                        )
+                    ),
+                    array(
+                        'name' => 'Identical',
+                        'options' => array(
+                            'token' => 'email',
+                            "messages" => array(
+                                Identical::NOT_SAME => "The email are not identical"
                             )
                         )
                     )
                 )
             )
         ]);
+    }
 
+    /**
+     * Get the value of entityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
+
+    /**
+     * Set the value of entityManager
+     *
+     * @return  self
+     */
+    public function setEntityManager($entityManager)
+    {
+        $this->entityManager = $entityManager;
+
+        return $this;
     }
 }

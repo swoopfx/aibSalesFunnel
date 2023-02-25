@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -8,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  */
 
-class User {
+class User
+{
 
     /**
      *
@@ -49,7 +51,7 @@ class User {
      */
     private $role;
 
-     /**
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="registration_date", type="datetime", nullable=true)
@@ -78,22 +80,40 @@ class User {
      */
     protected $createdOn;
 
-     /**
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      *
      * @var \Datetime
      */
     protected $updatedOn;
 
-    
+    /**
+     * @ORM\Column(nullable=false)
+     * @var string
+     */
 
-    public function getId(){
+    private $Uuid;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
+     *
+     * @var boolean
+     */
+    private $isActive;
+
+
+
+
+
+
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
      * Get the value of phonenumber
-     */ 
+     */
     public function getPhonenumber()
     {
         return $this->phonenumber;
@@ -103,7 +123,7 @@ class User {
      * Set the value of phonenumber
      *
      * @return  self
-     */ 
+     */
     public function setPhonenumber($phonenumber)
     {
         $this->phonenumber = $phonenumber;
@@ -113,7 +133,7 @@ class User {
 
     /**
      * Get the value of email
-     */ 
+     */
     public function getEmail()
     {
         return $this->email;
@@ -123,7 +143,7 @@ class User {
      * Set the value of email
      *
      * @return  self
-     */ 
+     */
     public function setEmail($email)
     {
         $this->email = $email;
@@ -133,7 +153,7 @@ class User {
 
     /**
      * Get the value of password
-     */ 
+     */
     public function getPassword()
     {
         return $this->password;
@@ -143,7 +163,7 @@ class User {
      * Set the value of password
      *
      * @return  self
-     */ 
+     */
     public function setPassword($password)
     {
         $this->password = $password;
@@ -155,7 +175,7 @@ class User {
      * Get undocumented variable
      *
      * @return  string
-     */ 
+     */
     public function getFullname()
     {
         return $this->fullname;
@@ -167,7 +187,7 @@ class User {
      * @param  string  $fullname  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setFullname(string $fullname)
     {
         $this->fullname = $fullname;
@@ -179,7 +199,7 @@ class User {
      * Get the value of role
      *
      * @return  Roles
-     */ 
+     */
     public function getRole()
     {
         return $this->role;
@@ -191,7 +211,7 @@ class User {
      * @param  Roles  $role
      *
      * @return  self
-     */ 
+     */
     public function setRole(Roles $role)
     {
         $this->role = $role;
@@ -203,7 +223,7 @@ class User {
      * Get the value of registrationDate
      *
      * @return  \DateTime
-     */ 
+     */
     public function getRegistrationDate()
     {
         return $this->registrationDate;
@@ -215,7 +235,7 @@ class User {
      * @param  \DateTime  $registrationDate
      *
      * @return  self
-     */ 
+     */
     public function setRegistrationDate(\DateTime $registrationDate)
     {
         $this->registrationDate = $registrationDate;
@@ -227,7 +247,7 @@ class User {
      * Get the value of registrationToken
      *
      * @return  string
-     */ 
+     */
     public function getRegistrationToken()
     {
         return $this->registrationToken;
@@ -239,7 +259,7 @@ class User {
      * @param  string  $registrationToken
      *
      * @return  self
-     */ 
+     */
     public function setRegistrationToken(string $registrationToken)
     {
         $this->registrationToken = $registrationToken;
@@ -251,7 +271,7 @@ class User {
      * Get the value of emailConfirmed
      *
      * @return  boolean
-     */ 
+     */
     public function getEmailConfirmed()
     {
         return $this->emailConfirmed;
@@ -263,7 +283,7 @@ class User {
      * @param  boolean  $emailConfirmed
      *
      * @return  self
-     */ 
+     */
     public function setEmailConfirmed(bool $emailConfirmed)
     {
         $this->emailConfirmed = $emailConfirmed;
@@ -275,7 +295,7 @@ class User {
      * Get the value of createdOn
      *
      * @return  Datetime
-     */ 
+     */
     public function getCreatedOn()
     {
         return $this->createdOn;
@@ -287,11 +307,11 @@ class User {
      * @param  \Datetime  $createdOn
      *
      * @return  self
-     */ 
+     */
     public function setCreatedOn(\Datetime $createdOn)
     {
         $this->createdOn = $createdOn;
-
+        $this->updatedOn = $createdOn;
         return $this;
     }
 
@@ -299,7 +319,7 @@ class User {
      * Get the value of updatedOn
      *
      * @return  \Datetime
-     */ 
+     */
     public function getUpdatedOn()
     {
         return $this->updatedOn;
@@ -311,10 +331,54 @@ class User {
      * @param  \Datetime  $updatedOn
      *
      * @return  self
-     */ 
+     */
     public function setUpdatedOn(\Datetime $updatedOn)
     {
         $this->updatedOn = $updatedOn;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  bool  $isActive  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setIsActive(bool $isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Uuid
+     */
+    public function getUuid()
+    {
+        return $this->Uuid;
+    }
+
+    /**
+     * Set the value of Uuid
+     *
+     * @return  self
+     */
+    public function setUuid($Uuid)
+    {
+        $this->Uuid = $Uuid;
 
         return $this;
     }

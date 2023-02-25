@@ -27,7 +27,8 @@
         "laminas/laminas-di": "^3.2.2",
         "doctrine/doctrine-orm-module": "^5.3",
         "aws/aws-sdk-php": "^3.257",
-        "doctrine/migrations": "3.4"
+        "doctrine/migrations": "3.4",
+        "ramsey/uuid": "^4.2"
     },
     "autoload": {
         "psr-4": {

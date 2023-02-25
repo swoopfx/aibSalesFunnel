@@ -2,10 +2,20 @@
 
 namespace Application\Service;
 
+use Laminas\Session\Container;
+
 class FunnelSession {
 
 
     private $funnelSession;
+
+
+    public function __construct()
+    {
+        $funnelSession = new Container('aib-funnel');
+        $funnelSession->setExpirationSeconds(43200);
+        $this->funnelSession = $funnelSession;
+    }
 
     /**
      * Get the value of funnelSession
@@ -15,15 +25,5 @@ class FunnelSession {
         return $this->funnelSession;
     }
 
-    /**
-     * Set the value of funnelSession
-     *
-     * @return  self
-     */ 
-    public function setFunnelSession($funnelSession)
-    {
-        $this->funnelSession = $funnelSession;
-
-        return $this;
-    }
+    
 }

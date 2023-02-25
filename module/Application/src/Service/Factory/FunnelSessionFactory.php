@@ -22,9 +22,8 @@ class FunnelSessionFactory implements FactoryInterface {
         // ]);
         // $sessionManager = new SessionManager($sessionConfig);
         // Container::setDefaultManager($sessionManager);
-        $funnelSession = new Container('aib-funnel');
-        $funnelSession->setExpirationSeconds(43200);
-        $xserv->setFunnelSession($funnelSession);
+       
+        // $xserv->setFunnelSession($funnelSession);
         return $xserv;
     }
 }

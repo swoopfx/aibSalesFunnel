@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Application;
 
+use Application\Form\Factory\RegisterInputFilterFactory;
+use Application\Form\LoginInputFilter;
+use Application\Form\RegisterInputFilter;
 use Application\Service\Factory\GeneralServiceFactory;
 use Application\Service\GeneralService;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -116,7 +119,14 @@ return [
         "aliases"=>[
             "general_service"=>GeneralService::class,
         ]
-    ]
+        ],
+
+        "input_filters"=>[
+            "factories"=>[
+                RegisterInputFilter::class=>RegisterInputFilterFactory::class,
+                LoginInputFilter::class=>InvokableFactory::class
+            ]
+        ]
 
 
 ];

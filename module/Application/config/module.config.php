@@ -7,7 +7,9 @@ namespace Application;
 use Application\Form\Factory\RegisterInputFilterFactory;
 use Application\Form\LoginInputFilter;
 use Application\Form\RegisterInputFilter;
+use Application\Service\Factory\FunnelSessionFactory;
 use Application\Service\Factory\GeneralServiceFactory;
+use Application\Service\FunnelSession;
 use Application\Service\GeneralService;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Laminas\Router\Http\Literal;
@@ -115,18 +117,20 @@ return [
     'service_manager' => [
         "factories" => [
             GeneralService::class => GeneralServiceFactory::class,
+            FunnelSession::class => FunnelSessionFactory::class
         ],
-        "aliases"=>[
-            "general_service"=>GeneralService::class,
+        "aliases" => [
+            "general_service" => GeneralService::class,
+            "funnel_session" => FunnelSession::class
         ]
-        ],
+    ],
 
-        "input_filters"=>[
-            "factories"=>[
-                RegisterInputFilter::class=>RegisterInputFilterFactory::class,
-                LoginInputFilter::class=>InvokableFactory::class
-            ]
+    "input_filters" => [
+        "factories" => [
+            RegisterInputFilter::class => RegisterInputFilterFactory::class,
+            LoginInputFilter::class => InvokableFactory::class
         ]
+    ]
 
 
 ];

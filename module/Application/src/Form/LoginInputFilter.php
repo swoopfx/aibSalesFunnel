@@ -27,7 +27,7 @@ class LoginInputFilter extends InputFilter
                     'name' => 'NotEmpty',
                     'options' => array(
                         'messages' => array(
-                            'isEmpty' => 'Identity is required'
+                            'isEmpty' => 'Please provide a your phone number or email'
                         )
                     )
                 ),

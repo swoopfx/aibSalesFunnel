@@ -9,9 +9,10 @@ use Laminas\View\Model\JsonModel;
 use Application\Form\RegisterInputFilter;
 use Application\Form\LoginInputFilter;
 use Application\Service\UserService;
-use Laminas\Db\Sql\Ddl\Column\Datetime;
+// use Laminas\Db\Sql\Ddl\Column\Datetime;
 use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\EntityManager;
+use Application\Service\FunnelSession;
 
 class AuthController extends AbstractActionController
 {
@@ -30,6 +31,13 @@ class AuthController extends AbstractActionController
      * @var LoginInputFilter
      */
     private $loginInputFilter;
+
+    /**
+     * Undocumented variable
+     *
+     * @var FunnelSession
+     */
+    private $funnelSession;
 
 
     private $generalService;
@@ -52,31 +60,50 @@ class AuthController extends AbstractActionController
         $request = $this->getRequest();
         $response = $this->getResponse();
         $em = $this->entityManager;
-        if($request->isPost()){
+        $loginInputFilter = $this->loginInputFilter;
+        if ($request->isPost()) {
             $post = $request->getPost()->toArray();
-            $phoneOrEmail = '';
-            $user = $em->createQuery("SELECT u FROM Application\Entity\User u WHERE u.email = '$phoneOrEmail' OR u.phonenumber = '$phoneOrEmail'")->getResult(\Doctrine\ORM\Query::HYDRATE_OBJECT);
-            if(count($user) != 0){
-                // Start Funnel Session
-                // return a reload
+            $loginInputFilter->setValidationGroup([
+                "phoneOrEmail"
+            ]);
+            $loginInputFilter->setData($post);
+            if ($loginInputFilter->isValid()) {
+                try {
+                    $phoneOrEmail = '';
+                    /**
+                     * @var User
+                     */
+                    $user = $em->createQuery("SELECT u FROM Application\Entity\User u WHERE u.email = '$phoneOrEmail' OR u.phonenumber = '$phoneOrEmail'")->getResult(\Doctrine\ORM\Query::HYDRATE_OBJECT);
+                    if (count($user) != 0) {
+                        // Start Funnel Session
+                        // return a reload
+                        $sessionData["uuid"] = $user[0]->getUuid();
+                        $sessionData["name"] = $user[0]->getFullname();
+                        $this->funnelSession->createSession($sessionData);
 
-                $response->setStatusCode(200);
-                $jsonModel->setVariables([
-                    "success"=>true,
-                    "user"=>[
-                        "name"=>$user[0]->getFullname(),
-                        "uuid"=>$user[0]->getUuid()
-                    ]
-                ]);
-
-            }else{
-                $response->setStatusCode(400);
-                $jsonModel->setVariables([
-                    "success"=>false,
-                    "message"=>"You need to be registered  first "
-                ]);
+                        $response->setStatusCode(200);
+                        $jsonModel->setVariables([
+                            "success" => true,
+                            "user" => [
+                                "name" => $user[0]->getFullname(),
+                                "uuid" => $user[0]->getUuid()
+                            ]
+                        ]);
+                    } else {
+                        $response->setStatusCode(200);
+                        $jsonModel->setVariables([
+                            "success" => false,
+                            "message" => "You need to be registered  first "
+                        ]);
+                    }
+                } catch (\Throwable $th) {
+                    $response->setStatusCode(400);
+                    $jsonModel->setVariables([
+                        "success" => false,
+                        "message" => $loginInputFilter->getMessages()
+                    ]);
+                }
             }
-
         }
 
         return $jsonModel;
@@ -145,6 +172,14 @@ class AuthController extends AbstractActionController
         return $jsonModel;
     }
 
+    public function logoutAction(){
+        
+        $this->funnelSession->closeSession();
+        $response = $this->getResponse();
+        $response->setStatusCode(204);
+        return new JsonModel();
+    }
+
     /**
      * Get the value of registerInputFilter
      */
@@ -209,7 +244,7 @@ class AuthController extends AbstractActionController
      * Get the value of loginInputFilter
      *
      * @return  LoginInputFilter
-     */ 
+     */
     public function getLoginInputFilter()
     {
         return $this->loginInputFilter;
@@ -221,10 +256,34 @@ class AuthController extends AbstractActionController
      * @param  LoginInputFilter  $loginInputFilter
      *
      * @return  self
-     */ 
+     */
     public function setLoginInputFilter(LoginInputFilter $loginInputFilter)
     {
         $this->loginInputFilter = $loginInputFilter;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  FunnelSession
+     */ 
+    public function getFunnelSession()
+    {
+        return $this->funnelSession;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  FunnelSession  $funnelSession  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setFunnelSession(FunnelSession $funnelSession)
+    {
+        $this->funnelSession = $funnelSession;
 
         return $this;
     }

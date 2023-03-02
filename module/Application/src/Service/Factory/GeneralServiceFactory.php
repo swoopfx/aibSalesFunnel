@@ -2,6 +2,7 @@
 
 namespace Application\Service\Factory;
 
+use Application\Entity\Settings;
 use Application\Service\GeneralService;
 use Doctrine\ORM\EntityManager;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -16,7 +17,8 @@ class GeneralServiceFactory implements FactoryInterface{
 
         $em = $container->get(EntityManager::class);
         // $authService = $container->get("authentication_service");
-        $xserv->setEm($em);
+        $companySetting = $em->find(Settings::class, 1);
+        $xserv->setEm($em)->setCompanySettings($companySetting);
         // ->setAuthService($authService);
         return $xserv;
         

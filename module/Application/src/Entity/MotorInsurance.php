@@ -5,6 +5,7 @@ namespace Application\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Application\Entity\User;
 
 
 /**
@@ -23,11 +24,25 @@ class MotorInsurance
     private $id;
 
     /**
+     * Undocumented variable
+     * @ORM\ManyToOne(targetEntity="User")
+     * @var User
+     */
+    private $user;
+
+    /**
      * Either Thrid Party, comprehensive or custom
      * @ORM\ManyToOne(targetEntity="MotorinsuranceCoverType")
      * @var MotorinsuranceCoverType
      */
     private $coverType;
+
+    /**
+     * Undocumented variable
+     * @ORM\Column(type="string", nullable=false)
+     * @var string
+     */
+    private $uid;
 
     /**
      * Scanned document or liscence
@@ -58,6 +73,39 @@ class MotorInsurance
      * @var Collection
      */
     private Collection $vehicleImage;
+
+    /**
+     * Undocumented variable
+     *
+     * @ORM\ManyToOne(targetEntity="Uploads")
+     * @var Uploads
+     */
+    private $frontImage;
+
+    /**
+     * Undocumented variable
+     * @ORM\ManyToOne(targetEntity="Uploads")
+     * @var Uploads
+     */
+    private $backImage;
+
+
+    /**
+     * Undocumented variable
+     * @ORM\ManyToOne(targetEntity="Uploads")
+     * @var Uploads
+     */
+    private $dashboardImage;
+
+    /**
+     * Undocumented variable
+     * @ORM\ManyToOne(targetEntity="Uploads")
+     * @var Uploads
+     */
+    private $interiorImage;
+
+
+    // private $milag
 
     /**
      * Scanned Means of ID
@@ -99,6 +147,14 @@ class MotorInsurance
     private $updatedOn;
 
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Invoice")
+     *
+     * @var Invoice
+     */
+    private $invoice;
+
+
     public function __construct()
     {
         $this->vehicleImage = new ArrayCollection();
@@ -138,7 +194,7 @@ class MotorInsurance
      * Get scanned document or liscence
      *
      * @return  Uploads
-     */ 
+     */
     public function getVehicleLicense()
     {
         return $this->vehicleLicense;
@@ -150,7 +206,7 @@ class MotorInsurance
      * @param  Uploads  $vehicleLicense  Scanned document or liscence
      *
      * @return  self
-     */ 
+     */
     public function setVehicleLicense(Uploads $vehicleLicense)
     {
         $this->vehicleLicense = $vehicleLicense;
@@ -162,7 +218,7 @@ class MotorInsurance
      * Get scaneed documents
      *
      * @return  Uploads
-     */ 
+     */
     public function getProofOfOwnership()
     {
         return $this->proofOfOwnership;
@@ -174,7 +230,7 @@ class MotorInsurance
      * @param  Uploads  $proofOfOwnership  Scaneed documents
      *
      * @return  self
-     */ 
+     */
     public function setProofOfOwnership(Uploads $proofOfOwnership)
     {
         $this->proofOfOwnership = $proofOfOwnership;
@@ -186,25 +242,26 @@ class MotorInsurance
      * Get )
      *
      * @return  Collection
-     */ 
+     */
     public function getVehicleImage()
     {
         return $this->vehicleImage;
     }
 
 
-    public function addVehicleImage($image){
-        if(!$this->vehicleImage->contains($image)){
+    public function addVehicleImage($image)
+    {
+        if (!$this->vehicleImage->contains($image)) {
             $this->vehicleImage->add($image);
-        
         }
         return $this;
     }
 
 
-    public function removeVehicleImage($image){
-        if($this->vehicleImage->contains($image)){
-            $this->vehicleImage->removeElement($image);  
+    public function removeVehicleImage($image)
+    {
+        if ($this->vehicleImage->contains($image)) {
+            $this->vehicleImage->removeElement($image);
         }
         return $this;
     }
@@ -214,7 +271,7 @@ class MotorInsurance
      * Get scanned Means of ID
      *
      * @return  Uploads
-     */ 
+     */
     public function getMeansOfId()
     {
         return $this->meansOfId;
@@ -226,7 +283,7 @@ class MotorInsurance
      * @param  Uploads  $meansOfId  Scanned Means of ID
      *
      * @return  self
-     */ 
+     */
     public function setMeansOfId(Uploads $meansOfId)
     {
         $this->meansOfId = $meansOfId;
@@ -238,7 +295,7 @@ class MotorInsurance
      * Get value of Car
      *
      * @return  string
-     */ 
+     */
     public function getValueOfCar()
     {
         return $this->valueOfCar;
@@ -250,7 +307,7 @@ class MotorInsurance
      * @param  string  $valueOfCar  Value of Car
      *
      * @return  self
-     */ 
+     */
     public function setValueOfCar(string $valueOfCar)
     {
         $this->valueOfCar = $valueOfCar;
@@ -262,7 +319,7 @@ class MotorInsurance
      * Get currency Car was bought
      *
      * @return  Currency
-     */ 
+     */
     public function getCurrency()
     {
         return $this->currency;
@@ -274,7 +331,7 @@ class MotorInsurance
      * @param  Currency  $currency  Currency Car was bought
      *
      * @return  self
-     */ 
+     */
     public function setCurrency(Currency $currency)
     {
         $this->currency = $currency;
@@ -286,7 +343,7 @@ class MotorInsurance
      * Get undocumented variable
      *
      * @return  \Datetime
-     */ 
+     */
     public function getCreatedOn()
     {
         return $this->createdOn;
@@ -298,7 +355,7 @@ class MotorInsurance
      * @param  \Datetime  $createdOn  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setCreatedOn(\Datetime $createdOn)
     {
         $this->createdOn = $createdOn;
@@ -310,7 +367,7 @@ class MotorInsurance
      * Get the value of updatedOn
      *
      * @return  \Datetime
-     */ 
+     */
     public function getUpdatedOn()
     {
         return $this->updatedOn;
@@ -322,10 +379,178 @@ class MotorInsurance
      * @param  \Datetime  $updatedOn
      *
      * @return  self
-     */ 
+     */
     public function setUpdatedOn(\Datetime $updatedOn)
     {
         $this->updatedOn = $updatedOn;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  Uploads
+     */
+    public function getFrontImage()
+    {
+        return $this->frontImage;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  Uploads  $frontImage  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setFrontImage(Uploads $frontImage)
+    {
+        $this->frontImage = $frontImage;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  [type]
+     */
+    public function getBackImage()
+    {
+        return $this->backImage;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  [type]  $backImage  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setBackImage($backImage)
+    {
+        $this->backImage = $backImage;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  Uploads
+     */
+    public function getDashboardImage()
+    {
+        return $this->dashboardImage;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  Uploads  $dashboardImage  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setDashboardImage(Uploads $dashboardImage)
+    {
+        $this->dashboardImage = $dashboardImage;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  Uploads
+     */
+    public function getInteriorImage()
+    {
+        return $this->interiorImage;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  Uploads  $interiorImage  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setInteriorImage(Uploads $interiorImage)
+    {
+        $this->interiorImage = $interiorImage;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  string
+     */
+    public function getUid()
+    {
+        return $this->uid;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  string  $uid  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setUid(string $uid)
+    {
+        $this->uid = $uid;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  User
+     */ 
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  User  $user  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of invoice
+     *
+     * @return  Invoice
+     */ 
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * Set the value of invoice
+     *
+     * @param  Invoice  $invoice
+     *
+     * @return  self
+     */ 
+    public function setInvoice(Invoice $invoice)
+    {
+        $this->invoice = $invoice;
 
         return $this;
     }

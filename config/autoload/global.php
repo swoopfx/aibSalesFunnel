@@ -13,5 +13,11 @@
  */
 
 return [
-    // ...
+
+    // "aws" => array(
+    //     'credentials' => [
+    //         'key' => 'AKIA6HLPYINC62YTNED2',
+    //         'secret' => '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'
+    //     ]
+    // )
 ];

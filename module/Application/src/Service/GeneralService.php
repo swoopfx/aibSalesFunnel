@@ -1,6 +1,8 @@
 <?php
 namespace Application\Service;
 
+use Application\Entity\Settings;
+
 
 class GeneralService {
 
@@ -10,6 +12,13 @@ class GeneralService {
     private $mail;
 
     private $authService;
+
+    /**
+     * Undocumented function
+     *
+     * @return Settings
+     */
+    private $companySettings;
 
     
 
@@ -69,6 +78,26 @@ class GeneralService {
     public function setAuthService($authService)
     {
         $this->authService = $authService;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented function
+     */ 
+    public function getCompanySettings()
+    {
+        return $this->companySettings;
+    }
+
+    /**
+     * Set undocumented function
+     *
+     * @return  self
+     */ 
+    public function setCompanySettings($companySettings)
+    {
+        $this->companySettings = $companySettings;
 
         return $this;
     }

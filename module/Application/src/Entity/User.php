@@ -92,7 +92,7 @@ class User
      * @var string
      */
 
-    private $Uuid;
+    private $uuid;
 
     /**
      * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
@@ -368,7 +368,7 @@ class User
      */
     public function getUuid()
     {
-        return $this->Uuid;
+        return $this->uuid;
     }
 
     /**
@@ -376,9 +376,9 @@ class User
      *
      * @return  self
      */
-    public function setUuid($Uuid)
+    public function setUuid($uuid)
     {
-        $this->Uuid = $Uuid;
+        $this->uuid = $uuid;
 
         return $this;
     }

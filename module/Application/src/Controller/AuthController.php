@@ -180,6 +180,8 @@ class AuthController extends AbstractActionController
         return new JsonModel();
     }
 
+    // public function 
+
     /**
      * Get the value of registerInputFilter
      */

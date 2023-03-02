@@ -5,6 +5,8 @@ namespace Application\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * 100 thirdparty
+ * 200 comprehensive
  * @ORM\Entity
  * @ORM\Table(name="motor_insurance_covertype")
  */

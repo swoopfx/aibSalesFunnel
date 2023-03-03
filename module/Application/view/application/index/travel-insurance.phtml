@@ -1,4 +1,3 @@
-
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
 	<!--begin::Aside-->
 	<div id="kt_aside" class="aside card" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle" data-kt-sticky="true" data-kt-sticky-name="aside-sticky" data-kt-sticky-offset="{default: false, lg: '200px'}" data-kt-sticky-width="{lg: '265px'}" data-kt-sticky-left="auto" data-kt-sticky-top="95px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
@@ -241,112 +240,15 @@
 										<div class="current" data-kt-stepper-element="content">
 											<div class="w-100">
 
-												<!--begin::Input group-->
-												<div class="fv-row">
-													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-														<span class="required">Select Prefered Service</span>
-														<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Select your app category"></i>
-													</label>
-													<!--end::Label-->
-													<!--begin:Options-->
-													<div class="fv-row">
-
-
-
-
-
-														<div class="row fv-row" id="pService">
-															<!--begin::Col-->
-															<div class="col-xl-6 col-xs-12">
-																<label class="d-flex flex-stack mb-5 cursor-pointer">
-																	<!--begin:Label-->
-																	<span class="d-flex align-items-center me-2">
-																		<!--begin:Icon-->
-																		<span class="symbol symbol-50px me-6">
-																			<span class="symbol-label bg-light-primary">
-																				<!--begin::Svg Icon | path: icons/duotune/maps/map004.svg-->
-																				<span class="svg-icon svg-icon-1 svg-icon-primary">
-																					<img alt="Logo" src="/svg/comprehensive.svg" class="h-30px h-lg-30px logo-default" />
-
-																				</span>
-																				<!--end::Svg Icon-->
-																			</span>
-																		</span>
-																		<!--end:Icon-->
-																		<!--begin:Info-->
-																		<span class="d-flex flex-column">
-																			<span class="fw-bolder fs-6">Comprehensive Insurance </span>
-
-																		</span>
-																		<!--end:Info-->
-																	</span>
-																	<!--end:Label-->
-																	<!--begin:Input-->
-																	<span class="form-check form-check-custom form-check-solid">
-																		<input class="form-check-input" v-model="motortype" value="comprehensive" type="radio" name="auto-category" value="0" />
-																	</span>
-																	<!--end:Input-->
-																</label>
-
-
-
-															</div>
-															<!--end::Col-->
-															<!--begin::Col-->
-															<div class="col-xl-6 col-xs-12">
-																<label class="d-flex flex-stack mb-5 cursor-pointer">
-																	<!--begin:Label-->
-																	<span class="d-flex align-items-center me-2">
-																		<!--begin:Icon-->
-																		<span class="symbol symbol-50px me-6">
-																			<span class="symbol-label bg-light-primary">
-																				<!--begin::Svg Icon | path: icons/duotune/maps/map004.svg-->
-																				<span class="svg-icon svg-icon-1 svg-icon-primary">
-																					<img alt="Logo" src="/svg/thrid-party.svg" class="h-30px h-lg-30px logo-default" />
-
-																				</span>
-																				<!--end::Svg Icon-->
-																			</span>
-																		</span>
-																		<!--end:Icon-->
-																		<!--begin:Info-->
-																		<span class="d-flex flex-column">
-																			<span class="fw-bolder fs-6">Third Party Insurance</span>
-																		</span>
-																		<!--end:Info-->
-																	</span>
-																	<!--end:Label-->
-																	<!--begin:Input-->
-																	<span class="form-check form-check-custom form-check-solid">
-																		<input class="form-check-input" v-model="motortype" value="thirdparty" type="radio" id="auto-category" name="auto-category" value="1" />
-																	</span>
-																	<!--end:Input-->
-																</label>
-															</div>
-															<!--end::Col-->
-														</div>
-
-
-
-
-
-
-													</div>
-													<!--end:Options-->
-												</div>
-												<!--end::Input group-->
+												
+												
 											</div>
 										</div>
 										<hr>
 
-										<div v-if="motortype == 'thirdparty'">
-											<?php echo $this->partial("partials-form-thirdparty") ?>
-										</div>
-										<div v-else-if="motortype == 'comprehensive'">
-											<?php echo $this->partial("partials-form-comprehensive"); ?>
-										</div>
 
+
+										<?= $this->partial("partials-form-travel") ?>
 										<br>
 										<br>
 										<!--end::Actions-->
@@ -387,17 +289,70 @@
 <!--end::Root-->
 
 <script>
-    const travelapp = Vue.createApp({
-        data() {
-            return {
-                wel: "come"
-            }
-        },
+	const travelapp = Vue.createApp({
+		data() {
+			return {
+				wel: "come",
+				travelVariant: "",
+				isLoadedVariant: false,
+				loadedVariant: [],
+				activeVariantDesc: "",
+				activeHeader:"",
+				isActiveVariantDesc:false,
+				isProcessingTravel: true,
+				isGroupList:"No",
+				groupListState:false,
+			}
+		},
+		mounted() {
+			this.getTravelVariant();
+		},
 
-        methods: {
-            sendTravel() {
-                
-            }
-        },
-    })
+		
+
+		methods: {
+
+			toggleGroupList(){
+				this.groupListState = !this.groupListState;
+				if(this.groupListState){
+					this.isGroupList = "Yes";
+				}else{
+					this.isGroupList = "No";
+				}
+			},
+			getTravelVariant() {
+				this.isLoadedVariant = false;
+				axios.get("/travel/get-variant").then(res => {
+					if (res.status == 200) {
+						this.loadedVariant = res.data.data;
+						this.isLoadedVariant = true;
+					}
+				}).catch(err => {
+
+				})
+			},
+
+			getVariantDescription(e){
+				let tar = e.target.value;
+				axios.get("/travel/get-variant-description/"+tar).then(res=>{
+					if(res.status == 200){
+						this.activeVariantDesc = res.data.data;
+						this.activeHeader = res.data.head;
+						this.isActiveVariantDesc = true;
+					}
+				})
+			},
+
+
+			variantAction(e){
+				//this.activeVariantDesc = e.target.
+				console.log(e.target.value);
+			},
+			sendTravel() {
+
+			}
+		},
+	});
+	travelapp.use(VueToast.ToastPlugin);
+	travelapp.mount("#travelv");
 </script>

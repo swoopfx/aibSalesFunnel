@@ -14,58 +14,63 @@ class Country
 
     /**
      *
-     * @var integer @ORM\Column(name="id", type="integer", nullable=false)
+     * @var int @ORM\Column(name="id", type="integer", nullable=false)
      *      @ORM\Id
      *      @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     *
-     * @var string 
-     * @ORM\Column(name="country_name", type="string", length=128, nullable=true)
+     * @ORM\Column(name="name", type="string", nullable=true)
+     * 
+     * @var string
      */
-    private $countryName;
+    private $name;
 
     /**
-     *
-     * @var string 
-     * @ORM\Column(name="iso_code_2", type="string", length=2, nullable=true)
+     * @ORM\Column(name="iso_code_2", type="string", nullable=true)
+     * 
+     * @var string
      */
     private $isoCode2;
 
     /**
-     *
-     * @var string 
-     * @ORM\Column(name="iso_code_3", type="string", length=6, nullable=true)
+     * @ORM\Column(name="iso_code_3", type="string", nullable=true)
+     * 
+     * @var string
      */
     private $isoCode3;
 
     /**
-     *
-     * @var string 
      * @ORM\Column(name="address_format", type="text", nullable=true)
+     * 
+     * @var string
      */
     private $addressFormat;
 
     /**
-     *
-     * @var boolean 
-     * @ORM\Column(name="postcode_required", type="boolean", nullable=true)
+     * @ORM\Column(name="post_code_required", type="boolean", nullable=true)
+     * 
+     * @var boolean
      */
-    private $postcodeRequired;
+    private $postCodeRequired;
 
     /**
-     *
-     * @var boolean 
-     * @ORM\Column(name="status", type="boolean", nullable=true)
+     * @ORM\Column(name="status", type="boolean", nullable=false, options={"default"="1"})
+     * 
+     * @var boolean
      */
-    private $status;
+    private $status = true;
 
     /**
-     * Get id
-     *
-     * @return integer
+     */
+    public function __construct()
+    {
+        
+        // TODO - Insert your code here
+    }
+    /**
+     * @return the $id
      */
     public function getId()
     {
@@ -73,45 +78,15 @@ class Country
     }
 
     /**
-     * Set countryName
-     *
-     * @param string $countryName            
-     * @return Country
+     * @return the $name
      */
-    public function setCountryName($countryName)
+    public function getName()
     {
-        $this->countryName = $countryName;
-        
-        return $this;
+        return $this->name;
     }
 
     /**
-     * Get countryName
-     *
-     * @return string
-     */
-    public function getCountryName()
-    {
-        return $this->countryName;
-    }
-
-    /**
-     * Set isoCode2
-     *
-     * @param string $isoCode2            
-     * @return Country
-     */
-    public function setIsoCode2($isoCode2)
-    {
-        $this->isoCode2 = $isoCode2;
-        
-        return $this;
-    }
-
-    /**
-     * Get isoCode2
-     *
-     * @return string
+     * @return the $isoCode2
      */
     public function getIsoCode2()
     {
@@ -119,22 +94,7 @@ class Country
     }
 
     /**
-     * Set isoCode3
-     *
-     * @param string $isoCode3            
-     * @return Country
-     */
-    public function setIsoCode3($isoCode3)
-    {
-        $this->isoCode3 = $isoCode3;
-        
-        return $this;
-    }
-
-    /**
-     * Get isoCode3
-     *
-     * @return string
+     * @return the $isoCode3
      */
     public function getIsoCode3()
     {
@@ -142,22 +102,7 @@ class Country
     }
 
     /**
-     * Set addressFormat
-     *
-     * @param string $addressFormat            
-     * @return Country
-     */
-    public function setAddressFormat($addressFormat)
-    {
-        $this->addressFormat = $addressFormat;
-        
-        return $this;
-    }
-
-    /**
-     * Get addressFormat
-     *
-     * @return string
+     * @return the $addressFormat
      */
     public function getAddressFormat()
     {
@@ -165,48 +110,81 @@ class Country
     }
 
     /**
-     * Set postcodeRequired
-     *
-     * @param boolean $postcodeRequired            
-     * @return Country
+     * @return the $postCodeRequired
      */
-    public function setPostcodeRequired($postcodeRequired)
+    public function getPostCodeRequired()
     {
-        $this->postcodeRequired = $postcodeRequired;
-        
-        return $this;
+        return $this->postCodeRequired;
     }
 
     /**
-     * Get postcodeRequired
-     *
-     * @return boolean
-     */
-    public function getPostcodeRequired()
-    {
-        return $this->postcodeRequired;
-    }
-
-    /**
-     * Set status
-     *
-     * @param boolean $status            
-     * @return Country
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-        
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return boolean
+     * @return the $status
      */
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @param number $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @param string $isoCode2
+     */
+    public function setIsoCode2($isoCode2)
+    {
+        $this->isoCode2 = $isoCode2;
+        return $this;
+    }
+
+    /**
+     * @param string $isoCode3
+     */
+    public function setIsoCode3($isoCode3)
+    {
+        $this->isoCode3 = $isoCode3;
+        return $this;
+    }
+
+    /**
+     * @param string $addressFormat
+     */
+    public function setAddressFormat($addressFormat)
+    {
+        $this->addressFormat = $addressFormat;
+        return $this;
+    }
+
+    /**
+     * @param boolean $postCodeRequired
+     */
+    public function setPostCodeRequired($postCodeRequired)
+    {
+        $this->postCodeRequired = $postCodeRequired;
+        return $this;
+    }
+
+    /**
+     * @param boolean $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
     }
 }

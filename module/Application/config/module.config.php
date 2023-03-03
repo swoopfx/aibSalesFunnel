@@ -7,6 +7,8 @@ namespace Application;
 use Application\Controller\AuthController;
 use Application\Controller\Factory\AuthControllerFactory;
 use Application\Controller\Factory\IndexControllerFactory;
+use Application\Controller\Factory\TravelControllerFactory;
+use Application\Controller\TravelController;
 use Application\Form\Factory\RegisterInputFilterFactory;
 use Application\Form\LoginInputFilter;
 use Application\Form\RegisterInputFilter;
@@ -52,12 +54,78 @@ return [
                     ],
                 ],
             ],
+
+            'travel' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/travel[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9]*'
+                    ),
+                    'defaults' => [
+                        'controller' => TravelController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
+            'auth' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/auth[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9]*'
+                    ),
+                    'defaults' => [
+                        'controller' => AuthController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
+
+            // 'bbmintraining' => array(
+            //     'type' => 'Segment',
+            //     'options' => array(
+            //         // Change this to something specific to your module
+            //         'route' => '/t[/:action[/:id]]',
+            //         'defaults' => array(
+            //             // Change this value to reflect the namespace in which
+            //             // the controllers for your module are found
+            //             '__NAMESPACE__' => 'Application\Controller',
+            //             'controller' => '',
+            //             'action' => 'index',
+            //         ),
+            //     ),
+            //     'may_terminate' => true,
+            //     'child_routes' => array(
+            //         // This route is a sane default when developing a module;
+            //         // as you solidify the routes for your module, however,
+            //         // you may want to remove it and replace it with more
+            //         // specific routes.
+            //         'default' => array(
+            //             'type' => 'Segment',
+            //             'options' => array(
+            //                 'route' => '[/:action[/:id][/page[/:page]]]',
+            //                 'constraints' => array(
+            //                     'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+            //                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+            //                     "id" => '[a-zA-Z0-9_-]*',
+            //                 ),
+            //                 'defaults' => array(),
+            //             ),
+            //         ),
+            //     ),
+            // ),
         ],
     ],
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => IndexControllerFactory::class,
-            AuthController::class => AuthControllerFactory::class
+            AuthController::class => AuthControllerFactory::class,
+            TravelController::class => TravelControllerFactory::class,
         ],
     ],
     'view_manager' => [
@@ -75,6 +143,7 @@ return [
             "partials-top-menu" => __DIR__ . '/../view/partial/top-menu.phtml',
             "partials-form-thirdparty" => __DIR__ . '/../view/partial/thirdparty.phtml',
             "partials-form-comprehensive" => __DIR__ . '/../view/partial/comprehensive.phtml',
+            "partials-form-travel" => __DIR__ . '/../view/partial/travel-form-partial.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
@@ -133,14 +202,14 @@ return [
         "factories" => [
             GeneralService::class => GeneralServiceFactory::class,
             FunnelSession::class => FunnelSessionFactory::class,
-            UploadService::class=> UploadServiceFactory::class,
+            UploadService::class => UploadServiceFactory::class,
             MotorService::class => MotorServiceFactory::class,
             TransactionService::class => TransactionServiceFactory::class,
         ],
         "aliases" => [
             "general_service" => GeneralService::class,
             "funnel_session" => FunnelSession::class,
-            'upload_service'=>UploadService::class,
+            'upload_service' => UploadService::class,
         ]
     ],
 

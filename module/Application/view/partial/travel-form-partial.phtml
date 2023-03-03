@@ -1,0 +1,222 @@
+<!--begin::Step 4-->
+<div data-kt-stepper-element="content">
+    <div class="w-100">
+        <!--begin::Input group-->
+
+        <!--end::Input group-->
+        <!--begin::Input group-->
+        <div class="d-flex flex-column mb-7 fv-row">
+            <!--begin::Label-->
+            <label class="required fs-6 fw-bold form-label mb-2">Departure Data</label>
+            <!--end::Label-->
+            <!--begin::Input wrapper-->
+            <div class="position-relative">
+                <!--begin::Input-->
+                <input type="date" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                <!--end::Input-->
+                <!--begin::Card logos-->
+
+                <!--end::Card logos-->
+            </div>
+
+            <!--begin::Item-->
+
+
+
+            <!--end::Input wrapper-->
+        </div>
+        <!--end::Input group-->
+        <br>
+
+        <!--begin::Input group-->
+        <div class="d-flex flex-column mb-7 fv-row">
+            <!--begin::Label-->
+            <label class="required fs-6 fw-bold form-label mb-2">Return Date</label>
+            <!--end::Label-->
+            <!--begin::Input wrapper-->
+            <div class="position-relative">
+                <!--begin::Input-->
+
+
+
+                <input type="date" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                <!--end::Input-->
+                <!--begin::Card logos-->
+
+                <!--end::Card logos-->
+            </div>
+
+            <!--begin::Item-->
+
+            <!--end::Input wrapper-->
+        </div>
+        <!--end::Input group-->
+        <br>
+
+
+        <div v-if="loadedVariant.length" class="d-flex flex-column mb-7 fv-row">
+            <div v-if="isActiveVariantDesc" class="overflow-auto pb-5">
+                <!--begin::Notice-->
+                <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed min-w-lg-300px flex-shrink-0 p-6">
+                    <!--begin::Icon-->
+                    <!--begin::Svg Icon | path: icons/duotune/coding/cod004.svg-->
+                    <span class="svg-icon svg-icon-2tx svg-icon-primary me-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3" d="M19.0687 17.9688H11.0687C10.4687 17.9688 10.0687 18.3687 10.0687 18.9688V19.9688C10.0687 20.5687 10.4687 20.9688 11.0687 20.9688H19.0687C19.6687 20.9688 20.0687 20.5687 20.0687 19.9688V18.9688C20.0687 18.3687 19.6687 17.9688 19.0687 17.9688Z" fill="black" />
+                            <path d="M4.06875 17.9688C3.86875 17.9688 3.66874 17.8688 3.46874 17.7688C2.96874 17.4688 2.86875 16.8688 3.16875 16.3688L6.76874 10.9688L3.16875 5.56876C2.86875 5.06876 2.96874 4.46873 3.46874 4.16873C3.96874 3.86873 4.56875 3.96878 4.86875 4.46878L8.86875 10.4688C9.06875 10.7688 9.06875 11.2688 8.86875 11.5688L4.86875 17.5688C4.66875 17.7688 4.36875 17.9688 4.06875 17.9688Z" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <!--end::Icon-->
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
+                        <!--begin::Content-->
+                        <div class="mb-3 mb-md-0 fw-bold">
+                            <h5>{{activeHeader}}</h5>
+                            <div class="fs-6 text-gray-700 pe-7">{{activeVariantDesc}}</div>
+                        </div>
+                        <!--end::Content-->
+
+                    </div>
+                    <!--end::Wrapper-->
+                </div>
+                <!--end::Notice-->
+            </div>
+            <!--begin::Label-->
+            <label class="required fs-6 fw-bold form-label mb-2">Upload Proof of ownership</label>
+            <!--end::Label-->
+            <!--begin::Input wrapper-->
+            <div class="position-relative">
+                <!--begin::Input-->
+
+
+                <select @change="getVariantDescription" class="form-select form-select-solid" data-control="select2">
+
+                    <option v-for="variant in loadedVariant" :value="variant.id">{{variant.variant}}</option>
+
+                </select>
+                <!--begin::Card logos-->
+
+
+                <!--end::Card logos-->
+            </div>
+            <br>
+
+            <!--end::Input wrapper-->
+        </div>
+
+
+
+
+
+        <div v-if="loadedVariant.length" class="d-flex flex-column mb-7 fv-row">
+            <div v-if="isActiveVariantDesc" class="overflow-auto pb-5">
+                <!--begin::Notice-->
+                <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed min-w-lg-300px flex-shrink-0 p-6">
+                    <!--begin::Icon-->
+                    <!--begin::Svg Icon | path: icons/duotune/coding/cod004.svg-->
+                    <span class="svg-icon svg-icon-2tx svg-icon-primary me-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3" d="M19.0687 17.9688H11.0687C10.4687 17.9688 10.0687 18.3687 10.0687 18.9688V19.9688C10.0687 20.5687 10.4687 20.9688 11.0687 20.9688H19.0687C19.6687 20.9688 20.0687 20.5687 20.0687 19.9688V18.9688C20.0687 18.3687 19.6687 17.9688 19.0687 17.9688Z" fill="black" />
+                            <path d="M4.06875 17.9688C3.86875 17.9688 3.66874 17.8688 3.46874 17.7688C2.96874 17.4688 2.86875 16.8688 3.16875 16.3688L6.76874 10.9688L3.16875 5.56876C2.86875 5.06876 2.96874 4.46873 3.46874 4.16873C3.96874 3.86873 4.56875 3.96878 4.86875 4.46878L8.86875 10.4688C9.06875 10.7688 9.06875 11.2688 8.86875 11.5688L4.86875 17.5688C4.66875 17.7688 4.36875 17.9688 4.06875 17.9688Z" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <!--end::Icon-->
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
+                        <!--begin::Content-->
+                        <div class="mb-3 mb-md-0 fw-bold">
+                            <h5>{{activeHeader}}</h5>
+                            <div class="fs-6 text-gray-700 pe-7">{{activeVariantDesc}}</div>
+                        </div>
+                        <!--end::Content-->
+
+                    </div>
+                    <!--end::Wrapper-->
+                </div>
+                <!--end::Notice-->
+            </div>
+            <!--begin::Label-->
+            <label class="required fs-6 fw-bold form-label mb-2">Upload Proof of ownership</label>
+            <!--end::Label-->
+
+
+
+
+            <!--begin::Input wrapper-->
+            <div class="position-relative">
+                <!--begin::Input-->
+
+
+                <select @change="getVariantDescription" class="form-select form-select-solid" data-control="select2">
+
+                    <option v-for="variant in loadedVariant" :value="variant.id">{{variant.variant}}</option>
+
+                </select>
+                <!--begin::Card logos-->
+
+
+                <!--end::Card logos-->
+            </div>
+            <br>
+
+
+
+            <!--end::Input wrapper-->
+        </div>
+        <!--begin::Input group-->
+        <div class="d-flex flex-stack">
+            <!--begin::Label-->
+            <div class="me-5">
+                <label class="fs-6 fw-bold form-label">Travelers List</label>
+                <div class="fs-7 fw-bold text-muted">Are you travelling in a group</div>
+            </div>
+            <!--end::Label-->
+            <!--begin::Switch-->
+            <label class="form-check form-switch form-check-custom form-check-solid">
+                <input class="form-check-input" @click="toggleGroupList" type="checkbox" value="1" :checked="groupListState" />
+                <span class="form-check-label fw-bold text-muted">{{isGroupList}}</span>
+            </label>
+            <!--end::Switch-->
+        </div>
+        <!--end::Input group-->
+    </div>
+</div>
+
+
+
+<!--begin::Actions-->
+<div class="d-flex flex-stack pt-10">
+    <!--begin::Wrapper-->
+
+    <!--end::Wrapper-->
+    <!--begin::Wrapper-->
+    <div>
+
+        <div v-if="isProcessingTravel">
+            <button :disabled="isProcessingTravel" type="button" class="btn btn-lg block btn-primary" data-kt-stepper-action="next">...processing
+                <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                <span class="svg-icon svg-icon-3 ms-1 me-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black" />
+                        <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black" />
+                    </svg>
+                </span>
+                <!--end::Svg Icon--></button>
+
+        </div>
+        <div v-else>
+            <button @click="sendthrirdparty()" type="button" class="btn btn-lg block btn-primary" data-kt-stepper-action="next">Continue
+                <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+                <span class="svg-icon svg-icon-3 ms-1 me-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black" />
+                        <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black" />
+                    </svg>
+                </span>
+                <!--end::Svg Icon--></button>
+        </div>
+    </div>
+    <!--end::Wrapper-->
+</div>

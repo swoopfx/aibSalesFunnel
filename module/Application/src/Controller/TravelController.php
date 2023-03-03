@@ -1,12 +1,16 @@
 <?php
+
 namespace Application\Controller;
 
+use Application\Entity\TravelInsuranceVariant;
 use Application\Service\GeneralService;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 
-class TravelController extends AbstractActionController{
+class TravelController extends AbstractActionController
+{
 
     /**
      * Undocumented variable
@@ -22,16 +26,48 @@ class TravelController extends AbstractActionController{
      */
     private $generalService;
 
-    public function travelAction(){
+    public function travelAction()
+    {
         $jsonModel = new JsonModel();
         return $jsonModel;
     }
+
+
+    public function getVariantAction()
+    {
+        $jsonModel = new JsonModel();
+        $em = $this->entityManager;
+        $repo = $em->getRepository(TravelInsuranceVariant::class);
+        $data = $repo->createQueryBuilder("l")
+            ->select("l")
+            ->getQuery()
+            ->setHydrationMode(Query::HYDRATE_ARRAY)
+            ->getArrayResult();
+        $jsonModel->setVariables([
+            "data" => $data
+        ]);
+        return $jsonModel;
+    }
+
+
+    public function getVariantDescriptionAction(){
+        $jsonModel = new JsonModel();
+        $id = $this->params()->fromRoute("id");
+        $data = $this->entityManager->find(TravelInsuranceVariant::class, $id);
+        $jsonModel->setVariables([
+            "data"=>$data->getDescription(),
+            "head"=>$data->getVariant(),
+        ]);
+        return $jsonModel;
+    }
+
+    // public fun
 
     /**
      * Get undocumented variable
      *
      * @return  EntityManager
-     */ 
+     */
     public function getEntityManager()
     {
         return $this->entityManager;
@@ -43,7 +79,7 @@ class TravelController extends AbstractActionController{
      * @param  EntityManager  $entityManager  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -55,7 +91,7 @@ class TravelController extends AbstractActionController{
      * Get undocumented variable
      *
      * @return  GeneralService
-     */ 
+     */
     public function getGeneralService()
     {
         return $this->generalService;
@@ -67,7 +103,7 @@ class TravelController extends AbstractActionController{
      * @param  GeneralService  $generalService  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setGeneralService(GeneralService $generalService)
     {
         $this->generalService = $generalService;

@@ -7,12 +7,12 @@
         <!--begin::Input group-->
         <div class="d-flex flex-column mb-7 fv-row">
             <!--begin::Label-->
-            <label class="required fs-6 fw-bold form-label mb-2">Departure Date</label>
+            <label class="required fs-6 fw-bold form-label mb-2">Upload Vehicle License</label>
             <!--end::Label-->
             <!--begin::Input wrapper-->
             <div class="position-relative">
                 <!--begin::Input-->
-                <input type="date" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                <input type="file" ref="tlicense" accept="image/*, application/pdf" @change="onFileChangeL"  class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
                 <!--end::Input-->
                 <!--begin::Card logos-->
 

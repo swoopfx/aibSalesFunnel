@@ -5,107 +5,81 @@
 
         <!--end::Input group-->
         <!--begin::Input group-->
-        <div class="d-flex flex-column mb-7 fv-row">
-            <!--begin::Label-->
-            <label class="required fs-6 fw-bold form-label mb-2">Departure Data</label>
-            <!--end::Label-->
-            <!--begin::Input wrapper-->
-            <div class="position-relative">
-                <!--begin::Input-->
-                <input type="date" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
-                <!--end::Input-->
-                <!--begin::Card logos-->
-
-                <!--end::Card logos-->
+        <div class="row g-9 mb-8">
+            <!--begin::Col-->
+            <div class="col-md-6 fv-row">
+                <label class="required fs-6 fw-bold mb-2">Departure Date</label>
+                <div class="position-relative d-flex align-items-center">
+                    <input ref="vDeparture" type="date" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                </div>
             </div>
-
-            <!--begin::Item-->
-
-
-
-            <!--end::Input wrapper-->
+            <!--end::Col-->
+            <!--begin::Col-->
+            <div class="col-md-6 fv-row">
+                <label class="required fs-6 fw-bold mb-2">Return Date</label>
+                <!--begin::Input-->
+                <div class="position-relative d-flex align-items-center">
+                    <!--begin::Icon-->
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
+                    <input type="date" ref="vReturnDate" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                    <!--end::Datepicker-->
+                </div>
+                <!--end::Input-->
+            </div>
+            <!--end::Col-->
         </div>
+
+        <div class="row g-9 mb-8">
+            <!--begin::Col-->
+            <div class="col-md-6 fv-row">
+                <label class="required fs-6 fw-bold mb-2">Date Of Birth</label>
+                <div class="position-relative d-flex align-items-center">
+                    <input ref="vDob" type="date" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                </div>
+            </div>
+            <!--end::Col-->
+            <!--begin::Col-->
+            <div v-if="travelNationality.length" class="col-md-6 fv-row">
+                <label class="required fs-6 fw-bold mb-2">Nationality</label>
+                <select class="form-select form-select-solid" data-control="select2" ref="selectedNationality" data-hide-search="true" data-placeholder="Select a Team Member" name="target_assign">
+                    <option value="0">Select Nationality</option>
+                    <option v-for="nat  in travelNationality" :value="nat.id">{{nat.name}}</option>
+
+                </select>
+            </div>
+            <!--end::Col-->
+        </div>
+
+        <div class="row g-9 mb-8">
+            <!--begin::Col-->
+            <div v-if="travelDestination.length" class="col-md-6 fv-row">
+                <label class="required fs-6 fw-bold mb-2">Destination</label>
+                <select class="form-select form-select-solid" ref="selectedDestination" data-control="select2" data-hide-search="true" data-placeholder="Select a Team Member" name="target_assign">
+                    <option value="0">Select Destination</option>
+                    <option v-for="dest in travelDestination" :value="dest.id">{{dest.name}}</option>
+
+                </select>
+            </div>
+            <div class="col-md-6 fv-row">
+                <label class="required fs-6 fw-bold mb-2">Passport Bio Data</label>
+                <div class="position-relative d-flex align-items-center">
+                    <input type="file" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                </div>
+            </div>
+        </div>
+
+
+
+
         <!--end::Input group-->
         <br>
 
         <!--begin::Input group-->
-        <div class="d-flex flex-column mb-7 fv-row">
-            <!--begin::Label-->
-            <label class="required fs-6 fw-bold form-label mb-2">Return Date</label>
-            <!--end::Label-->
-            <!--begin::Input wrapper-->
-            <div class="position-relative">
-                <!--begin::Input-->
 
-
-
-                <input type="date" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
-                <!--end::Input-->
-                <!--begin::Card logos-->
-
-                <!--end::Card logos-->
-            </div>
-
-            <!--begin::Item-->
-
-            <!--end::Input wrapper-->
-        </div>
         <!--end::Input group-->
         <br>
 
 
-        <div v-if="loadedVariant.length" class="d-flex flex-column mb-7 fv-row">
-            <div v-if="isActiveVariantDesc" class="overflow-auto pb-5">
-                <!--begin::Notice-->
-                <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed min-w-lg-300px flex-shrink-0 p-6">
-                    <!--begin::Icon-->
-                    <!--begin::Svg Icon | path: icons/duotune/coding/cod004.svg-->
-                    <span class="svg-icon svg-icon-2tx svg-icon-primary me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path opacity="0.3" d="M19.0687 17.9688H11.0687C10.4687 17.9688 10.0687 18.3687 10.0687 18.9688V19.9688C10.0687 20.5687 10.4687 20.9688 11.0687 20.9688H19.0687C19.6687 20.9688 20.0687 20.5687 20.0687 19.9688V18.9688C20.0687 18.3687 19.6687 17.9688 19.0687 17.9688Z" fill="black" />
-                            <path d="M4.06875 17.9688C3.86875 17.9688 3.66874 17.8688 3.46874 17.7688C2.96874 17.4688 2.86875 16.8688 3.16875 16.3688L6.76874 10.9688L3.16875 5.56876C2.86875 5.06876 2.96874 4.46873 3.46874 4.16873C3.96874 3.86873 4.56875 3.96878 4.86875 4.46878L8.86875 10.4688C9.06875 10.7688 9.06875 11.2688 8.86875 11.5688L4.86875 17.5688C4.66875 17.7688 4.36875 17.9688 4.06875 17.9688Z" fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                    <!--end::Icon-->
-                    <!--begin::Wrapper-->
-                    <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
-                        <!--begin::Content-->
-                        <div class="mb-3 mb-md-0 fw-bold">
-                            <h5>{{activeHeader}}</h5>
-                            <div class="fs-6 text-gray-700 pe-7">{{activeVariantDesc}}</div>
-                        </div>
-                        <!--end::Content-->
-
-                    </div>
-                    <!--end::Wrapper-->
-                </div>
-                <!--end::Notice-->
-            </div>
-            <!--begin::Label-->
-            <label class="required fs-6 fw-bold form-label mb-2">Upload Proof of ownership</label>
-            <!--end::Label-->
-            <!--begin::Input wrapper-->
-            <div class="position-relative">
-                <!--begin::Input-->
-
-
-                <select @change="getVariantDescription" class="form-select form-select-solid" data-control="select2">
-
-                    <option v-for="variant in loadedVariant" :value="variant.id">{{variant.variant}}</option>
-
-                </select>
-                <!--begin::Card logos-->
-
-
-                <!--end::Card logos-->
-            </div>
-            <br>
-
-            <!--end::Input wrapper-->
-        </div>
-
-
 
 
 
@@ -138,30 +112,7 @@
                 <!--end::Notice-->
             </div>
             <!--begin::Label-->
-            <label class="required fs-6 fw-bold form-label mb-2">Upload Proof of ownership</label>
-            <!--end::Label-->
-
-
-
-
-            <!--begin::Input wrapper-->
-            <div class="position-relative">
-                <!--begin::Input-->
-
-
-                <select @change="getVariantDescription" class="form-select form-select-solid" data-control="select2">
-
-                    <option v-for="variant in loadedVariant" :value="variant.id">{{variant.variant}}</option>
-
-                </select>
-                <!--begin::Card logos-->
-
-
-                <!--end::Card logos-->
-            </div>
-            <br>
-
-
+          
 
             <!--end::Input wrapper-->
         </div>
@@ -184,6 +135,10 @@
     </div>
 </div>
 
+<div v-if="groupListState">
+    <?php echo $this->partial("partials-form-travel-list"); ?>
+</div>
+
 
 
 <!--begin::Actions-->
@@ -194,7 +149,7 @@
     <!--begin::Wrapper-->
     <div>
 
-        <div v-if="isProcessingTravel">
+        <div v-if="isSendingTravelData">
             <button :disabled="isProcessingTravel" type="button" class="btn btn-lg block btn-primary" data-kt-stepper-action="next">...processing
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                 <span class="svg-icon svg-icon-3 ms-1 me-0">
@@ -207,7 +162,7 @@
 
         </div>
         <div v-else>
-            <button @click="sendthrirdparty()" type="button" class="btn btn-lg block btn-primary" data-kt-stepper-action="next">Continue
+            <button @click="sendTravel()" type="button" class="btn btn-lg block btn-primary" data-kt-stepper-action="next">Continue
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                 <span class="svg-icon svg-icon-3 ms-1 me-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

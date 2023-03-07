@@ -1,0 +1,139 @@
+<?php
+?>
+<hr>
+<div v-if="travelList.length" class="col-xxl-12">
+    <!--begin::Table Widget 1-->
+    <div class="card card-xxl-stretch">
+        <!--begin::Header-->
+        <div class="card-header border-0 pt-5 pb-3">
+            <!--begin::Card title-->
+
+            <!--end::Card title-->
+            <!--begin::Card toolbar-->
+
+            <!--end::Card toolbar-->
+        </div>
+        <!--end::Header-->
+        <!--begin::Body-->
+        <div class="card-body py-0">
+            <!--begin::Table-->
+            <div class="table-responsive">
+                <table class="table align-middle table-row-bordered table-row-dashed gy-5" id="kt_table_widget_1">
+                    <!--begin::Table body-->
+                    <tbody>
+                        <!--begin::Table row-->
+                        <tr class="text-start text-gray-400 fw-boldest fs-7 text-uppercase">
+                            <th class="min-w-200px px-0">Details</th>
+
+                            <th class="text-end pe-2 min-w-70px">Action</th>
+                        </tr>
+                        <!--end::Table row-->
+                        <!--begin::Table row-->
+                        <tr v-for="(listt, ind) in travelList">
+                            <!--begin::Author=-->
+                            <td class="p-0">
+                                <div class="d-flex align-items-center">
+                                    <!--begin::Logo-->
+                                    <div class="symbol symbol-50px me-2">
+                                        <span class="symbol-label">
+                                            <img alt="" class="w-25px" src="/assets/media/svg/brand-logos/aven.svg" />
+                                        </span>
+                                    </div>
+                                    <!--end::Logo-->
+                                    <div class="ps-3">
+                                        <a href="../dist/account/overview.html" class="text-gray-800 fw-boldest fs-5 text-hover-primary mb-1">{{listt.surname}} {{listt.lastname}}</a>
+                                        <span class="text-gray-400 fw-bold d-block">Pssport No : {{listt.passport}}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <!--end::Author=-->
+                            <!--begin::Progress=-->
+
+                            <!--end::Company=-->
+                            <!--begin::Action=-->
+                            <td class="pe-0 text-end">
+                                <button @click="removeFromList(ind)" class="btn btn-sm btn-icon btn-color-gray-500 btn-active-color-primary" data-kt-menu-trigger="click" data-kt-menu-overflow="true" data-kt-menu-placement="bottom-start">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen023.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </button>
+                                <!--begin::Menu 3-->
+                                
+                                <!--end::Menu 3-->
+                            </td>
+                            <!--end::Action=-->
+                        </tr>
+                        <!--end::Table row-->
+
+
+                    </tbody>
+                    <!--end::Table body-->
+                </table>
+            </div>
+            <!--end::Table-->
+        </div>
+        <!--end::Body-->
+    </div>
+    <!--end::Table Widget 1-->
+</div>
+
+<div class="row g-9 mb-8">
+    <!--begin::Col-->
+    <div class="col-md-6 fv-row">
+        <label class="required fs-6 fw-bold mb-2">Surname</label>
+        <input type="text" ref="listSurname" class="form-control form-control-solid" id='file' name="file" placeholder="Upload Owner Proof" required />
+
+    </div>
+    <!--end::Col-->
+    <!--begin::Col-->
+    <div class="col-md-6 fv-row">
+        <label class="required fs-6 fw-bold mb-2">Firstname</label>
+        <!--begin::Input-->
+        <input type="text" ref="listFirstname" class="form-control form-control-solid" id='file' name="file" placeholder="Upload Owner Proof" required />
+    </div>
+    <!--end::Col-->
+</div>
+
+<div class="row g-9 mb-8">
+    <!--begin::Col-->
+    <div class="col-md-6 fv-row">
+        <label class="required fs-6 fw-bold mb-2">Passport No.</label>
+        <input type="text" ref="listPassport" class="form-control form-control-solid" id='file' name="file" placeholder="Upload Owner Proof" required />
+
+    </div>
+    <!--end::Col-->
+    <!--begin::Col-->
+    <div class="col-md-6 fv-row">
+        <label class="required fs-6 fw-bold mb-2">Date Of Birth</label>
+        <!--begin::Input-->
+        <input type="text" ref="listDob" class="form-control form-control-solid" id='file' name="file" placeholder="Upload Owner Proof" required />
+    </div>
+    <!--end::Col-->
+</div>
+
+<div class="row g-9 mb-8">
+    <!--begin::Col-->
+    <div class="col-md-6 fv-row">
+        <label class="required fs-6 fw-bold mb-2">Sex</label>
+        <input type="text" ref="listSex" class="form-control form-control-solid" id='file' name="file" placeholder="Upload Owner Proof" required />
+
+    </div>
+    <!--end::Col-->
+    <!--begin::Col-->
+    <div class="col-md-6 fv-row">
+
+        <!--begin::Input-->
+
+        <button type="button" class="btn btn-lg block btn-primary" @click="addToList">Add
+            <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+
+            <!--end::Svg Icon--></button>
+    </div>
+    <!--end::Col-->
+</div>
+<hr>

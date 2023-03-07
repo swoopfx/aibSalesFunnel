@@ -14,6 +14,7 @@ class IndexControllerFactory implements FactoryInterface
     {
         $ctr =  new IndexController();
         $generalService = $container->get("general_service");
+        $paystackService = $container->get("paystack_service");
         $motorService = $container->get(MotorService::class);
         $ctr->setEntityManager($generalService->getEm())->setMotorService($motorService);
 

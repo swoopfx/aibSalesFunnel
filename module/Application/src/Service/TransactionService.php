@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Invoice;
 use Application\Entity\InvoiceStatus;
+use Application\Entity\Transaction;
 use Doctrine\ORM\EntityManager;
 use Ramsey\Uuid\Uuid;
 
@@ -40,6 +41,23 @@ class TransactionService
 
         $entityManager->persist($invoiceEntity);
         return $invoiceEntity;
+    }
+
+
+    public function finalizeSuccessfulTransaction($invoiceUid){
+        $em = $this->entityManager;
+        /**
+         * @var Invoice
+         */
+        $invoiceEntity = $em->getRepository(Invoice::class)->findOneBy([
+            "invoiceUuid"=>$invoiceUid
+        ]);
+        if($invoiceEntity != null){
+            $transactionEntity = new Transaction();
+            // $transactionEntity->setInvoiceId($invoiceEntity->getId())->set
+            
+            // $invoiceEntity->setTr
+        }
     }
 
     private static function invoiceUid()

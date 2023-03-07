@@ -45,28 +45,44 @@ class TravelInsurance
 
     /**
      * 
-     *
-     * @var [
+     * @ORM\ManyToOne(targetEntity="Country")
+     * @var Country
      */
     private $destination;
 
     /**
-     * Which is also departure 
+     * Undocumented variable
+     * @ORM\ManyToOne(targetEntity="Country")
      *
-     * @var \Datetime
+     * @var Country
      */
-    private $startDate;
+    private $nationality;
 
     /**
-     * Expiry Date
-     *
-     * @var  \Datetime
+     * Which is also departure 
+     * @ORM\Column(type="date", nullable=false)
+     * @var \Date
      */
-    private $expireDate;
+    private $departureDate;
+
 
     /**
      * Undocumented variable
      *
+     * @var \Date
+     */
+    private $returnDate;
+
+    // /**
+    //  * Expiry Date
+    //  * @ORM\Column(type="date", nullable=false)
+    //  * @var  \Datetime
+    //  */
+    // private $expireDate;
+
+    /**
+     * Undocumented variable
+     * @ORM\OneToMany(targetEntity="TravelinsuranceList", mappedBy="travelInsurance")
      * @var Collection
      */
     private $travelList;
@@ -85,6 +101,13 @@ class TravelInsurance
      */
     private $createdOn;
 
+    /**
+     * Undocumented variable
+     * @ORM\ManyToone(targetEntity="Invoice")
+     * @var Invoice
+     */
+    private $invoice;
+
 
     public function __construct()
     {
@@ -95,7 +118,7 @@ class TravelInsurance
      * Get the value of user
      *
      * @return  User
-     */ 
+     */
     public function getUser()
     {
         return $this->user;
@@ -107,7 +130,7 @@ class TravelInsurance
      * @param  User  $user
      *
      * @return  self
-     */ 
+     */
     public function setUser(User $user)
     {
         $this->user = $user;
@@ -119,7 +142,7 @@ class TravelInsurance
      * Get string
      *
      * @return  string
-     */ 
+     */
     public function getTravelUid()
     {
         return $this->travelUid;
@@ -131,19 +154,19 @@ class TravelInsurance
      * @param  string  $travelUid  String
      *
      * @return  self
-     */ 
+     */
     public function setTravelUid(string $travelUid)
     {
         $this->travelUid = $travelUid;
 
         return $this;
-    } 
+    }
 
     /**
      * Get date of birth
      *
      * @return  \Date
-     */ 
+     */
     public function getDob()
     {
         return $this->dob;
@@ -155,10 +178,245 @@ class TravelInsurance
      * @param  \Date  $dob  Date of birth
      *
      * @return  self
-     */ 
-    public function setDob( $dob)
+     */
+    public function setDob($dob)
     {
         $this->dob = $dob;
+
+        return $this;
+    }
+
+    // /**
+    //  * Get which is also departure
+    //  *
+    //  * @return  \Date
+    //  */
+    // public function getStartDate()
+    // {
+    //     return $this->startDate;
+    // }
+
+    // /**
+    //  * Set which is also departure
+    //  *
+    //  * @param  \Date  $startDate  Which is also departure
+    //  *
+    //  * @return  self
+    //  */
+    // public function setStartDate($startDate)
+    // {
+    //     $this->startDate = $startDate;
+
+    //     return $this;
+    // }
+
+    /**
+     * Get @ORM\Column(name="id", type="integer")
+     *
+     * @return  integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the value of destination
+     *
+     * @return  Zone
+     */
+    public function getDestination()
+    {
+        return $this->destination;
+    }
+
+    /**
+     * Set the value of destination
+     *
+     * @param  Country  $destination
+     *
+     * @return  self
+     */
+    public function setDestination(Country $destination)
+    {
+        $this->destination = $destination;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  Collection
+     */
+    public function getTravelList()
+    {
+        return $this->travelList;
+    }
+
+    // /**
+    //  * Set undocumented variable
+    //  *
+    //  * @param  Collection  $travelList  Undocumented variable
+    //  *
+    //  * @return  self
+    //  */ 
+    // public function setTravelList(Collection $travelList)
+    // {
+    //     $this->travelList = $travelList;
+
+    //     return $this;
+    // }
+
+    public function addTravelList(TravelinsuranceList $list)
+    {
+        if (!$this->travelList->contains($list)) {
+            $this->travelList->add($list);
+            $list->setTravelInsurance($this);
+        }
+        return $this;
+    }
+
+    /**
+     * Get the value of updatedOn
+     *
+     * @return  \Datetime
+     */
+    public function getUpdatedOn()
+    {
+        return $this->updatedOn;
+    }
+
+    /**
+     * Set the value of updatedOn
+     *
+     * @param  \Datetime  $updatedOn
+     *
+     * @return  self
+     */
+    public function setUpdatedOn(\Datetime $updatedOn)
+    {
+        $this->updatedOn = $updatedOn;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of createdOn
+     *
+     * @return  \Datetime
+     */
+    public function getCreatedOn()
+    {
+        return $this->createdOn;
+    }
+
+    /**
+     * Set the value of createdOn
+     *
+     * @param  \Datetime  $createdOn
+     *
+     * @return  self
+     */
+    public function setCreatedOn(\Datetime $createdOn)
+    {
+        $this->createdOn = $createdOn;
+        $this->updatedOn = $createdOn;
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  Country
+     */
+    public function getNationality()
+    {
+        return $this->nationality;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  Country  $nationality  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setNationality(Country $nationality)
+    {
+        $this->nationality = $nationality;
+
+        return $this;
+    }
+
+    /**
+     * Get which is also departure
+     *
+     * @return  \Date
+     */ 
+    public function getDepartureDate()
+    {
+        return $this->departureDate;
+    }
+
+    /**
+     * Set which is also departure
+     *
+     * @param  \Date  $departureDate  Which is also departure
+     *
+     * @return  self
+     */ 
+    public function setDepartureDate($departureDate)
+    {
+        $this->departureDate = $departureDate;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  \Date
+     */ 
+    public function getReturnDate()
+    {
+        return $this->returnDate;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  \Date  $returnDate  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setReturnDate($returnDate)
+    {
+        $this->returnDate = $returnDate;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  Invoice
+     */ 
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  Invoice  $invoice  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setInvoice(Invoice $invoice)
+    {
+        $this->invoice = $invoice;
 
         return $this;
     }

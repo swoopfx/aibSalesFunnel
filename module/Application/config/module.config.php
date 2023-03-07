@@ -12,14 +12,17 @@ use Application\Controller\TravelController;
 use Application\Form\Factory\RegisterInputFilterFactory;
 use Application\Form\LoginInputFilter;
 use Application\Form\RegisterInputFilter;
+use Application\Form\TravelInputFIlter;
 use Application\Service\Factory\FunnelSessionFactory;
 use Application\Service\Factory\GeneralServiceFactory;
 use Application\Service\Factory\MotorServiceFactory;
+use Application\Service\Factory\PaystackServiceFactory;
 use Application\Service\Factory\TransactionServiceFactory;
 use Application\Service\Factory\UploadServiceFactory;
 use Application\Service\FunnelSession;
 use Application\Service\GeneralService;
 use Application\Service\MotorService;
+use Application\Service\PaystackService;
 use Application\Service\TransactionService;
 use Application\Service\UploadService;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -144,6 +147,7 @@ return [
             "partials-form-thirdparty" => __DIR__ . '/../view/partial/thirdparty.phtml',
             "partials-form-comprehensive" => __DIR__ . '/../view/partial/comprehensive.phtml',
             "partials-form-travel" => __DIR__ . '/../view/partial/travel-form-partial.phtml',
+            "partials-form-travel-list" => __DIR__ . '/../view/partial/travel-list-form-partial.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
@@ -205,18 +209,21 @@ return [
             UploadService::class => UploadServiceFactory::class,
             MotorService::class => MotorServiceFactory::class,
             TransactionService::class => TransactionServiceFactory::class,
+            PaystackService::class => PaystackServiceFactory::class,
         ],
         "aliases" => [
             "general_service" => GeneralService::class,
             "funnel_session" => FunnelSession::class,
             'upload_service' => UploadService::class,
+            'paystack_service' => PaystackService::class,
         ]
     ],
 
     "input_filters" => [
         "factories" => [
             RegisterInputFilter::class => RegisterInputFilterFactory::class,
-            LoginInputFilter::class => InvokableFactory::class
+            LoginInputFilter::class => InvokableFactory::class,
+            TravelInputFIlter::class => InvokableFactory::class,
         ]
     ]
 

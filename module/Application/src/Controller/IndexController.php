@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Application\Controller;
 
+use Application\Entity\Country;
+use Application\Entity\Gender;
+use Application\Entity\Settings;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Mvc\MvcEvent;
@@ -54,6 +57,29 @@ class IndexController extends AbstractActionController
         return new ViewModel();
     }
 
+    public function getsexAction()
+    {
+        $em = $this->entityManager;
+        $jsonModel = new JsonModel();
+        $data = $em->getRepository(Gender::class)->createQueryBuilder("s")->getQuery()->getArrayResult();
+        $jsonModel->setVariables([
+            "data" => $data,
+        ]);
+        return $jsonModel;
+    }
+
+
+    public function getCountryAction()
+    {
+        $em = $this->entityManager;
+        $jsonModel = new JsonModel();
+        $data = $em->getRepository(Country::class)->createQueryBuilder("s")->getQuery()->getArrayResult();
+        $jsonModel->setVariables([
+            "data" => $data,
+        ]);
+        return $jsonModel;
+    }
+
 
     /**
      * Retrieves the User information based on the available access
@@ -80,6 +106,12 @@ class IndexController extends AbstractActionController
 
 
     public function funnelAction()
+    {
+        $viewModel = new ViewModel();
+        return $viewModel;
+    }
+
+    public function invoiceAction()
     {
         $viewModel = new ViewModel();
         return $viewModel;
@@ -144,6 +176,16 @@ class IndexController extends AbstractActionController
     }
 
 
+    public function invoiceSettingAction()
+    {
+        $jsonModel = new JsonModel();
+        $em = $this->entityManager;
+        $repo = $em->getRepository(Settings::class);
+        // $data = $em->createQueryBuilder("l")->get
+        return $jsonModel;
+    }
+
+
     public function motorAction()
     {
         $viewModel = new ViewModel();
@@ -164,7 +206,7 @@ class IndexController extends AbstractActionController
 
     /**
      * Get the value of entityManager
-     */ 
+     */
     public function getEntityManager()
     {
         return $this->entityManager;
@@ -174,7 +216,7 @@ class IndexController extends AbstractActionController
      * Set the value of entityManager
      *
      * @return  self
-     */ 
+     */
     public function setEntityManager($entityManager)
     {
         $this->entityManager = $entityManager;
@@ -184,7 +226,7 @@ class IndexController extends AbstractActionController
 
     /**
      * Get the value of motorService
-     */ 
+     */
     public function getMotorService()
     {
         return $this->motorService;
@@ -194,7 +236,7 @@ class IndexController extends AbstractActionController
      * Set the value of motorService
      *
      * @return  self
-     */ 
+     */
     public function setMotorService($motorService)
     {
         $this->motorService = $motorService;

@@ -219,8 +219,6 @@
 					<div class="col-xxl-8">
 
 
-
-
 						<!--begin::Table Widget 1-->
 
 						<!--begin::Header-->
@@ -240,8 +238,8 @@
 										<div class="current" data-kt-stepper-element="content">
 											<div class="w-100">
 
-												
-												
+
+
 											</div>
 										</div>
 										<hr>
@@ -297,28 +295,53 @@
 				isLoadedVariant: false,
 				loadedVariant: [],
 				activeVariantDesc: "",
-				activeHeader:"",
-				isActiveVariantDesc:false,
+				activeHeader: "",
+				isActiveVariantDesc: false,
 				isProcessingTravel: true,
-				isGroupList:"No",
-				groupListState:false,
+				isGroupList: "No",
+				groupListState: false,
+				travelList: [],
+				isSendingTravelData: false,
+				travelListSex: [],
+				travelCountry: [],
+				travelNationality: [],
+				travelDestination: [],
+				isValidtravelForm: false,
 			}
 		},
 		mounted() {
 			this.getTravelVariant();
+			this.getSex();
+			this.getCountry()
 		},
 
-		
+
 
 		methods: {
 
-			toggleGroupList(){
+			toggleGroupList() {
 				this.groupListState = !this.groupListState;
-				if(this.groupListState){
+				if (this.groupListState) {
 					this.isGroupList = "Yes";
-				}else{
+				} else {
 					this.isGroupList = "No";
 				}
+			},
+			getSex() {
+				axios.get("/app/getsex").then(res => {
+					if (res.status == 200) {
+						this.travelListSex = res.data.data;
+					}
+				}).catch();
+			},
+			getCountry() {
+				axios.get("/app/get-country").then(res => {
+					if (res.status == 200) {
+						this.travelCountry = res.data.data;
+						this.travelNationality = res.data.data;
+						this.travelDestination = res.data.data;
+					}
+				}).catch();
 			},
 			getTravelVariant() {
 				this.isLoadedVariant = false;
@@ -332,10 +355,11 @@
 				})
 			},
 
-			getVariantDescription(e){
+			getVariantDescription(e) {
+				// alert("Hey");
 				let tar = e.target.value;
-				axios.get("/travel/get-variant-description/"+tar).then(res=>{
-					if(res.status == 200){
+				axios.get("/travel/get-variant-description/" + tar).then(res => {
+					if (res.status == 200) {
 						this.activeVariantDesc = res.data.data;
 						this.activeHeader = res.data.head;
 						this.isActiveVariantDesc = true;
@@ -343,12 +367,89 @@
 				})
 			},
 
+			// List functionality
 
-			variantAction(e){
+			addToList() {
+				if (this.$refs.listSurname.value == "" || this.$refs.listFirstname.value == "" || this.$refs.listDob.value == "") {
+
+					this.$toast.open({
+						message: "One of the fields required is empty please fill before adding",
+						type: "error",
+						position: "top-right",
+						duration: 30000,
+						dismissible: true
+					});
+
+				} else {
+					let newObject = {
+						surname: this.$refs.listSurname.value,
+						lastname: this.$refs.listFirstname.value,
+						dob: this.$refs.listDob.value,
+						passport: this.$refs.listPassport.value,
+						sex: this.$refs.listSex.value,
+					};
+
+					this.$refs.listFirstname.value = "";
+					this.$refs.listSurname.value = "";
+					this.travelList.push(newObject);
+				}
+
+			},
+
+			removeFromList(inn) {
+				this.travelList.splice(inn, 1);
+			},
+
+
+			variantAction(e) {
 				//this.activeVariantDesc = e.target.
 				console.log(e.target.value);
 			},
+			validateTravelForm(){
+				if(this.$refs.vDeparture.value == "" || this.$refs.vDob.value == "" || this.$refs.vReturnDate.value == ""){
+					
+				}
+			}, 
 			sendTravel() {
+				this.isSendingTravelData = true;
+				if (!this.isValidtravelForm) {
+
+				} else {
+
+					this.isSendingTravelData = true;
+					let formData = new FormData();
+					formData.append("dob", this.$refs.vDob.value);
+					formData.append("departureDate", this.$refs.vDeparture.value);
+					formData.append("returnDate", this.$refs.vReturnDate.value);
+					formData.append("nationality", this.$refs.selectedNationality.value);
+					formData.append("destination", this.$refs.selectedDestination.value);
+					formData.append("travelList", JSON.stringify(this.travelList));
+					// formData.append("departureDate", this.$refs.vDeparture.value);
+					axios.post("/travel/intiate", formData).then(res => {
+						if (res.status == 201) {
+							$responseData = $res.data.data;
+							window.location.href = "/app/invoice/"+$responseData["invoiceUid"];
+							this.isSendingTravelData = false;
+						} else {
+							this.$toast.open({
+								message: res.data.messages,
+								type: "error",
+								position: "top-right",
+								duration: 30000,
+								dismissible: true
+							});
+						}
+					}).catch(err => {
+						this.$toast.open({
+							message: err.response.data.messages,
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					});
+					this.isSendingTravelData = false;
+				}
 
 			}
 		},

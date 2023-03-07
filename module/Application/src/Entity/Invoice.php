@@ -31,7 +31,7 @@ class Invoice
     private $user;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(nullable=false, unique=true)
      *
      * @var string
      */
@@ -74,9 +74,12 @@ class Invoice
 
     /**
      * 
-     * @var string @ORM\Column(name="invoice_uid", type="string", nullable=false)
+     * @var string 
+     * @ORM\Column(name="invoice_uid", type="string", nullable=false, unique=true)
      */
     private $invoiceUid;
+
+    
 
     /**
      * @ORM\ManyToOne(targetEntity="InvoiceStatus")

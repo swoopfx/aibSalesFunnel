@@ -65,6 +65,23 @@ class Settings
      */
     private $comprehensiveRate;
 
+    /**
+     * Undocumented variable
+     * @ORM\Column(nullable=true)
+     *
+     * @var string
+     */
+    private $paystackKey;
+
+    /**
+     * Pay
+     * @ORM\Column(nullable=true)
+     * @var string
+     */
+    private $paystackSecret;
+
+    // private 
+
 
     // private $
 
@@ -73,7 +90,7 @@ class Settings
      * Get the value of companyName
      *
      * @return  string
-     */ 
+     */
     public function getCompanyName()
     {
         return $this->companyName;
@@ -85,7 +102,7 @@ class Settings
      * @param  string  $companyName
      *
      * @return  self
-     */ 
+     */
     public function setCompanyName(string $companyName)
     {
         $this->companyName = $companyName;
@@ -97,7 +114,7 @@ class Settings
      * Get @ORM\Column(name="id", type="integer", nullable=false)
      *
      * @return  integer
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -107,7 +124,7 @@ class Settings
      * Get the value of companyEmail
      *
      * @return  string
-     */ 
+     */
     public function getCompanyEmail()
     {
         return $this->companyEmail;
@@ -119,7 +136,7 @@ class Settings
      * @param  string  $companyEmail
      *
      * @return  self
-     */ 
+     */
     public function setCompanyEmail(string $companyEmail)
     {
         $this->companyEmail = $companyEmail;
@@ -131,7 +148,7 @@ class Settings
      * Get undocumented variable
      *
      * @return  string
-     */ 
+     */
     public function getThirdPartyRate()
     {
         return $this->thirdPartyRate;
@@ -143,7 +160,7 @@ class Settings
      * @param  string  $thirdPartyRate  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setThirdPartyRate(string $thirdPartyRate)
     {
         $this->thirdPartyRate = $thirdPartyRate;
@@ -155,7 +172,7 @@ class Settings
      * Get undocumented variable
      *
      * @return  string
-     */ 
+     */
     public function getComprehensiveRate()
     {
         return $this->comprehensiveRate;
@@ -167,7 +184,7 @@ class Settings
      * @param  string  $comprehensiveRate  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setComprehensiveRate(string $comprehensiveRate)
     {
         $this->comprehensiveRate = $comprehensiveRate;
@@ -179,7 +196,7 @@ class Settings
      * Get the value of companyLogo
      *
      * @return  string
-     */ 
+     */
     public function getCompanyLogo()
     {
         return $this->companyLogo;
@@ -191,7 +208,7 @@ class Settings
      * @param  string  $companyLogo
      *
      * @return  self
-     */ 
+     */
     public function setCompanyLogo(string $companyLogo)
     {
         $this->companyLogo = $companyLogo;
@@ -203,7 +220,7 @@ class Settings
      * Get the value of companyAddress
      *
      * @return  string
-     */ 
+     */
     public function getCompanyAddress()
     {
         return $this->companyAddress;
@@ -215,10 +232,58 @@ class Settings
      * @param  string  $companyAddress
      *
      * @return  self
-     */ 
+     */
     public function setCompanyAddress(string $companyAddress)
     {
         $this->companyAddress = $companyAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  string
+     */
+    public function getPaystackKey()
+    {
+        return $this->paystackKey;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  string  $paystackKey  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setPaystackKey(string $paystackKey)
+    {
+        $this->paystackKey = $paystackKey;
+
+        return $this;
+    }
+
+    /**
+     * Get pay
+     *
+     * @return  string
+     */
+    public function getPaystackSecret()
+    {
+        return $this->paystackSecret;
+    }
+
+    /**
+     * Set pay
+     *
+     * @param  string  $paystackSecret  Pay
+     *
+     * @return  self
+     */
+    public function setPaystackSecret(string $paystackSecret)
+    {
+        $this->paystackSecret = $paystackSecret;
 
         return $this;
     }

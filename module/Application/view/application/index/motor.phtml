@@ -452,29 +452,29 @@
 				} else {
 					this.isProcessingThird = true;
 					let formData = new FormData();
-					
+
 					formData.append("license", this.$refs.tlicense.files[0]);
 					formData.append("ownership", this.$refs.ownership.files[0]);
-					
+
 					axios.post("/app/thirdparty", formData, {
 						headers: {
 							"Content-Type": "multipart/form-data"
 						}
 					}).then(response => {
 						if (response.status == 201) {
-						this.isProcessingThird = false;
-						
-						this.isProcessingThird = false;
-						window.location.href('/app/travel-insurance');
+							this.isProcessingThird = false;
+
+							this.isProcessingThird = false;
+							window.location.href('/app/travel-insurance');
 						}
 					}).catch(err => {
 						this.$toast.open({
-                        message: err.response.data.messages,
-                        type: "error",
-                        position: "top-right",
-                        duration: 30000,
-                        dismissible: true
-                    })
+							message: err.response.data.messages,
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						})
 					});
 				}
 

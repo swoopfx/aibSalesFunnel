@@ -68,7 +68,7 @@ class TravelInsurance
 
     /**
      * Undocumented variable
-     *
+     * @ORM\Column(type="date", nullable=false)
      * @var \Date
      */
     private $returnDate;
@@ -107,6 +107,20 @@ class TravelInsurance
      * @var Invoice
      */
     private $invoice;
+
+    /**
+     * Undocumented variable
+     * @ORM\Column(nullable=false)
+     * @var string
+     */
+    private $travelUuid;
+
+    /**
+     * Undocumented variable
+     * @ORM\Column(type="boolean", options={"default" : 1})
+     * @var bool
+     */
+    private $isActive;
 
 
     public function __construct()
@@ -353,7 +367,7 @@ class TravelInsurance
      * Get which is also departure
      *
      * @return  \Date
-     */ 
+     */
     public function getDepartureDate()
     {
         return $this->departureDate;
@@ -365,7 +379,7 @@ class TravelInsurance
      * @param  \Date  $departureDate  Which is also departure
      *
      * @return  self
-     */ 
+     */
     public function setDepartureDate($departureDate)
     {
         $this->departureDate = $departureDate;
@@ -377,7 +391,7 @@ class TravelInsurance
      * Get undocumented variable
      *
      * @return  \Date
-     */ 
+     */
     public function getReturnDate()
     {
         return $this->returnDate;
@@ -389,7 +403,7 @@ class TravelInsurance
      * @param  \Date  $returnDate  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setReturnDate($returnDate)
     {
         $this->returnDate = $returnDate;
@@ -401,7 +415,7 @@ class TravelInsurance
      * Get undocumented variable
      *
      * @return  Invoice
-     */ 
+     */
     public function getInvoice()
     {
         return $this->invoice;
@@ -413,10 +427,58 @@ class TravelInsurance
      * @param  Invoice  $invoice  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setInvoice(Invoice $invoice)
     {
         $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  string
+     */
+    public function getTravelUuid()
+    {
+        return $this->travelUuid;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  string  $travelUuid  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setTravelUuid(string $travelUuid)
+    {
+        $this->travelUuid = $travelUuid;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  bool
+     */ 
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  bool  $isActive  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setIsActive(bool $isActive)
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

@@ -2,7 +2,9 @@
 
 namespace Application\Controller;
 
+use Application\Entity\TravelInsurance;
 use Application\Entity\TravelInsuranceVariant;
+use Application\Entity\User;
 use Application\Form\TravelInputFIlter;
 use Application\Service\GeneralService;
 use Application\Service\TravelService;
@@ -10,6 +12,9 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Application\Service\FunnelSession;
+
 
 class TravelController extends AbstractActionController
 {
@@ -35,6 +40,11 @@ class TravelController extends AbstractActionController
      */
     private $generalService;
 
+    /**
+     * @var FunnelSession
+     */
+    private $funnelSession;
+
 
     /**
      * 
@@ -57,10 +67,11 @@ class TravelController extends AbstractActionController
                 try {
                     $data = $inputFilter->getValues();
                     $travelService = $this->travelService;
-                    $travelService->initiateTravelinsurance($data);
+                    // var_dump($data);
+                    $responseData = $travelService->initiateTravelinsurance($data);
                     $jsonModel->setVariables([
                         "status" => "success",
-                        "data" => $data, // this include user entity, invoice data and other  specific details
+                        "data" => $responseData, // this include user entity, invoice data and other  specific details
 
                     ]);
                     $response->setStatusCode(201);
@@ -71,8 +82,39 @@ class TravelController extends AbstractActionController
                     $response->setStatusCode(400);
                 }
             } else {
+                $jsonModel->setVariables([
+                    "messages" => $inputFilter->getMessages()
+                ]);
+                $response->setStatusCode(400);
             }
         }
+        return $jsonModel;
+    }
+
+
+    public function viewAllAction()
+    {
+        $viewModel = new ViewModel();
+        $userEntity = $this->entityManager->getRepository(User::class)->findOneBy([
+            "uuid" => $this->funnelSession->getSessionUid()
+        ]);
+        $data = $this->entityManager->getRepository(TravelInsurance::class)->findBy([
+            "user" => $userEntity->getId(),
+            "isActive"=>TRUE
+        ], [
+            "id" => "DESC",
+        ], 100);
+        $viewModel->setVariables([
+            "data" => $data
+        ]);
+        return $viewModel;
+    }
+
+
+
+    public function editAction()
+    {
+        $jsonModel = new JsonModel();
         return $jsonModel;
     }
 
@@ -176,6 +218,54 @@ class TravelController extends AbstractActionController
     public function setTravelInputFilter($travelInputFilter)
     {
         $this->travelInputFilter = $travelInputFilter;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of travelService
+     *
+     * @return  TravelService
+     */
+    public function getTravelService()
+    {
+        return $this->travelService;
+    }
+
+    /**
+     * Set the value of travelService
+     *
+     * @param  TravelService  $travelService
+     *
+     * @return  self
+     */
+    public function setTravelService(TravelService $travelService)
+    {
+        $this->travelService = $travelService;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of funnelSession
+     *
+     * @return  FunnelSession
+     */
+    public function getFunnelSession()
+    {
+        return $this->funnelSession;
+    }
+
+    /**
+     * Set the value of funnelSession
+     *
+     * @param  FunnelSession  $funnelSession
+     *
+     * @return  self
+     */
+    public function setFunnelSession($funnelSession)
+    {
+        $this->funnelSession = $funnelSession;
 
         return $this;
     }

@@ -6,7 +6,9 @@ namespace Application\Controller;
 
 use Application\Entity\Country;
 use Application\Entity\Gender;
+use Application\Entity\Invoice;
 use Application\Entity\Settings;
+use Application\Entity\User;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Mvc\MvcEvent;
@@ -17,6 +19,7 @@ use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
 use Application\Service\MotorService;
+use Application\Service\FunnelSession;
 
 class IndexController extends AbstractActionController
 {
@@ -42,6 +45,14 @@ class IndexController extends AbstractActionController
      */
     private $generalService;
 
+
+    /**
+     * Undocumented variable
+     *
+     * @var FunnelSession
+     */
+    private $funnelSession;
+
     public function onDispatch(MvcEvent $e)
     {
         $response  = parent::onDispatch($e);
@@ -55,6 +66,24 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
         return new ViewModel();
+    }
+
+    public function profileAction()
+    {
+        $viewModel = new ViewModel();
+        $sessionuid = $this->funnelSession->getSessionUid();
+        if ($sessionuid == null) {
+            return $this->redirect()->toRoute("home");
+        } else {
+            $userEntity = $this->entityManager->getRepository(User::class)->findoneBy([
+                "uuid" => $sessionuid,
+            ]);
+        }
+        $viewModel->setVariables([
+            "data" => $userEntity
+        ]);
+
+        return $viewModel;
     }
 
     public function getsexAction()
@@ -114,6 +143,22 @@ class IndexController extends AbstractActionController
     public function invoiceAction()
     {
         $viewModel = new ViewModel();
+        $parameter = $this->params()->fromRoute("id", null);
+        if ($parameter == null) {
+            $this->redirect()->toRoute("home");
+        } else {
+            $invoiceEntity = $this->entityManager->getRepository(Invoice::class)->findOneBy([
+                "invoiceUuid" => strip_tags($parameter)
+            ]);
+            if ($invoiceEntity == null) {
+                $this->redirect()->toRoute("home");
+            }
+            $settings = $this->entityManager->find(Settings::class, 1);
+            $viewModel->setVariables([
+                "data" => $invoiceEntity,
+                "setting" => $settings
+            ]);
+        }
         return $viewModel;
     }
 
@@ -201,6 +246,10 @@ class IndexController extends AbstractActionController
 
     public function travelinsuranceAction()
     {
+        $request = $this->getRequest();
+        $cookie = $request->getHeaders()->get("Cookie");
+        // var_dump($cookie->igibber);
+
         return new ViewModel();
     }
 
@@ -240,6 +289,30 @@ class IndexController extends AbstractActionController
     public function setMotorService($motorService)
     {
         $this->motorService = $motorService;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  FunnelSession
+     */
+    public function getFunnelSession()
+    {
+        return $this->funnelSession;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  FunnelSession  $funnelSession  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setFunnelSession(FunnelSession $funnelSession)
+    {
+        $this->funnelSession = $funnelSession;
 
         return $this;
     }

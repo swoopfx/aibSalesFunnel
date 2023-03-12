@@ -7,7 +7,11 @@ namespace Application;
 use Application\Controller\AuthController;
 use Application\Controller\Factory\AuthControllerFactory;
 use Application\Controller\Factory\IndexControllerFactory;
+use Application\Controller\Factory\InvoiceControllerFactory;
+use Application\Controller\Factory\MotorControllerFactory;
 use Application\Controller\Factory\TravelControllerFactory;
+use Application\Controller\InvoiceController;
+use Application\Controller\MotorController;
 use Application\Controller\TravelController;
 use Application\Form\Factory\RegisterInputFilterFactory;
 use Application\Form\LoginInputFilter;
@@ -18,12 +22,14 @@ use Application\Service\Factory\GeneralServiceFactory;
 use Application\Service\Factory\MotorServiceFactory;
 use Application\Service\Factory\PaystackServiceFactory;
 use Application\Service\Factory\TransactionServiceFactory;
+use Application\Service\Factory\TravelServiceFactory;
 use Application\Service\Factory\UploadServiceFactory;
 use Application\Service\FunnelSession;
 use Application\Service\GeneralService;
 use Application\Service\MotorService;
 use Application\Service\PaystackService;
 use Application\Service\TransactionService;
+use Application\Service\TravelService;
 use Application\Service\UploadService;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Laminas\Router\Http\Literal;
@@ -49,7 +55,7 @@ return [
                     'route'    => '/app[/:action[/:id]]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id' => '[a-zA-Z0-9]*'
+                        'id' => '[a-zA-Z0-9_-]*'
                     ),
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
@@ -64,10 +70,25 @@ return [
                     'route'    => '/travel[/:action[/:id]]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id' => '[a-zA-Z0-9]*'
+                        'id' => '[a-zA-Z0-9_-]*'
                     ),
                     'defaults' => [
                         'controller' => TravelController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
+            'motor' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/travel[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9_-]*'
+                    ),
+                    'defaults' => [
+                        'controller' => MotorController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -79,7 +100,7 @@ return [
                     'route'    => '/auth[/:action[/:id]]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id' => '[a-zA-Z0-9]*'
+                        'id' => '[a-zA-Z0-9_-]*'
                     ),
                     'defaults' => [
                         'controller' => AuthController::class,
@@ -129,6 +150,8 @@ return [
             Controller\IndexController::class => IndexControllerFactory::class,
             AuthController::class => AuthControllerFactory::class,
             TravelController::class => TravelControllerFactory::class,
+            MotorController::class => MotorControllerFactory::class,
+            InvoiceController::class => InvoiceControllerFactory::class,
         ],
     ],
     'view_manager' => [
@@ -148,6 +171,10 @@ return [
             "partials-form-comprehensive" => __DIR__ . '/../view/partial/comprehensive.phtml',
             "partials-form-travel" => __DIR__ . '/../view/partial/travel-form-partial.phtml',
             "partials-form-travel-list" => __DIR__ . '/../view/partial/travel-list-form-partial.phtml',
+            "partials-login" => __DIR__ . '/../view/partial/login-partial.phtml',
+            "partials-form-login" => __DIR__ . '/../view/partial/login-form-partial.phtml',
+            "partials-form-register" => __DIR__ . '/../view/partial/register-form-partial.phtml',
+
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
@@ -210,6 +237,7 @@ return [
             MotorService::class => MotorServiceFactory::class,
             TransactionService::class => TransactionServiceFactory::class,
             PaystackService::class => PaystackServiceFactory::class,
+            TravelService::class => TravelServiceFactory::class,
         ],
         "aliases" => [
             "general_service" => GeneralService::class,

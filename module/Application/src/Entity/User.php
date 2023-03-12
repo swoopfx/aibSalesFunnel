@@ -40,7 +40,7 @@ class User
     private $email;
 
     /**
-     * @ORM\Column(name="password", length=100, nullable=false)
+     * @ORM\Column(name="password", length=100, nullable=true)
      */
     private $password;
 
@@ -62,7 +62,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="registration_token", type="string", length=32, nullable=true)
+     * @ORM\Column(name="registration_token", type="string", length=121, nullable=true)
      */
     protected $registrationToken;
 

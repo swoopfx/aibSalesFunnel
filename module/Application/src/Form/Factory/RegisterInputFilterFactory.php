@@ -11,13 +11,15 @@ class RegisterInputFilterFactory implements FactoryInterface {
 
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $xserv = new RegisterInputFilter();
+        $generalService = $container->get("general_service");
+       
+        // $xserv->setEntityManager($generalService->getEm());
+        $xserv = new RegisterInputFilter($generalService->getEm());
         /**
          * @var GeneralService
          * 
          */
-        $generalService = $container->get("general_service");
-        $xserv->setEntityManager($generalService->getEm());
+       
         return $xserv;
     }
 }

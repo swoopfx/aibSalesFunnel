@@ -51,7 +51,7 @@ class TravelInputFIlter extends InputFilter
                     "name" => 'NotEmpty',
                     'options' => [
                         'messages' => [
-                            'isEmpty' => 'Please provide a your phone number or email'
+                            'isEmpty' => 'Destination is required'
                         ]
                     ]
 
@@ -61,7 +61,7 @@ class TravelInputFIlter extends InputFilter
 
 
         $this->add([
-            "name" => "dob",
+            "name" => "departureDate",
             'required' => true,
             "allow_empty" => false,
             "filters" => [
@@ -77,7 +77,7 @@ class TravelInputFIlter extends InputFilter
                     "name" => 'NotEmpty',
                     'options' => [
                         'messages' => [
-                            'isEmpty' => 'Please provide a your phone number or email'
+                            'isEmpty' => 'Departure Date is required'
                         ]
                     ]
 
@@ -86,9 +86,8 @@ class TravelInputFIlter extends InputFilter
         ]);
 
 
-
         $this->add([
-            "name" => "dob",
+            "name" => "nationality",
             'required' => true,
             "allow_empty" => false,
             "filters" => [
@@ -104,12 +103,80 @@ class TravelInputFIlter extends InputFilter
                     "name" => 'NotEmpty',
                     'options' => [
                         'messages' => [
-                            'isEmpty' => 'Please provide a your phone number or email'
+                            'isEmpty' => 'Your Nationality is required'
                         ]
                     ]
 
                 ]
             ]
+        ]);
+
+
+        $this->add([
+            "name" => "returnDate",
+            'required' => true,
+            "allow_empty" => false,
+            "filters" => [
+                [
+                    'name' => 'StripTags'
+                ],
+                [
+                    'name' => 'StringTrim'
+                ]
+            ],
+            'validators' => [
+                [
+                    "name" => 'NotEmpty',
+                    'options' => [
+                        'messages' => [
+                            'isEmpty' => 'Return Date is required'
+                        ]
+                    ]
+
+                ]
+            ]
+        ]);
+
+
+
+        $this->add([
+            "name" => "user",
+            'required' => true,
+            "allow_empty" => false,
+            "filters" => [
+                [
+                    'name' => 'StripTags'
+                ],
+                [
+                    'name' => 'StringTrim'
+                ]
+            ],
+            'validators' => [
+                [
+                    "name" => 'NotEmpty',
+                    'options' => [
+                        'messages' => [
+                            'isEmpty' => 'You need to be logged in to process this form'
+                        ]
+                    ]
+
+                ]
+            ]
+        ]);
+
+        $this->add([
+            "name" => "travelList",
+            'required' => false,
+            "allow_empty" => true,
+            "filters" => [
+                [
+                    'name' => 'StripTags'
+                ],
+                [
+                    'name' => 'StringTrim'
+                ]
+            ],
+
         ]);
     }
 }

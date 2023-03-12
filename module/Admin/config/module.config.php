@@ -1,9 +1,16 @@
 <?php
 namespace Admin;
 
+use Admin\Controller\AdminController;
+use Admin\Controller\Factory\AdminControllerFactory;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 return [
+    "controllers"=>[
+        "factories"=>[
+            AdminController::class=>AdminControllerFactory::class
+        ]
+    ],
     'doctrine' => [
         'doctrine' => [
             'authentication' => [

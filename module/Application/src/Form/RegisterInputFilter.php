@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityManager;
 use Laminas\Validator\EmailAddress;
 use Laminas\Validator\Identical;
 use Laminas\Validator\StringLength;
+use Application\Entity\User;
+use Laminas\Validator\Regex;
 
 class RegisterInputFilter extends InputFilter
 {
@@ -15,8 +17,11 @@ class RegisterInputFilter extends InputFilter
     private $entityManager;
 
 
-    public function __construct()
+    public function __construct($entityManager)
     {
+        $this->entityManager = $entityManager;
+
+
 
         $this->add(array(
             'name' => 'phonenumber',
@@ -39,20 +44,20 @@ class RegisterInputFilter extends InputFilter
                         )
                     )
                 ),
-                [
-                    "name" => NoObjectExists::class,
-                    "options" => [
-                        "use_context" => true,
-                        "object_repository" => $this->entityManager->getRepository(User::class),
-                        "objject_manager" => $this->entityManager,
-                        "fields" => [
-                            "username"
-                        ],
-                        "messages" => [
-                            NoObjectExists::ERROR_NO_OBJECT_FOUND => "please use another Phone number"
-                        ]
-                    ]
-                ],
+                // [
+                //     "name" => NoObjectExists::class,
+                //     "options" => [
+                //         "use_context" => true,
+                //         "object_repository" => $this->entityManager->getRepository(User::class),
+                //         "objject_manager" => $this->entityManager,
+                //         "fields" => [
+                //             "phonenumber"
+                //         ],
+                //         "messages" => [
+                //             NoObjectExists::ERROR_NO_OBJECT_FOUND => "please use another Phone number"
+                //         ]
+                //     ]
+                // ],
                 [
                     'name' => StringLength::class,
                     'options' => array(
@@ -107,115 +112,129 @@ class RegisterInputFilter extends InputFilter
         ));
 
 
-        $this->add([
-            'email' => array(
-                'required' => true,
-                'allow_empty' => false,
-                'break_chain_on_failure' => true,
-                'filters' => array(
-                    array(
-                        'name' => 'StripTags'
-                    ),
-                    array(
-                        'name' => 'StringTrim'
+
+        $this->add(array(
+            'name' => 'email',
+            'required' => true,
+            "allow_empty" => false,
+            'filters' => array(
+                array(
+                    'name' => 'StripTags'
+                ),
+                array(
+                    'name' => 'StringTrim'
+                )
+            ),
+            'validators' => array(
+                array(
+                    'name' => 'EmailAddress',
+
+                    'options' => array(
+
+                        'messages' => array(
+                            EmailAddress::INVALID_FORMAT => 'Please check your email something is not right'
+                        )
                     )
                 ),
-                'validators' => array(
-                    // array(
-                    // 'name' => 'Regex',
-                    // 'options' => array(
-                    // 'pattern' => '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/',
-                    // 'messages' => array(
-                    // Regex::NOT_MATCH => 'Please provide a valid email address.'
-                    // )
-                    // ),
-                    // 'break_chain_on_failure' => true
-                    // ),
-                    array(
-                        'name' => 'DoctrineModule\Validator\NoObjectExists',
-                        'options' => array(
-                            'use_context' => true,
-                            'object_repository' => $this->entityManager->getRepository(User::class),
-                            'object_manager' => $this->entityManager,
-                            'fields' => array(
-                                'email'
-                            ),
-                            'messages' => array(
-
-                                NoObjectExists::ERROR_OBJECT_FOUND => 'Someone else is registered with this email'
-                            )
+                array(
+                    'name' => 'Regex',
+                    'options' => array(
+                        'pattern' => '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/',
+                        'messages' => array(
+                            Regex::NOT_MATCH => 'Please provide a valid email address.'
                         )
                     ),
-                    array(
-                        'name' => 'Laminas\Validator\StringLength',
-                        'options' => array(
-                            'messages' => array(),
-                            'min' => 3,
-                            'max' => 256,
-                            'messages' => array(
-                                StringLength::TOO_SHORT => 'Email Too short',
-                                StringLength::TOO_LONG => 'We dont think this is a genuine email'
-                            )
+                    'break_chain_on_failure' => true
+                ),
+                array(
+                    'name' => 'DoctrineModule\Validator\NoObjectExists',
+                    'options' => array(
+                        'use_context' => true,
+                        'object_repository' => $this->entityManager->getRepository(User::class),
+                        'object_manager' => $this->entityManager,
+                        'fields' => array(
+                            'email'
                         ),
+                        'messages' => array(
 
-
-                    ),
-                    array(
-                        'name' => 'EmailAddress',
-
-                        'options' => array(
-
-                            'messages' => array(
-                                EmailAddress::INVALID_FORMAT => 'Please check your email something is not right'
-                            )
+                            NoObjectExists::ERROR_OBJECT_FOUND => 'Someone else is registered with this email'
                         )
                     )
+                ),
+                array(
+                    'name' => 'NotEmpty',
+                    'options' => array(
+                        'messages' => array(
+                            'isEmpty' => 'What do we call you, we need to know'
+                        )
+                    )
+                ),
 
-                )
+                [
+                    'name' => StringLength::class,
+                    'options' => array(
+                        'messages' => array(),
+                        'min' => 2,
+                        'max' => 256,
+                        'messages' => array(
+                            StringLength::TOO_SHORT => 'We dont think you are Chinese',
+                            StringLength::TOO_LONG => 'How to you refer to such long name'
+                        )
+                    ),
+                ]
             )
-        ]);
+        ));
 
 
-
-        $this->add([
-            "emailVerify" => array(
-                "required" => true,
-                "allow_empty" => false,
-                "validators" => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min' => 6,
-                            'max' => 50,
-                            "messages" => array(
-                                StringLength::TOO_SHORT => "The email must be more than 6 characters",
-                                StringLength::TOO_LONG => "This email is too long to memorize"
-                            )
+        $this->add(array(
+            'name' => 'emailVerify',
+            'required' => true,
+            "allow_empty" => false,
+            'filters' => array(
+                array(
+                    'name' => 'StripTags'
+                ),
+                array(
+                    'name' => 'StringTrim'
+                )
+            ),
+            "validators" => array(
+                array(
+                    'name' => 'StringLength',
+                    'options' => array(
+                        'encoding' => 'UTF-8',
+                        'min' => 6,
+                        'max' => 50,
+                        "messages" => array(
+                            StringLength::TOO_SHORT => "The email must be more than 6 characters",
+                            StringLength::TOO_LONG => "This email is too long to memorize"
                         )
-                    ),
-                    array(
-                        'name' => 'EmailAddress',
+                    )
+                ),
+                array(
+                    'name' => 'EmailAddress',
 
-                        'options' => array(
+                    'options' => array(
 
-                            'messages' => array(
-                                EmailAddress::INVALID_FORMAT => 'Please check your email something is not right'
-                            )
+                        'messages' => array(
+                            EmailAddress::INVALID_FORMAT => 'Please check your email something is not right'
                         )
-                    ),
-                    array(
-                        'name' => 'Identical',
-                        'options' => array(
-                            'token' => 'email',
-                            "messages" => array(
-                                Identical::NOT_SAME => "The email are not identical"
-                            )
+                    )
+                ),
+                array(
+                    'name' => 'Identical',
+                    'options' => array(
+                        'token' => 'email',
+                        "messages" => array(
+                            Identical::NOT_SAME => "The email are not identical"
                         )
                     )
                 )
             )
-        ]);
+        ));
+
+
+       
     }
 
     /**

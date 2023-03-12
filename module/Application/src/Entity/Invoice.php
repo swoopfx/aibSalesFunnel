@@ -50,6 +50,14 @@ class Invoice
     private $amount;
 
 
+    /**
+     * Undocumented variable
+     * @ORM\Column(type="text", nullable=true)
+     * @var string
+     */
+    private $description;
+
+
 
     /**
      * The related transaction or reciept on successful payment or unsccessful Payment
@@ -371,6 +379,30 @@ class Invoice
     public function setInvoiceUuid(string $invoiceUuid)
     {
         $this->invoiceUuid = $invoiceUuid;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  string
+     */ 
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  string  $description  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setDescription(string $description)
+    {
+        $this->description = $description;
 
         return $this;
     }

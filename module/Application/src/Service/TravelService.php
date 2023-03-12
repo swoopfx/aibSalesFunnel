@@ -6,9 +6,11 @@ use Application\Entity\Country;
 use Application\Entity\Gender;
 use Application\Entity\TravelInsurance;
 use Application\Entity\TravelinsuranceList;
+use Application\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Application\Service\TransactionService;
 use DateTime;
+use Ramsey\Uuid\Uuid;
 
 class TravelService
 {
@@ -67,13 +69,19 @@ class TravelService
         $payableIndividualPrice = $this->calculateIndividualTravelFee($data);
         $payableListPrice = $this->calculateListPrice($data, $payableIndividualPrice);
         $totalPrice = $payableIndividualPrice + $payableListPrice;
-
+        $userEntity = $em->getRepository(User::class)->findOneBy([
+            "uuid" => $data["user"]
+        ]);
         $travelEntity = new TravelInsurance();
+        $destination = $em->find(Country::class, $data["destination"]);
         $travelEntity->setCreatedOn(new \DateTime())
+            ->setUser($userEntity)
+            ->setIsActive(TRUE)
+            ->setTravelUuid(Uuid::uuid4())
             ->setDepartureDate(DateTime::createFromFormat(self::DATE_FORMAT, $data["departureDate"]))
             ->setReturnDate(\DateTime::createFromFormat(self::DATE_FORMAT, $data["returnDate"]))
-            ->setDestination($em->find(Country::class, $data["destination"]))
-            ->setNationality($em->find(Country::class, $data["natioinality"]))
+            ->setDestination($destination)
+            ->setNationality($em->find(Country::class, $data["nationality"]))
             ->setDob(\DateTime::createFromFormat(self::DATE_FORMAT, $data["dob"]))
             ->setTravelUid(self::genrateTravelUid());
         if ($data["travelList"] != "") {
@@ -90,14 +98,20 @@ class TravelService
                 $em->persist($travelListEntity);
             }
         }
+
         $invoiceData["amount"] = $totalPrice;
+        $invoiceData["user"] = $userEntity;
+        $invoiceData["desc"] = "Premium payment for travel insurance by {$userEntity->getFullname()} to  {$destination->getName()}";
         $invoiceEntity = $this->transactionService->generateInvoice($invoiceData);
         $travelEntity->setInvoice($invoiceEntity);
 
         $em->persist($travelEntity);
         $em->flush();
-        $response["invoice"] = $invoiceEntity;
-        $response["travel"] = $travelEntity;
+
+        $invoice['uuid'] = $invoiceEntity->getInvoiceUuid();
+        $travel["uuid"] = $travelEntity->getTravelUuid();
+        $response["invoice"] = $invoice;
+        $response["travel"] = $travel;
         return $response;
     }
 
@@ -116,7 +130,8 @@ class TravelService
     private function calculateIndividualTravelFee($data): float
     {
         $travelFee = 0;
-        $age = $this->ageOfPrincipal($data["dob"]);
+        $age = $this->ageOfPrincipal($data);
+        // var_dump($age);
         $travelDuration = $this->durationOfTravel($data);
         $absTravelDuration = intval(abs($travelDuration));
         switch (true) {
@@ -331,6 +346,7 @@ class TravelService
 
     private function ageOfPrincipal($data)
     {
+        // var_dump(\DateTime::createFromFormat(self::DATE_FORMAT, $data["dob"])->diff(new \DateTime('now')));
         return  \DateTime::createFromFormat(self::DATE_FORMAT, $data["dob"])->diff(new \DateTime('now'))->y;
     }
 

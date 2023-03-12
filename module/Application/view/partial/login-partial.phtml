@@ -1,27 +1,233 @@
 <?php
+
 ?>
+<div class="flex-lg-row-fluid ms-lg-10">
+    <!--begin::details View-->
+    <div id="loginvv" class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+        <!--begin::Card header-->
+        <div v-if="sessionUid == null">
+            <div class="card-header cursor-pointer">
+                <!--begin::Card title-->
+                <div class="card-title m-0">
+                    <h3 class="fw-bolder m-0">Login Details</h3>
+                </div>
+                <!--end::Card title-->
+                <!--begin::Action-->
+                <!-- <a href="#" class="btn btn-primary align-self-center">Edit Profile</a> -->
+                <!--end::Action-->
+            </div>
+            <!--begin::Card header-->
+            <!--begin::Card body-->
+            <div class="card-body p-9">
+                <!--begin::Row-->
+                <div v-if="!isRegisterForm">
+                    <?= $this->partial("partials-form-login") ?>
+                </div>
+                <div v-else>
+                    <?= $this->partial("partials-form-register") ?>
+                </div>
+
+                <!--end::Notice-->
+            </div>
+        </div>
+        <div v-else>
+            <div class="card-header cursor-pointer">
+                <!--begin::Card title-->
+                <div class="card-title m-0">
+                    <h3 class="fw-bolder m-0">User Details</h3>
+                </div>
+                <!--end::Card title-->
+                <!--begin::Action-->
+                <!-- <a href="#" class="btn btn-primary align-self-center">Edit Profile</a> -->
+                <!--end::Action-->
+            </div>
+            <!--begin::Card header-->
+            <!--begin::Card body-->
+            <div v-if="sessionDetailsStrigify != '{}'" class="card-body p-9">
+                <!--begin::Row-->
+                <div class="row mb-7">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 fw-bold text-muted">Customer Name</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <span class="fw-bolder fs-6 text-dark">{{sessionDetails.fullname}}</span>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Row-->
+                <!--begin::Input group-->
+                <div class="row mb-7">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 fw-bold text-muted">Email</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <span class="fw-bold fs-6">{{sessionDetails.email}}</span>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-7">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 fw-bold text-muted">Contact Phone
+                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Phone number must be active"></i></label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8 d-flex align-items-center">
+                        <span class="fw-bolder fs-6 me-2">{{sessionDetails.phone}}</span>
+                        <span class="badge badge-success">Verified</span>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+
+               
+                <!--end::Notice-->
+            </div>
+        </div>
+
+        <!--end::Card body-->
+    </div>
+    <!--end::details View-->
+    <!--begin::Chart widget 2-->
+
+    <!--end::List Widget 4-->
+</div>
 
 
 <script>
     const loginApp = Vue.createApp({
         data() {
             return {
-
+                sessionUid: null,
+                sessionDetails: {},
+                sessionDetailsStrigify: "{}",
+                see: "Wel",
+                isRegisterForm: false,
+                isSubmitRegister: false,
+                isSubmitEmailStatus: false,
+                userREmail: "",
             }
         },
 
         mounted() {
-            this.welcome();
+            // this.welcome();
+            this.getSession();
         },
 
         methods: {
-            welcome() {
 
+            emailStatus() {
+                this.isSubmitEmailStatus = true;
+                if (this.$refs.vEmail.value == "") {
+                    this.$toast.open({
+                        message: "Your email is required",
+                        type: "error",
+                        position: "top-right",
+                        duration: 30000,
+                        dismissible: true
+                    });
+                    this.isSubmitEmailStatus = false;
+                } else {
+                    let formData = new FormData();
+                    formData.append("email", this.$refs.vEmail.value);
+                    axios.post("/auth/emailstatus", formData).then(res => {
+                        if (res.status == 200) {
+                            if (res.data.isRegister) {
+                                this.isRegisterForm = true;
+                                this.userREmail = this.$refs.vEmail.value;
+                            } else if (!res.data.isRegister) {
+                                // this.sessionUid = res.data.data.uid;
+                                // this.$sessionDetails = res.data.data;
+
+                                this.getSession();
+
+                                window.location.reload();
+                            }
+                        }
+                        this.isSubmitEmailStatus = false;
+                    }).catch(err => {
+                        this.$toast.open({
+                            message: err.response.data.messages,
+                            type: "error",
+                            position: "top-right",
+                            duration: 30000,
+                            dismissible: true
+                        });
+                    })
+                }
             },
 
-            login() {
+            registerUser() {
+                this.isSubmitRegister = true;
 
+                if (this.$refs.vREmail.value == "" || this.$refs.vRPhone.value == "" || this.$refs.vRFullName.value == "" || this.$refs.vvREmail.value == "") {
+                    this.$toast.open({
+                        message: "A required Field is empty, please make sure all fields are filled",
+                        type: "error",
+                        position: "top-right",
+                        duration: 30000,
+                        dismissible: true
+                    });
+                    this.isSubmitRegister = false;
+                } else if (this.$refs.vvREmail.value !== this.$refs.vREmail.value) {
+                    this.$toast.open({
+                        message: "We require you to verify email pprovided to be the same",
+                        type: "error",
+                        position: "top-right",
+                        duration: 30000,
+                        dismissible: true
+                    });
+                    this.isSubmitRegister = false;
+                } else {
+                    let formData = new FormData();
+                    formData.append("email", this.$refs.vREmail.value);
+                    formData.append("phonenumber", this.$refs.vRPhone.value);
+                    formData.append("fullname", this.$refs.vRFullName.value);
+                    formData.append("emailVerify", this.$refs.vvREmail.value);
+
+                    axios.post("/auth/register", formData).then(res => {
+                        if (res.status == 201) {
+                            window.location.reload();
+                        } else {
+                            // throw error notification
+                        }
+                        this.isSubmitRegister = false;
+                    }).catch(err => {
+
+                        this.isSubmitRegister = false;
+                    });
+
+                }
+            },
+
+            getSession() {
+                axios.get("/auth/session").then(res => {
+                    if (res.status == 200) {
+
+                        this.sessionDetails = res.data.data;
+                        this.sessionDetailsStrigify = JSON.stringify(res.data.data);
+                        this.sessionUid = res.data.data.uid;
+                        // console.log(this.sessionUid);
+                        // return ;
+
+                    }
+                }).catch();
+            },
+
+            welcome() {
+                if (this.sessionUid != NULL) {
+
+                }
             }
+
         },
-    })
+    });
+    loginApp.use(VueToast.ToastPlugin);
+    const loginAppMount = loginApp.mount("#loginvv");
+
+    // console.log(loginAppMount.see);
 </script>

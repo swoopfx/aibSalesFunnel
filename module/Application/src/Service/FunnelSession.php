@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Laminas\Http\Header\SetCookie;
 use Laminas\Session\Container;
 
 class FunnelSession
@@ -31,6 +32,7 @@ class FunnelSession
         $this->funnelSession->offsetSet("igibber", $data["uuid"]);
         $this->funnelSession->offsetSet("igibbername", $data["name"]);
         // $this->funnelSession->igibber = $data;
+       
         return $this;
     }
 

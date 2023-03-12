@@ -155,6 +155,15 @@ class MotorInsurance
     private $invoice;
 
 
+
+    /**
+     * Undocumented variable
+     * @ORM\Column(type="boolean", options={"default" : 1})
+     * @var bool
+     */
+    private $isActive ;
+
+
     public function __construct()
     {
         $this->vehicleImage = new ArrayCollection();
@@ -551,6 +560,30 @@ class MotorInsurance
     public function setInvoice(Invoice $invoice)
     {
         $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  bool
+     */ 
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  bool  $isActive  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setIsActive(bool $isActive)
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

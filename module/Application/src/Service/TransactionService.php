@@ -22,9 +22,13 @@ class TransactionService
 
     private $generalService;
 
+    const INVOICE_STATUS_INITIATED = 10;
+   
     const INVOICE_STATUS_SETTLED = 100;
 
     const INVOICE_STATUS_UNSETTLED = 200;
+
+    const INVOICE_STATUS_CANCELLED = 500;
 
     public function generateInvoice($data)
     {
@@ -35,8 +39,10 @@ class TransactionService
             ->setCreatedOn(new \Datetime())
             ->setInvoiceUuid(self::invoiceUuid())
             ->setInvoiceUid(self::invoiceUid())
+            ->setDescription($data["desc"])
             ->setIsOpen(TRUE)
-            ->setStatus($entityManager->find(InvoiceStatus::class, self::INVOICE_STATUS_UNSETTLED))
+            ->setUser($data["user"])
+            ->setStatus($entityManager->find(InvoiceStatus::class, self::INVOICE_STATUS_INITIATED))
             ->setGeneratedOn(new \Datetime());
 
         $entityManager->persist($invoiceEntity);

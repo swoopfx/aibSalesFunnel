@@ -17,6 +17,7 @@ use Doctrine\ORM\Query;
 use Laminas\Http\Header\SetCookie;
 use Laminas\InputFilter\InputFilter;
 use Laminas\View\Model\ViewModel;
+use Application\Service\SendInBlueMarketing;
 
 class AuthController extends AbstractActionController
 {
@@ -52,6 +53,13 @@ class AuthController extends AbstractActionController
      * @var EntityManager
      */
     private $entityManager;
+
+    /**
+     * Undocumented variable
+     *
+     * @var SendInBlueMarketing
+     */
+    private $sendInBlue;
 
     public function sessionAction()
     {
@@ -262,11 +270,19 @@ class AuthController extends AbstractActionController
 
 
                     $em->persist($userEntity);
-                    $em->flush();
+                   
 
                     $cookie = $this->createSession($userEntity);
                     $response->getHeaders()->addHeader($cookie);
 
+                    // $number = intval($userEntity->getPhonenumber());
+                    $sendInBlue["email"] = $userEntity->getEmail();
+                    $sendInBlue["fullname"] = $userEntity->getFullname();
+                    // $sendInBlue["sms"] = "234".$number;
+
+                    $this->sendInBlue->createContact($sendInBlue);
+
+                    $em->flush();
 
                     // register user email and phone on sendInblue for email marketing or any campaign tool
 
@@ -418,6 +434,30 @@ class AuthController extends AbstractActionController
     public function setFunnelSession(FunnelSession $funnelSession)
     {
         $this->funnelSession = $funnelSession;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  SendInBlueMarketing
+     */ 
+    public function getSendInBlue()
+    {
+        return $this->sendInBlue;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  SendInBlueMarketing  $sendInBlue  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setSendInBlue(SendInBlueMarketing $sendInBlue)
+    {
+        $this->sendInBlue = $sendInBlue;
 
         return $this;
     }

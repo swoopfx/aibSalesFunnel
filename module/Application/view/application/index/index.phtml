@@ -2,7 +2,20 @@
 	<!--begin::Root-->
 
 	<?php
+	$flashMessenger = $this->flashMessenger()
+		->setMessageOpenFormat('<div%s>
+ <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+	 &times;
+ </button>
+ <ul><li>')
+		->setMessageSeparatorString('</li><li>')
+		->setMessageCloseString('</li></ul></div>');
+
 	?>
+	<?php echo $flashMessenger->render('error',   array('alert', 'alert-dismissable', 'alert-danger')); ?>
+	<?php echo $flashMessenger->render('info',    array('alert', 'alert-dismissable', 'alert-info')); ?>
+	<?php echo $flashMessenger->render('default', array('alert', 'alert-dismissable', 'alert-warning')); ?>
+	<?php echo $flashMessenger->render('success', array('alert', 'alert-dismissable', 'alert-success')); ?>
 
 	<div class="d-flex flex-column flex-root">
 		<!--begin::Page-->
@@ -197,7 +210,7 @@
 
 
 								<!--begin::About  enter about here -->
-								
+
 
 
 

@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\MotorInsurance;
+use Application\Entity\User;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;

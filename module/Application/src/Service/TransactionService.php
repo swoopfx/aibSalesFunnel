@@ -68,7 +68,7 @@ class TransactionService
 
     private static function invoiceUid()
     {
-        return uniqid(time());
+        return uniqid("inv");
     }
 
     private static function invoiceUuid()

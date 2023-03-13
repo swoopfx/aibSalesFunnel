@@ -21,6 +21,7 @@ use Application\Service\Factory\FunnelSessionFactory;
 use Application\Service\Factory\GeneralServiceFactory;
 use Application\Service\Factory\MotorServiceFactory;
 use Application\Service\Factory\PaystackServiceFactory;
+use Application\Service\Factory\SendInBlueMarketingFactory;
 use Application\Service\Factory\TransactionServiceFactory;
 use Application\Service\Factory\TravelServiceFactory;
 use Application\Service\Factory\UploadServiceFactory;
@@ -28,9 +29,11 @@ use Application\Service\FunnelSession;
 use Application\Service\GeneralService;
 use Application\Service\MotorService;
 use Application\Service\PaystackService;
+use Application\Service\SendInBlueMarketing;
 use Application\Service\TransactionService;
 use Application\Service\TravelService;
 use Application\Service\UploadService;
+use Application\ViewHelper\InvoiceStatusHelper;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
@@ -82,7 +85,7 @@ return [
             'motor' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/travel[/:action[/:id]]',
+                    'route'    => '/motor[/:action[/:id]]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id' => '[a-zA-Z0-9_-]*'
@@ -238,12 +241,14 @@ return [
             TransactionService::class => TransactionServiceFactory::class,
             PaystackService::class => PaystackServiceFactory::class,
             TravelService::class => TravelServiceFactory::class,
+            SendInBlueMarketing::class => SendInBlueMarketingFactory::class,
         ],
         "aliases" => [
             "general_service" => GeneralService::class,
             "funnel_session" => FunnelSession::class,
             'upload_service' => UploadService::class,
             'paystack_service' => PaystackService::class,
+            "send_in_blue" => SendInBlueMarketing::class,
         ]
     ],
 
@@ -253,7 +258,15 @@ return [
             LoginInputFilter::class => InvokableFactory::class,
             TravelInputFIlter::class => InvokableFactory::class,
         ]
-    ]
+    ],
+    'view_helpers' => [
+        "factories" => [
+            InvoiceStatusHelper::class => InvokableFactory::class,
+        ],
+        "aliases" => [
+            "invoicestatus" => InvoiceStatusHelper::class
+        ]
+    ],
 
 
 ];

@@ -21,6 +21,7 @@ class AuthControllerFactory implements FactoryInterface
          */
         $generalService = $container->get("general_service");
         $funnelSession = $container->get("funnel_session");
+        $sendInBlue = $container->get("send_in_blue");
         $em = $generalService->getEm();
         $inputfilterPlugin = $container->get(InputFilterPluginManager::class);
         $registerInputFilter = $inputfilterPlugin->get(RegisterInputFilter::class);
@@ -28,6 +29,7 @@ class AuthControllerFactory implements FactoryInterface
         $ctr->setEntityManager($em)->setGeneralService($generalService)
             ->setRegisterInputFilter($registerInputFilter)
             ->setLoginInputFilter($loginInputFilter)
+            ->setSendInBlue($sendInBlue)
             ->setFunnelSession($funnelSession);
         return $ctr;
     }

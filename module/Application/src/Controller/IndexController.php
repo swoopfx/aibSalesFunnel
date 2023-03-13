@@ -145,12 +145,14 @@ class IndexController extends AbstractActionController
         $viewModel = new ViewModel();
         $parameter = $this->params()->fromRoute("id", null);
         if ($parameter == null) {
+            $this->flashmessenger()->addErrorMessage("Invoice Identifier is absent");
             $this->redirect()->toRoute("home");
         } else {
             $invoiceEntity = $this->entityManager->getRepository(Invoice::class)->findOneBy([
                 "invoiceUuid" => strip_tags($parameter)
             ]);
             if ($invoiceEntity == null) {
+                $this->flashmessenger()->addErrorMessage("Invoice Identifier is absent");
                 $this->redirect()->toRoute("home");
             }
             $settings = $this->entityManager->find(Settings::class, 1);

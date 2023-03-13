@@ -86,8 +86,9 @@
                                                             <div class="ps-3">
                                                                 <?= strtoupper($dat->getTravelUid()) ?>
                                                                 <span class="text-gray-400 fw-bold d-block">Destination: <?= $dat->getDestination()->getName() ?></span>
+                                                               Invoice Status: <?= $this->invoicestatus($dat->getInvoice()->getStatus()->getId()) ?>
 
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </td>

@@ -20,6 +20,7 @@ use Laminas\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
 use Application\Service\MotorService;
 use Application\Service\FunnelSession;
+use Laminas\Session\Container;
 
 class IndexController extends AbstractActionController
 {
@@ -148,6 +149,9 @@ class IndexController extends AbstractActionController
             $this->flashmessenger()->addErrorMessage("Invoice Identifier is absent");
             $this->redirect()->toRoute("home");
         } else {
+            /**
+             * @var Invoice
+             */
             $invoiceEntity = $this->entityManager->getRepository(Invoice::class)->findOneBy([
                 "invoiceUuid" => strip_tags($parameter)
             ]);
@@ -155,7 +159,17 @@ class IndexController extends AbstractActionController
                 $this->flashmessenger()->addErrorMessage("Invoice Identifier is absent");
                 $this->redirect()->toRoute("home");
             }
+            /**
+             * @var Settings
+             */
             $settings = $this->entityManager->find(Settings::class, 1);
+
+            $container = new Container("invoicesession");
+            $container->invoiceref = $invoiceEntity->getInvoiceUid();
+            $container->amount = $invoiceEntity->getAmount();
+            $container->email = $invoiceEntity->getUser()->getEmail();
+            $container->pkey = $settings->getPaystackKey();
+
             $viewModel->setVariables([
                 "data" => $invoiceEntity,
                 "setting" => $settings

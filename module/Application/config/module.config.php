@@ -19,6 +19,7 @@ use Application\Form\RegisterInputFilter;
 use Application\Form\TravelInputFIlter;
 use Application\Service\Factory\FunnelSessionFactory;
 use Application\Service\Factory\GeneralServiceFactory;
+use Application\Service\Factory\MailServiceFactory;
 use Application\Service\Factory\MotorServiceFactory;
 use Application\Service\Factory\PaystackServiceFactory;
 use Application\Service\Factory\SendInBlueMarketingFactory;
@@ -27,6 +28,7 @@ use Application\Service\Factory\TravelServiceFactory;
 use Application\Service\Factory\UploadServiceFactory;
 use Application\Service\FunnelSession;
 use Application\Service\GeneralService;
+use Application\Service\MailService;
 use Application\Service\MotorService;
 use Application\Service\PaystackService;
 use Application\Service\SendInBlueMarketing;
@@ -97,6 +99,21 @@ return [
                 ],
             ],
 
+            'invoice' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/invoice[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9_-]*'
+                    ),
+                    'defaults' => [
+                        'controller' => InvoiceController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
             'auth' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -155,6 +172,7 @@ return [
             TravelController::class => TravelControllerFactory::class,
             MotorController::class => MotorControllerFactory::class,
             InvoiceController::class => InvoiceControllerFactory::class,
+
         ],
     ],
     'view_manager' => [
@@ -242,10 +260,12 @@ return [
             PaystackService::class => PaystackServiceFactory::class,
             TravelService::class => TravelServiceFactory::class,
             SendInBlueMarketing::class => SendInBlueMarketingFactory::class,
+            MailService::class=>MailServiceFactory::class,
         ],
         "aliases" => [
             "general_service" => GeneralService::class,
             "funnel_session" => FunnelSession::class,
+            "transaction_service"=>TransactionService::class,
             'upload_service' => UploadService::class,
             'paystack_service' => PaystackService::class,
             "send_in_blue" => SendInBlueMarketing::class,

@@ -67,7 +67,7 @@ class Settings
 
     /**
      * Undocumented variable
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(nullable=true, type="text")
      *
      * @var string
      */
@@ -75,10 +75,18 @@ class Settings
 
     /**
      * Pay
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(nullable=true, type="text")
      * @var string
      */
     private $paystackSecret;
+
+    /**
+     * This is the registered email of mail sender on
+     * platforms like sendInBlue
+     * @ORM\Column(nullable=true)
+     * @var string
+     */
+    private $companyEmailSender;
 
     // private 
 
@@ -284,6 +292,30 @@ class Settings
     public function setPaystackSecret(string $paystackSecret)
     {
         $this->paystackSecret = $paystackSecret;
+
+        return $this;
+    }
+
+    /**
+     * Get platforms like sendInBlue
+     *
+     * @return  string
+     */ 
+    public function getCompanyEmailSender()
+    {
+        return $this->companyEmailSender;
+    }
+
+    /**
+     * Set platforms like sendInBlue
+     *
+     * @param  string  $companyEmailSender  platforms like sendInBlue
+     *
+     * @return  self
+     */ 
+    public function setCompanyEmailSender(string $companyEmailSender)
+    {
+        $this->companyEmailSender = $companyEmailSender;
 
         return $this;
     }

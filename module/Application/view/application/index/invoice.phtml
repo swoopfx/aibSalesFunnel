@@ -1,5 +1,5 @@
 <?php
-
+$key = $setting->getPaystackKey();
 ?>
 
 
@@ -23,7 +23,7 @@
                             </a>
                             <!--end::Logo-->
                             <!--begin::Actions-->
-                            <div class="my-1">
+                            <div v-if="hasLoadedInvoiceDets" class="my-1">
                                 <a href="#" class="btn btn-sm btn-light me-2">Download</a>
                                 <a href="#" class="btn btn-sm btn-success me-2" onclick="window.print()">Print</a>
                                 <button @click="makePayment()" class="btn btn-sm btn-primary" type="submit"> Pay </button>
@@ -217,7 +217,7 @@
                             <!--begin::Item-->
                             <div class="mb-6">
                                 <div class="fw-bold text-gray-600 fs-7">Account:</div>
-                                <div class="fw-bolder text-gray-800 fs-6">{{paystackKey}}
+                                <div class="fw-bolder text-gray-800 fs-6">{{paymentAmount}}
                                     <br />AMB NLANBZTC
                                 </div>
                             </div>
@@ -279,30 +279,75 @@
         data() {
             return {
                 // invoiceUid: value,
-                paystackKey: "HEYR",
+                paystackKey: "",
                 userEmail: "",
                 paymentAmount: "",
+                invoiceRef: "",
+                hasLoadedInvoiceDets: false,
             }
         },
 
         mounted() {
-
+            this.getInvoiceDetails();
         },
 
         methods: {
+
+            getInvoiceDetails() {
+
+                setTimeout(() => {
+                    // call invoiceSession Action
+                    axios.get("/invoice/invoice-session").then(res => {
+                        if (res.status == 200) {
+                            this.hasLoadedInvoiceDets = true;
+                            this.paymentAmount = res.data.data.amount;
+                            this.userEmail = res.data.data.email;
+                            this.invoiceRef = res.data.data.invoiceref;
+                            this.paystackKey = res.data.data.pkey;
+                        }
+                    }).catch();
+                }, 3000);
+            },
+
             getInvoiceSetting() {
 
             },
 
             makePayment() {
                 var handler = PaystackPop.setup({
-                    key: 'YOUR_PUBLIC_KEY', // Replace with your public key
+                    key: this.paystackKey, // Replace with your public key
                     email: this.userEmail,
-                    amount: this.paymentAmount, // the amount value is multiplied by 100 to convert to the lowest currency unit
+                    amount: this.paymentAmount * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
                     currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
-                    ref: 'YOUR_REFERENCE', // Replace with a reference you generated
+                    ref: this.invoiceRef, // Replace with a reference you generated
                     callback: function(response) {
+                        // message: "Approved"
+                        // redirecturl: "?trxref=T325045183374237&reference=T325045183374237"
+                        // reference: "T325045183374237"
+                        // status: "success"
+                        // trans: "2626859166"
+                        // transaction: "2626859166"
+                        // trxref: "T325045183374237"
+
+                        if (response.status == "success") {
+                            let formData = new FormData();
+                            formData.append("ref", response.reference);
+                            formData.append("transaction", response.transaction);
+                            formData.append("invoice", this.invoiceRef);
+                            axios.post("/invoice/verify", formData).then(res => {
+                                // if(res.status == 201){
+
+                                // }
+                            }).catch(err => {
+
+                            });
+                        }
+
+                        // alert("Got Here");
                         //this happens after the payment is completed successfully
+                        console.log(response);
+
+                        // console.log(response);
                         var reference = response.reference;
                         alert('Payment complete! Reference: ' + reference);
                         // Make an AJAX call to your server with the reference to verify the transaction

@@ -12,7 +12,9 @@ class InvoiceControllerFactory implements FactoryInterface{
     {
         
         $ctr = new InvoiceController();
-
+        $generalService = $container->get("general_service");
+        $transactionService = $container->get("transaction_service");
+        $ctr->setTransactionService($transactionService)->setEntityManager($generalService->getEm()); 
         return $ctr;
     }
 }

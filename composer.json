@@ -30,7 +30,9 @@
         "doctrine/migrations": "3.4",
         "ramsey/uuid": "^4.2",
         "sendinblue/api-v3-sdk": "^8.4",
-        "wildbit/postmark-php": "^4.0"
+        "wildbit/postmark-php": "^4.0",
+        "laminas/laminas-mail": "^2.16",
+        "laminas/laminas-mime": "^2.10"
     },
     "autoload": {
         "psr-4": {

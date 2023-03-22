@@ -88,6 +88,13 @@ class Settings
      */
     private $companyEmailSender;
 
+    /**
+     * Undocumented variable
+     * @ORM\Column(nullable=true)
+     * @var string
+     */
+    private $baseUrl;
+
     // private 
 
 
@@ -316,6 +323,30 @@ class Settings
     public function setCompanyEmailSender(string $companyEmailSender)
     {
         $this->companyEmailSender = $companyEmailSender;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  string
+     */ 
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  string  $baseUrl  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setBaseUrl(string $baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
 
         return $this;
     }

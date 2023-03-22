@@ -5,7 +5,7 @@
     <!--begin::Post-->
     <div class="content flex-row-fluid" id="kt_content">
         <!--begin::Layout - Overview-->
-        <div class="d-flex flex-column flex-xl-row">
+        <div id="vProfile" class="d-flex flex-column flex-xl-row">
             <!--begin::Sidebar-->
 
 
@@ -13,7 +13,7 @@
 
 
 
-            
+
 
             <!--end::Sidebar-->
             <!--begin::Content-->
@@ -28,7 +28,7 @@
                         </div>
                         <!--end::Card title-->
                         <!--begin::Action-->
-                        <a href="#" class="btn btn-primary align-self-center">Edit Profile</a>
+                        <a @click="getDetails" tooltip="Edit Profile" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_profilee" class="btn btn-primary align-self-center">Edit Profile</a>
                         <!--end::Action-->
                     </div>
                     <!--begin::Card header-->
@@ -135,3 +135,13 @@
     </div>
     <!--end::Post-->
 </div>
+
+<script>
+    const profileapp = Vue.createApp({
+        methods: {
+            getDetails() {
+                lowerDeck.getProfileData();
+            }
+        },
+    }).mount("#vProfile")
+</script>

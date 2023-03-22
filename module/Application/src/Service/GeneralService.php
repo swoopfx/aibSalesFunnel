@@ -2,11 +2,20 @@
 namespace Application\Service;
 
 use Application\Entity\Settings;
+use Doctrine\ORM\EntityManager;
 
 
 class GeneralService {
 
 
+    const COMPANY_NAME = "Advocate Insurance Brokers";
+
+
+    /**
+     * Undocumented variable
+     *
+     * @var EntityManager
+     */
     private $em;
 
     private $mail;
@@ -21,6 +30,9 @@ class GeneralService {
     private $companySettings;
 
     
+    public function getSettings(){
+      return  $this->em->find(Settings::class, 1);
+    }
 
     /**
      * Get the value of em

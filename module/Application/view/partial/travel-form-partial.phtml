@@ -10,7 +10,7 @@
             <div class="col-md-6 fv-row">
                 <label class="required fs-6 fw-bold mb-2">Departure Date</label>
                 <div class="position-relative d-flex align-items-center">
-                    <input ref="vDeparture" type="date" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                    <input ref="vDeparture" @change="onSelectDetartureDate" type="date" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
                 </div>
             </div>
             <!--end::Col-->
@@ -21,7 +21,7 @@
                 <div class="position-relative d-flex align-items-center">
                     <!--begin::Icon-->
                     <!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
-                    <input type="date" ref="vReturnDate" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                    <input type="date" ref="vReturnDate" :min="minReturnDate" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
                     <!--end::Datepicker-->
                 </div>
                 <!--end::Input-->

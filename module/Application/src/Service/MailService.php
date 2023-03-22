@@ -61,25 +61,29 @@ class MailService
      */
     public function execute(array $data)
     {
-        /**
-         * @var Settings
-         */
-        $settingEntity = $this->entityManager->find(Settings::class, 1);
-        $bodyHtml = $this->viewRenderer->render($data["template"], $data["var"]);
-        $html = new Part($bodyHtml);
-        $html->type = Mime::TYPE_HTML;
-        $html->charset = "utf-8";
-        $body = new Message();
-        $body->addPart($html);
-        $mail = new MailMessage();
-        $mail->setEncoding("UTF-8");
-        $mail->setBody($body);
-        $mail->setFrom($settingEntity->getCompanyEmailSender(), $settingEntity->getCompanyName());
-        $mail->addTo($data["to"], $data["toName"]);
-        $mail->setSubject($data["subject"]);
+        try {
+            /**
+             * @var Settings
+             */
+            $settingEntity = $this->entityManager->find(Settings::class, 1);
+            $bodyHtml = $this->viewRenderer->render($data["template"], $data["var"]);
+            $html = new Part($bodyHtml);
+            $html->type = Mime::TYPE_HTML;
+            $html->charset = "utf-8";
+            $body = new Message();
+            $body->addPart($html);
+            $mail = new MailMessage();
+            $mail->setEncoding("UTF-8");
+            $mail->setBody($body);
+            $mail->setFrom($settingEntity->getCompanyEmailSender(), $settingEntity->getCompanyName());
+            $mail->addTo($data["to"], $data["toName"]);
+            $mail->setSubject($data["subject"]);
 
-        $this->smtpTransport->setOptions($this->smtpOptions);
-        $this->smtpTransport->send($mail);
+            $this->smtpTransport->setOptions($this->smtpOptions);
+            $this->smtpTransport->send($mail);
+        } catch (\Throwable $th) {
+            throw new \Exception($th->getMessage());
+        }
     }
 
 

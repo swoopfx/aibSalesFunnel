@@ -1,14 +1,41 @@
 <?php
+
 namespace Admin;
 
 use Admin\Controller\AdminController;
 use Admin\Controller\Factory\AdminControllerFactory;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Laminas\Router\Http\Segment;
 
 return [
-    "controllers"=>[
-        "factories"=>[
-            AdminController::class=>AdminControllerFactory::class
+    "router" => [
+        "routes" => [
+           
+            'admin' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/admin[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9_-]*'
+                    ),
+                    'defaults' => [
+                        'controller' => AdminController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+        ]
+    ],
+    "view_manager" => [
+        'template_map' => [
+            "layout/admin" => __DIR__ . '/../view/layout/adminlayout.phtml',
+            "layout/admin-login"=>__DIR__ . '/../view/layout/adminlogin.phtml',
+        ]
+    ],
+    "controllers" => [
+        "factories" => [
+            AdminController::class => AdminControllerFactory::class
         ]
     ],
     'doctrine' => [

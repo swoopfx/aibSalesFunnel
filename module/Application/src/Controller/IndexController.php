@@ -20,7 +20,12 @@ use Laminas\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
 use Application\Service\MotorService;
 use Application\Service\FunnelSession;
+use Doctrine\ORM\Query;
 use Laminas\Session\Container;
+use Application\Form\RegisterInputFilter;
+use Laminas\Validator\EmailAddress;
+use Laminas\Validator\Regex;
+use Laminas\Validator\StringLength;
 
 class IndexController extends AbstractActionController
 {
@@ -46,6 +51,13 @@ class IndexController extends AbstractActionController
      */
     private $generalService;
 
+    /**
+     * Undocumented variable
+     *
+     * @var RegisterInputFilter
+     */
+    private $registerInputFilter;
+
 
     /**
      * Undocumented variable
@@ -67,6 +79,219 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
         return new ViewModel();
+    }
+
+    public function editProfileAction()
+    {
+
+        $jsonModel = new JsonModel();
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+        if ($request->isPost()) {
+            try {
+                $post = $request->getPost()->toArray();
+                $inputFilter = new InputFilter();
+                $inputFilter->add([
+                    'name' => 'phonenumber',
+                    'required' => true,
+                    "allow_empty" => false,
+                    'filters' => array(
+                        array(
+                            'name' => 'StripTags'
+                        ),
+                        array(
+                            'name' => 'StringTrim'
+                        )
+                    ),
+                    'validators' => array(
+                        array(
+                            'name' => 'NotEmpty',
+                            'options' => array(
+                                'messages' => array(
+                                    'isEmpty' => 'Identity is required'
+                                )
+                            )
+                        ),
+                        // [
+                        //     "name" => NoObjectExists::class,
+                        //     "options" => [
+                        //         "use_context" => true,
+                        //         "object_repository" => $this->entityManager->getRepository(User::class),
+                        //         "objject_manager" => $this->entityManager,
+                        //         "fields" => [
+                        //             "phonenumber"
+                        //         ],
+                        //         "messages" => [
+                        //             NoObjectExists::ERROR_NO_OBJECT_FOUND => "please use another Phone number"
+                        //         ]
+                        //     ]
+                        // ],
+                        [
+                            'name' => StringLength::class,
+                            'options' => array(
+                                'messages' => array(),
+                                'min' => 10,
+                                'max' => 11,
+                                'messages' => array(
+                                    StringLength::TOO_SHORT => 'Please provide a valid number',
+                                    StringLength::TOO_LONG => 'We think this is not a valid Phone Number'
+                                )
+                            ),
+                        ]
+                    )
+                ]);
+                $inputFilter->add([
+                    'name' => 'fullname',
+                    'required' => true,
+                    "allow_empty" => false,
+                    'filters' => array(
+                        array(
+                            'name' => 'StripTags'
+                        ),
+                        array(
+                            'name' => 'StringTrim'
+                        )
+                    ),
+                    'validators' => array(
+                        array(
+                            'name' => 'NotEmpty',
+                            'options' => array(
+                                'messages' => array(
+                                    'isEmpty' => 'What do we call you, we need to know'
+                                )
+                            )
+                        ),
+
+                        [
+                            'name' => StringLength::class,
+                            'options' => array(
+                                'messages' => array(),
+                                'min' => 2,
+                                'max' => 256,
+                                'messages' => array(
+                                    StringLength::TOO_SHORT => 'We dont think you are Chinese',
+                                    StringLength::TOO_LONG => 'How to you refer to such long name'
+                                )
+                            ),
+                        ]
+                    )
+                ]);
+
+                $inputFilter->add([
+                    'name' => 'email',
+                    'required' => true,
+                    "allow_empty" => false,
+                    'filters' => array(
+                        array(
+                            'name' => 'StripTags'
+                        ),
+                        array(
+                            'name' => 'StringTrim'
+                        )
+                    ),
+                    'validators' => array(
+                        array(
+                            'name' => 'EmailAddress',
+
+                            'options' => array(
+
+                                'messages' => array(
+                                    EmailAddress::INVALID_FORMAT => 'Please check your email something is not right'
+                                )
+                            )
+                        ),
+                        array(
+                            'name' => 'Regex',
+                            'options' => array(
+                                'pattern' => '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/',
+                                'messages' => array(
+                                    Regex::NOT_MATCH => 'Please provide a valid email address.'
+                                )
+                            ),
+                            'break_chain_on_failure' => true
+                        ),
+
+                        array(
+                            'name' => 'NotEmpty',
+                            'options' => array(
+                                'messages' => array(
+                                    'isEmpty' => 'What do we call you, we need to know'
+                                )
+                            )
+                        ),
+
+                        [
+                            'name' => StringLength::class,
+                            'options' => array(
+                                'messages' => array(),
+                                'min' => 2,
+                                'max' => 256,
+                                'messages' => array(
+                                    StringLength::TOO_SHORT => 'We dont think you are Chinese',
+                                    StringLength::TOO_LONG => 'How to you refer to such long name'
+                                )
+                            ),
+                        ]
+                    )
+                ]);
+                $inputFilter->setData($post);
+                $inputFilter->setValidationGroup([
+                    "email",
+                    "fullname",
+                    "phonenumber"
+                ]);
+                if ($inputFilter->isValid()) {
+                    $data = $inputFilter->getValues();
+                    $sessionuid = $this->funnelSession->getSessionUid();
+                    /**
+                     * @var User
+                     */
+                    $userEntity = $this->entityManager->getRepository(User::class)->findoneBy([
+                        "uuid" => $sessionuid,
+                    ]);
+                    $userEntity->setEmail($data["email"])->setUpdatedOn(new \Datetime())
+                        ->setPhonenumber($data["phonenumber"])
+                        ->setFullname($data["fullname"]);
+
+                    $this->entityManager->persist($userEntity);
+                    $this->entityManager->flush();
+
+                    $response->setStatusCode(202);
+                } else {
+                    $jsonModel->setVariables([
+                        "messages" => $inputFilter->getMessages()
+                    ]);
+                }
+            } catch (\Throwable $th) {
+                $jsonModel->setVariables([
+                    "messages" => $th->getMessage()
+                ]);
+            }
+        }
+        return $jsonModel;
+    }
+
+    public function getProfileDataAction()
+    {
+        $jsonModel = new JsonModel();
+        $em = $this->entityManager;
+        $sessionuid = $this->funnelSession->getSessionUid();
+        if ($sessionuid == NULL) {
+            $jsonModel->setVariables([]);
+        } else {
+            $repo = $em->getRepository(User::class);
+            $data = $repo->createQueryBuilder("s")->select("s")
+                ->where("s.uuid = :uuid")
+                ->setParameters([
+                    "uuid" => $sessionuid
+                ])->getQuery()
+                ->getResult(Query::HYDRATE_ARRAY);
+
+            $jsonModel->setVariables([
+                "data" => $data
+            ]);
+        }
+        return $jsonModel;
     }
 
     public function profileAction()
@@ -329,6 +554,30 @@ class IndexController extends AbstractActionController
     public function setFunnelSession(FunnelSession $funnelSession)
     {
         $this->funnelSession = $funnelSession;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  RegisterInputFilter
+     */
+    public function getRegisterInputFilter()
+    {
+        return $this->registerInputFilter;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  RegisterInputFilter  $registerInputFilter  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setRegisterInputFilter(RegisterInputFilter $registerInputFilter)
+    {
+        $this->registerInputFilter = $registerInputFilter;
 
         return $this;
     }

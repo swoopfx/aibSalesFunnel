@@ -5,11 +5,21 @@ namespace Application\Service;
 use Exception;
 use Laminas\Http\Client;
 use Application\Service\TransactionService;
+use Application\Service\GeneralService;
+use Application\Entity\Settings;
+use Throwable;
 
 class PaystackService
 {
 
     private $entityManager;
+
+    /**
+     * Undocumented variable
+     *
+     * @var GeneralService
+     */
+    private $generalService;
 
 
     private $paystackDetails;
@@ -26,21 +36,43 @@ class PaystackService
 
     public function verifyTransaction($data)
     {
+
+        // var_dump($this->paystackDetails);
         $header = [];
-        $secretKey = $this->paystackDetails["paystackSecret"];
+        /**
+         * @var Settings
+         */
+        $settings = $this->generalService->getSettings();
+        $secretKey = $this->paystackDetails[0]["paystackSecret"];
         // $header["Content-Type"]= "";
         $header["Authorization"] = "Bearer {$secretKey}";
+        //  var_dump($header);
         $client = new Client();
         $client->setMethod("GET");
         $client->setUri(self::PAYSTACK_VERFY_URL . "/{$data['ref']}");
         $client->setHeaders($header);
         $response = $client->send();
+        // var_dump($response);
+
         if ($response->isSuccess()) {
-            $body = json_decode($response->getBody());
-            $transacionData["invoice"] = $data["invoice"];
-            $transacionData["pRef"] = $data["ref"];
-            $transacionData["pTrans"] = $data["transaction"];
-            $this->transactionService->finalizeSuccessfulTransaction($transacionData);
+            try {
+                $body = json_decode($response->getBody());
+                // var_dump($body);
+                $transacionData["invoice"] = $data["ref"];
+                $transacionData["pRef"] = $data["ref"];
+                $transacionData["pTrans"] = $data["transaction"];
+                $transacionData["company_name"] = $settings->getCompanyName();
+                $transacionData["company_address"] = $settings->getCompanyAddress();
+                $transacionData["company_email"] = $settings->getCompanyEmail();
+                $transacionData["company_logo"] = $settings->getCompanyLogo();
+                $transacionData["base_url"] = $settings->getBaseUrl();
+
+                $this->transactionService->finalizeSuccessfulTransaction($transacionData);
+            } catch (\Throwable $th) {
+                throw new \Exception($th->getMessage());
+            }
+
+
             return $body;
         } else {
             throw new \Exception("Payment Verification error");
@@ -110,6 +142,30 @@ class PaystackService
     public function setTransactionService(TransactionService $transactionService)
     {
         $this->transactionService = $transactionService;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  GeneralService
+     */
+    public function getGeneralService()
+    {
+        return $this->generalService;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  GeneralService  $generalService  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setGeneralService(GeneralService $generalService)
+    {
+        $this->generalService = $generalService;
 
         return $this;
     }

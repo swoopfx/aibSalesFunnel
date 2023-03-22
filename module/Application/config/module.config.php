@@ -196,6 +196,9 @@ return [
             "partials-form-login" => __DIR__ . '/../view/partial/login-form-partial.phtml',
             "partials-form-register" => __DIR__ . '/../view/partial/register-form-partial.phtml',
 
+            // mail configuration 
+            "transaction-success-email"=>__DIR__ . '/../view/email/transaction-success.phtml',
+
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',

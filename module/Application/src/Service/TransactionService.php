@@ -8,6 +8,8 @@ use Application\Entity\Transaction;
 use Application\Entity\TransactionStatus;
 use Doctrine\ORM\EntityManager;
 use Ramsey\Uuid\Uuid;
+use Application\Service\MailService;
+use Exception;
 
 class TransactionService
 {
@@ -23,6 +25,11 @@ class TransactionService
 
     private $generalService;
 
+    /**
+     * Undocumented variable
+     *
+     * @var MailService
+     */
     private $mailService;
 
     const INVOICE_STATUS_INITIATED = 10;
@@ -61,40 +68,53 @@ class TransactionService
 
     public function finalizeSuccessfulTransaction($data)
     {
-        $em = $this->entityManager;
-        /**
-         * @var Invoice
-         */
-        $invoiceEntity = $em->getRepository(Invoice::class)->findOneBy([
-            "invoiceUuid" => $data["invoice"]
-        ]);
-        if ($invoiceEntity != null) {
+        try {
+            $em = $this->entityManager;
+            /**
+             * @var Invoice
+             */
+            $invoiceEntity = $em->getRepository(Invoice::class)->findOneBy([
+                "invoiceUuid" => $data["invoice"]
+            ]);
+            if ($invoiceEntity != null) {
 
-            $transactionEntity = new Transaction();
-            $transactionEntity->setInvoiceId($invoiceEntity)
-                ->setCreatedOn(new \Datetime())
-                ->setTransactionUid(uniqid("trans"))
-                ->setPaystackRef($data["pRef"])
-                ->setTransactionRef(Uuid::uuid4())
-                ->setTransactionStatus($em->find(TransactionStatus::class, self::TRANSACTION_STATUS_SUCCESS))
-                ->setPaystackTransaction($data["pTrans"]);
+                $transactionEntity = new Transaction();
+                $transactionEntity->setInvoiceId($invoiceEntity)
+                    ->setCreatedOn(new \Datetime())
+                    ->setTransactionUid(uniqid("trans"))
+                    ->setPaystackRef($data["pRef"])
+                    ->setTransactionRef(Uuid::uuid4())
+                    ->setTransactionStatus($em->find(TransactionStatus::class, self::TRANSACTION_STATUS_SUCCESS))
+                    ->setPaystackTransaction($data["pTrans"]);
 
-            $invoiceEntity->setStatus($em->find(InvoiceStatus::class, self::INVOICE_STATUS_SETTLED));
+                $invoiceEntity->setStatus($em->find(InvoiceStatus::class, self::INVOICE_STATUS_SETTLED));
 
-            $em->persist($invoiceEntity);
-            $em->persist($transactionEntity);
+                $em->persist($invoiceEntity);
+                $em->persist($transactionEntity);
 
-            // Send email notification for successful transaaction 
-            $mailData["to"] = $invoiceEntity->getUser()->getEmail();
-            $mailData["subject"] = self::MAIL_SUBJECT_SUCCESS;
-            $mailData["template"] = "";
-            $mailData["var"] = [
-                "amount" => $invoiceEntity->getAmount(),
-                "tRef" => $transactionEntity->getTransactionUid()
-            ];
+                // Send email notification for successful transaaction 
+                // $mailData["to"] = $invoiceEntity->getUser()->getEmail();
+                // $mailData["subject"] = self::MAIL_SUBJECT_SUCCESS;
+                // $mailData["toName"] = $invoiceEntity->getUser()->getFullname();
+                // $mailData["template"] = "transaction-success-email";
+                // $mailData["var"] = [
+                //     "delivery_to" => $invoiceEntity->getUser()->getFullname(),
+                //     "amount" => $invoiceEntity->getAmount(),
+                //     "tRef" => $transactionEntity->getTransactionUid(),
+                //     "description" => $invoiceEntity->getDescription(),
+                //     "company_name" => $data["company_name"],
+                //     "company_address" => $data["company_address"],
+                //     "company_email" => $data["company_email"],
+                //     "company_logo" => $data["company_logo"],
+
+                // ];
+                // $this->mailService->execute($mailData);
 
 
-            $em->flush();
+                $em->flush();
+            }
+        } catch (\Throwable $th) {
+            throw new \Exception($th->getMessage());
         }
     }
 

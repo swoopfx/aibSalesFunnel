@@ -31,4 +31,5 @@ return [
     'DoctrineModule',
     'DoctrineORMModule',
     'Application',
+    'Admin'
 ];

@@ -244,7 +244,7 @@
 										<div class="flex-row-fluid py-lg-5 px-lg-15">
 											<!--begin::Form-->
 											<form class="form" novalidate="novalidate" id="kt_modal_create_app_form">
-												<fieldset >
+												<fieldset>
 													<!--begin::Step 1-->
 													<div class="current" data-kt-stepper-element="content">
 														<div class="w-100">
@@ -325,6 +325,7 @@
 				isValidtravelForm: false,
 				isSessionAvailable: false,
 				loginStata: false,
+				minReturnDate: "",
 
 				sessionUid: null,
 				sessionDetails: {},
@@ -376,6 +377,10 @@
 
 			// 	}
 			// },
+
+			onSelectDetartureDate(e) {
+				this.minReturnDate = e.target.value;
+			},
 
 			getSession() {
 				axios.get("/auth/session").then(res => {
@@ -481,7 +486,7 @@
 			validateTravelForm() {
 				if (this.$refs.vDeparture.value == "" || this.$refs.vDob.value == "" || this.$refs.vReturnDate.value == "" || this.$refs.selectedNationality.value == "" || this.$refs.selectedDestination.value == "") {
 					this.isValidtravelForm = false;
-				}else{
+				} else {
 					this.isValidtravelForm = true;
 				}
 			},

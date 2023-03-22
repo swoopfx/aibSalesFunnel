@@ -11,6 +11,19 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class AdminController extends AbstractActionController
 {
+    public function onDispatch(\Laminas\Mvc\MvcEvent $e)
+    {
+        $response = parent::onDispatch($e);
+        // $this->customerRedirectPlugin()->totalRedirection();
+        $this->layout()->setTemplate('layout/admin-login');
+        return $response;
+    }
+
+    public function indexAction()
+    {
+        $viewModel = new ViewModel();
+        return $viewModel;
+    }
 
     /**
      * Undocumented variable
@@ -38,6 +51,21 @@ class AdminController extends AbstractActionController
             "next_page" => $nextPage,
             "data" => $records
         ]);
+        return $viewModel;
+    }
+
+
+    public function loginAction()
+    {
+        $viewModel = new ViewModel();
+        // $viewModel->setTemplate("layout/admin-login");
+        return $viewModel;
+    }
+
+
+    public function createAction()
+    {
+        $viewModel = new ViewModel();
         return $viewModel;
     }
 

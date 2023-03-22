@@ -21,7 +21,7 @@ class PaystackServiceFactory implements FactoryInterface
         $em = $generalService->getEm();
         $details = $this->getPaystackDetails($em);
         // var_dump($details);
-        $xserv->setPaystackDetails($details)->setTransactionService($transactionService);
+        $xserv->setPaystackDetails($details)->setTransactionService($transactionService)->setGeneralService($generalService);
         return $xserv;
     }
 

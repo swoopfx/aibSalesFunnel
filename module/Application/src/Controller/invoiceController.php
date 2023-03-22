@@ -7,6 +7,7 @@ use Application\Service\TransactionService;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Session\Container;
 use Laminas\View\Model\JsonModel;
+use Application\Service\PaystackService;
 
 class InvoiceController extends AbstractActionController
 {
@@ -25,14 +26,32 @@ class InvoiceController extends AbstractActionController
      */
     private $transactionService;
 
-    // private 
+    /**
+     * Undocumented variable
+     *
+     * @var PaystackService
+     */
+    private $paystackService;
 
     public function verifypaymentAction()
     {
         $jsonModel = new JsonModel();
         $request = $this->getRequest();
+        $response = $this->getResponse();
         $data = $request->getPost()->toArray();
         // var_dump($data["response"]);
+        
+        
+        try {
+            $this->paystackService->verifyTransaction($data);
+            $response->setStatusCode(201);
+
+        } catch (\Throwable $th) {
+            $jsonModel->setVariables([
+                "messages"=>$th->getMessage()
+            ]);
+            $response->setStatusCode(400);
+        }
         return $jsonModel;
     }
 
@@ -99,6 +118,30 @@ class InvoiceController extends AbstractActionController
     public function setTransactionService(TransactionService $transactionService)
     {
         $this->transactionService = $transactionService;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  PaystackService
+     */ 
+    public function getPaystackService()
+    {
+        return $this->paystackService;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  PaystackService  $paystackService  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setPaystackService(PaystackService $paystackService)
+    {
+        $this->paystackService = $paystackService;
 
         return $this;
     }

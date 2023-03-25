@@ -4,6 +4,7 @@ namespace Application\Controller\Factory;
 
 use Application\Controller\IndexController;
 use Application\Form\RegisterInputFilter;
+use Application\Service\MailService;
 use Application\Service\MotorService;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -18,11 +19,13 @@ class IndexControllerFactory implements FactoryInterface
         $generalService = $container->get("general_service");
         $paystackService = $container->get("paystack_service");
         $funnelSession = $container->get("funnel_session");
+        $mailService = $container->get(MailService::class);
+        $mailly = $container->get("acmailer.mailservice.default");
         $inputfilterPlugin = $container->get(InputFilterPluginManager::class);
         $registerInputFilter = $inputfilterPlugin->get(RegisterInputFilter::class);
         $motorService = $container->get(MotorService::class);
         $ctr->setEntityManager($generalService->getEm())
-            ->setMotorService($motorService)->setRegisterInputFilter($registerInputFilter)
+            ->setMotorService($motorService)->setRegisterInputFilter($registerInputFilter)->setMailly($mailly)
             ->setFunnelSession($funnelSession);
 
         return $ctr;

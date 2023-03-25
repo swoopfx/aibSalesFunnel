@@ -16,6 +16,7 @@ class TransactionServiceFactory implements FactoryInterface
         $xserv = new TransactionService();
         $generalService = $container->get("general_service");
         $mailService = $container->get(MailService::class);
+        // $mailService = $container->get('acmailer.mailservice.default');
         $xserv->setEntityManager($generalService->getEm())->setMailService($mailService);
         return $xserv;
     }

@@ -272,6 +272,7 @@ return [
             'upload_service' => UploadService::class,
             'paystack_service' => PaystackService::class,
             "send_in_blue" => SendInBlueMarketing::class,
+            "motor_service"=>MotorService::class,
         ]
     ],
 

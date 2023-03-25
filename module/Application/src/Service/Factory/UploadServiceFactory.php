@@ -14,12 +14,17 @@ class UploadServiceFactory implements FactoryInterface{
     {
         $appConfig = $container->get("config");
         $awsCredentials = $appConfig["aws"]["credentials"];
-        $awsCredentials = new Credentials($awsCredentials["key"], $awsCredentials["secret"]);
+        $awsCred = new Credentials($awsCredentials["key"], $awsCredentials["secret"]);
+        // print_r($awsCredentials["key"]);
+        // var_dump($awsCredentials["secret"]);
+        $generalService = $container->get("general_service");
         $s3 = new S3Client([
             'version'     => 'latest',
-            'region'      => 'us-west-2',
-            'credentials' => false
+            'region'      => 'us-east-1',
+            'credentials' => $awsCred
         ]);
         $xserv = new UploadService();
+        $xserv->setS3Instance($s3)->setEntityManager($generalService->getEm());
+        return $xserv;
     }
 }

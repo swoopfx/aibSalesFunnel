@@ -28,7 +28,7 @@ class UploadService
 
     const MAX_FILE_SIZE = 4582853;
 
-    const AWS_BUCKET_NAME = "";
+    const AWS_BUCKET_NAME = "aibnigeria";
 
 
 
@@ -103,14 +103,14 @@ class UploadService
                 return $uploadEntity;
                 
             } catch (\Exception $e) {
-                throw new \Exception("Document upload Error");
+                throw new \Exception($e->getMessage());
             }
         }
     }
 
     private static function docCode()
     {
-        return uniqid(time());
+        return uniqid("doc");
     }
 
 

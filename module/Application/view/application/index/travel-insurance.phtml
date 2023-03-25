@@ -514,6 +514,20 @@
 					formData.append("nationality", this.$refs.selectedNationality.value);
 					formData.append("destination", this.$refs.selectedDestination.value);
 					formData.append("travelList", JSON.stringify(this.travelList));
+
+					if (this.$refs.passportBio.file[0]) {
+						let biopassport = this.$refs.passportBio.file[0];
+						if (biopassport.size > 1024 * 1024 * 2) {
+							this.$toast.open({
+								message: "One of the required field is empty",
+								type: "error",
+								position: "top-right",
+								duration: 30000,
+								dismissible: true
+							});
+							return;
+						}
+					}
 					// formData.append("departureDate", this.$refs.vDeparture.value);
 					axios.post("/travel/intiate", formData).then(res => {
 						if (res.status == 201) {

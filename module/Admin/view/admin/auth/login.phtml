@@ -1,0 +1,98 @@
+<div class="card-body" id="adminlogin">
+
+    <div class="pt-4 pb-2">
+        <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+        <p class="text-center small">Enter your username & password to login</p>
+    </div>
+
+    <form class="row g-3 needs-validation" novalidate>
+
+        <div class="col-12">
+            <label for="yourUsername" class="form-label">Email</label>
+            <div class="input-group has-validation">
+                <span class="input-group-text" id="inputGroupPrepend"><span class="fa fa-mail"></span></span>
+                <input type="text" v-model="email" name="username" class="form-control" id="yourUsername" required>
+                <div class="invalid-feedback">Please enter your username.</div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <label for="yourPassword" class="form-label">Password</label>
+            <input type="password" v-model="password" name="password" class="form-control" id="yourPassword" required>
+            <div class="invalid-feedback">Please enter your password!</div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-check">
+                <input v-model="remember" class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">Remember me</label>
+            </div>
+        </div>
+        <div class="col-12">
+            <div v-if="isSubmitting">
+                <i class="fas fa-spinner fs-3x"></i>
+            </div>
+            <div v-else>
+                <button @click="login" class="btn btn-primary w-100" type="submit">Login</button>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+    const adminloginApp = Vue.createApp({
+        data() {
+            return {
+                email: "",
+                password: "",
+                isSubmitting: false,
+            }
+        },
+        methods: {
+            login() {
+                if (this.email == "" || this.password == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'A required field is empty',
+                        footer: '<a href="">Why do I have this issue?</a>'
+                    });
+                } else {
+                    this.isSubmitting = true;
+                    let formData = new FormData();
+                    formData.append("password", this.password);
+                    formData.append("email", this.email);
+                    axios.post("/auth-admin/loginjson", formData).then(res => {
+                        if (res.status == 201) {
+                            //process redirection 
+                            // make a toast notification 
+                            this.$toast.open({
+                                message: "Successfully logged in",
+                                type: "success",
+                                duration: 20000,
+                                dismissible: true
+                            });
+                            // console.log(res.data.redirect);
+                            window.location = res.data.redirect;
+                        }
+
+                    }).catch(err => {
+                        this.$toast.open({
+                            message: err.response.data.messages,
+                            type: "error",
+                            duration: 20000,
+                            dismissible: true
+                        })
+
+                        this.isSubmitting = false;
+                    });
+                }
+            }
+        },
+    });
+    adminloginApp.use(VueToast.ToastPlugin);
+    adminloginApp.mount("#adminlogin")
+</script>

@@ -26,6 +26,7 @@ use Application\Form\RegisterInputFilter;
 use Laminas\Validator\EmailAddress;
 use Laminas\Validator\Regex;
 use Laminas\Validator\StringLength;
+use Application\Service\MailService;
 
 class IndexController extends AbstractActionController
 {
@@ -58,6 +59,15 @@ class IndexController extends AbstractActionController
      */
     private $registerInputFilter;
 
+    /**
+     * Undocumented variable
+     *
+     * @var [type]
+     */
+    private $mailService;
+
+    private $mailly;
+
 
     /**
      * Undocumented variable
@@ -78,6 +88,18 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
+        try {
+            $this->mailly->send("it", [
+                'from' => 'it@aibltd.insure',
+                'to' => ['ezekiel_a@yahoo.com'],
+                'subject' => 'Greetings!',
+                'body' => 'Hello!',
+            ]);
+        } catch (\Throwable $th) {
+            echo $th->getTrace()."<br>";
+            echo $th->getMessage();
+        }
+
         return new ViewModel();
     }
 
@@ -578,6 +600,51 @@ class IndexController extends AbstractActionController
     public function setRegisterInputFilter(RegisterInputFilter $registerInputFilter)
     {
         $this->registerInputFilter = $registerInputFilter;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  [type]
+     */
+    public function getMailService()
+    {
+        return $this->mailService;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param   $mailService  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setMailService($mailService)
+    {
+        $this->mailService = $mailService;
+
+
+        return $this;
+    }
+
+    /**
+     * Get the value of mailly
+     */
+    public function getMailly()
+    {
+        return $this->mailly;
+    }
+
+    /**
+     * Set the value of mailly
+     *
+     * @return  self
+     */
+    public function setMailly($mailly)
+    {
+        $this->mailly = $mailly;
 
         return $this;
     }

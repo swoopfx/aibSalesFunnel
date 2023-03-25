@@ -33,7 +33,7 @@ class MotorService
     /**
      * Undocumented variable
      *
-     * @var Upload
+     * @var UploadService
      */
     private $uploadService;
 
@@ -89,10 +89,12 @@ class MotorService
 
                 $motorEntity->setCreatedOn(new \Datetime())
                     ->setCoverType($entityManager->find(MotorinsuranceCoverType::class, self::COVER_TYPE_THIRD_PARTY))
-                    ->setUid(self::motorUid())->setUser($userEntity);
+                    ->setUid(self::motorUid())->setUser($userEntity)->setUuid(Uuid::uuid4())->setIsActive(TRUE);
 
                 $amountPayable = $this->companySettings->getThirdPartyRate();
                 $data["amount"] = $amountPayable;
+                $data["user"] = $userEntity;
+                $data["desc"] = "Premium payment for third party Motor insurance service";
                 $invoiceEntity =  $this->transactionService->generateInvoice($data);
 
                 $em->persist($motorEntity);
@@ -100,9 +102,15 @@ class MotorService
 
                 $em->flush();
 
-                return $motorEntity;
+                $invoice['uuid'] = $invoiceEntity->getInvoiceUuid();
+                $motor["uuid"] = $motorEntity->getUuid();
+                $response["invoice"] = $invoice;
+                $response["motor"] = $motor;
+
+
+                return $response;
             } catch (\Throwable $th) {
-                return $th->getMessage();
+                throw new \Exception($th->getMessage());
             }
         }
     }
@@ -112,8 +120,9 @@ class MotorService
     public function comprehensive($data)
     {
         if (!$this->funnelSession->isExist()) {
-            throw new \Exception("Identity absent");
+            throw new \Exception("Please login");
         } else {
+
             $motorEntity = new MotorInsurance();
             $entityManager = $this->entityManager;
             $sessionUid = $this->funnelSession->getSessionUid();
@@ -129,21 +138,31 @@ class MotorService
                 $own = $uploadService->upload($data["ownership"]);
                 $motorEntity->setProofOfOwnership($entityManager->find(Uploads::class, $own->getId()));
 
-
                 $motorEntity->setCreatedOn(new \Datetime())
-                    ->setCoverType($entityManager->find(MotorinsuranceCoverType::class, self::COVER_TYPE_THIRD_PARTY))
-                    ->setUid(self::motorUid())->setUser($userEntity);
+                    ->setCoverType($entityManager->find(MotorinsuranceCoverType::class, self::COVERT_TYPE_COMPREHENSIVE))
+                    ->setUid(self::motorUid())->setUser($userEntity)->setUuid(Uuid::uuid4())->setIsActive(TRUE);
+
+                $amountPayable = $this->companySettings->getThirdPartyRate();
+                $data["amount"] = $amountPayable;
+                $data["user"] = $userEntity;
+                $data["desc"] = "Premium payment for Comprehensive Motor insurance service";
+                $invoiceEntity =  $this->transactionService->generateInvoice($data);
 
                 $em->persist($motorEntity);
+                $em->persist($invoiceEntity);
 
                 $em->flush();
 
-                return $motorEntity;
-            } catch (\Throwable $th) {
-                return $th->getMessage();
-            }
+                $invoice['uuid'] = $invoiceEntity->getInvoiceUuid();
+                $motor["uuid"] = $motorEntity->getUuid();
+                $response["invoice"] = $invoice;
+                $response["motor"] = $motor;
 
-            return $motorEntity;
+
+                return $response;
+            } catch (\Throwable $th) {
+                throw new \Exception($th->getMessage());
+            }
         }
     }
 

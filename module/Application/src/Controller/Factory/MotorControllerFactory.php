@@ -15,8 +15,8 @@ class MotorControllerFactory implements FactoryInterface
         $ctr = new MotorController();
         $generalService = $container->get("general_service");
         $funnelSession = $container->get("funnel_session");
-
-        $ctr->setEntityManager($generalService->getEm())->setFunnelSession($funnelSession);
+        $motorService = $container->get("motor_service");
+        $ctr->setEntityManager($generalService->getEm())->setFunnelSession($funnelSession)->setMotorService($motorService);
         return $ctr;
     }
 }

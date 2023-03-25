@@ -323,7 +323,7 @@ $key = $setting->getPaystackKey();
                             formData.append("invoice", this.invoiceRef);
                             axios.post("/invoice/verifypayment", formData).then(res => {
                                 if (res.status == 201) {
-                                    // window.location.reload();
+                                    window.location.reload();
                                 }
                             }).catch(err => {
 

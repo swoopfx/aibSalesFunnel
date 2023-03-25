@@ -35,6 +35,8 @@
 				<div class="row gy-5 g-xl-8">
 					<!--begin::Col-->
 
+					<?= $this->partial("partials-login") ?>
+
 					<div class="col-xxl-4">
 						<!--begin::Table Widget 1-->
 
@@ -399,6 +401,7 @@
 				lic: null,
 				own: null,
 				noFiles: true,
+				vNumber: "",
 
 
 				// comprehensive va
@@ -440,6 +443,7 @@
 
 			},
 			sendthrirdparty() {
+
 				if (this.checkThirdPartyValidity()) {
 
 					this.$toast.open({
@@ -450,32 +454,59 @@
 						dismissible: true
 					})
 				} else {
-					this.isProcessingThird = true;
-					let formData = new FormData();
+					let tLicFile = this.$refs.tlicense.files[0];
+					let townFile = this.$refs.ownership.files[0];
 
-					formData.append("license", this.$refs.tlicense.files[0]);
-					formData.append("ownership", this.$refs.ownership.files[0]);
-
-					axios.post("/app/thirdparty", formData, {
-						headers: {
-							"Content-Type": "multipart/form-data"
-						}
-					}).then(response => {
-						if (response.status == 201) {
-							this.isProcessingThird = false;
-
-							this.isProcessingThird = false;
-							window.location.href('/app/travel-insurance');
-						}
-					}).catch(err => {
+					if (tLicFile.size > 1024 * 1024 * 2) {
 						this.$toast.open({
-							message: err.response.data.messages,
+							message: "License file should notbe more than 2MB",
 							type: "error",
 							position: "top-right",
 							duration: 30000,
 							dismissible: true
-						})
-					});
+						});
+					} else if (townFile.size > 1024 * 1024 * 2) {
+						this.$toast.open({
+							message: "Proof of ownership file should notbe more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					}  else {
+						this.isProcessingThird = true;
+						let formData = new FormData();
+
+
+
+						formData.append("vNumber", this.vNumber);
+						formData.append("license", this.$refs.tlicense.files[0]);
+						formData.append("ownership", this.$refs.ownership.files[0]);
+
+						axios.post("/motor/thirdparty", formData, {
+							headers: {
+								"Content-Type": "multipart/form-data"
+							}
+						}).then(response => {
+							if (response.status == 201) {
+								this.isProcessingThird = false;
+								let responseData = response.data.data;
+								window.location.href = "/app/invoice/" + responseData.invoice.uuid;
+
+							}
+						}).catch(err => {
+							this.$toast.open({
+								message: err.response.data.messages,
+								type: "error",
+								position: "top-right",
+								duration: 30000,
+								dismissible: true
+							});
+							this.isProcessingThird = false;
+						});
+
+					}
+
 				}
 
 
@@ -483,25 +514,70 @@
 			},
 
 			sendcomprehensive() {
-				this.isProcessingCom = true;
-				let formData = new FormData();
-				formData.append("license", this.$refs.license.file[0]);
-				formData.append("ownership", this.$refs.ownership.file[0]);
-				formData.append("productid", this.productId);
-				axios.post("/app/thirdparty", formData, {
-					headers: {
-						"Content-Type": "multipart/form-data"
-					}
-				}).then(response => {
-					if (response.status == 201) {
-						this.isUploadingImage = false;
-						this.getImages(this.productUid);
-					}
-				}).catch(err => {
+				if (this.checkThirdPartyValidity()) {
 
-				});
+					this.$toast.open({
+						message: "A required file is empty please check and upload required document",
+						type: "error",
+						position: "top-right",
+						duration: 20000,
+						dismissible: true
+					})
+				} else {
+					let tLicFile = this.$refs.tlicense.files[0];
+					let townFile = this.$refs.ownership.files[0];
 
-				alert("Welcome");
+					if (tLicFile.size > 1024 * 1024 * 2) {
+						this.$toast.open({
+							message: "License file should notbe more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else if (townFile.size > 1024 * 1024 * 2) {
+						this.$toast.open({
+							message: "Proof of ownership file should notbe more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else {
+						this.isProcessingThird = true;
+						let formData = new FormData();
+
+
+
+						formData.append("vNumber", this.vNumber);
+						formData.append("license", this.$refs.tlicense.files[0]);
+						formData.append("ownership", this.$refs.ownership.files[0]);
+
+						axios.post("/motor/thirdparty", formData, {
+							headers: {
+								"Content-Type": "multipart/form-data"
+							}
+						}).then(response => {
+							if (response.status == 201) {
+								this.isProcessingThird = false;
+								let responseData = response.data.data;
+								window.location.href = "/app/invoice/" + responseData.invoice.uuid;
+
+							}
+						}).catch(err => {
+							this.$toast.open({
+								message: err.response.data.messages,
+								type: "error",
+								position: "top-right",
+								duration: 30000,
+								dismissible: true
+							});
+							this.isProcessingThird = false;
+						});
+
+					}
+
+				}
 			},
 
 			// Comprehensive events

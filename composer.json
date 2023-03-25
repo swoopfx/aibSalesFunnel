@@ -32,7 +32,9 @@
         "sendinblue/api-v3-sdk": "^8.4",
         "wildbit/postmark-php": "^4.0",
         "laminas/laminas-mail": "^2.16",
-        "laminas/laminas-mime": "^2.10"
+        "laminas/laminas-mime": "^2.10",
+        "laminas/laminas-crypt": "^3.8",
+        "acelaya/acmailer": "^8.2"
     },
     "autoload": {
         "psr-4": {

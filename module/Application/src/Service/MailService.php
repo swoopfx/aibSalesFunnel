@@ -11,6 +11,7 @@ use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
 use Laminas\View\Renderer\RendererInterface;
 use Doctrine\ORM\EntityManager;
+use AcMailer\Service\MailService as Mailly;
 
 
 
@@ -52,6 +53,14 @@ class MailService
     private $viewRenderer;
 
 
+    /**
+     * Undocumented variable
+     *
+     * @var  Mailly
+     */
+    private $mailService;
+
+
 
     /**
      * Undocumented function
@@ -61,26 +70,41 @@ class MailService
      */
     public function execute(array $data)
     {
-        try {
-            /**
-             * @var Settings
-             */
-            $settingEntity = $this->entityManager->find(Settings::class, 1);
-            $bodyHtml = $this->viewRenderer->render($data["template"], $data["var"]);
-            $html = new Part($bodyHtml);
-            $html->type = Mime::TYPE_HTML;
-            $html->charset = "utf-8";
-            $body = new Message();
-            $body->addPart($html);
-            $mail = new MailMessage();
-            $mail->setEncoding("UTF-8");
-            $mail->setBody($body);
-            $mail->setFrom($settingEntity->getCompanyEmailSender(), $settingEntity->getCompanyName());
-            $mail->addTo($data["to"], $data["toName"]);
-            $mail->setSubject($data["subject"]);
+        // try {
+        //     /**
+        //      * @var Settings
+        //      */
+        //     $settingEntity = $this->entityManager->find(Settings::class, 1);
+        //     $bodyHtml = $this->viewRenderer->render($data["template"], $data["var"]);
+        //     $html = new Part($bodyHtml);
+        //     $html->type = Mime::TYPE_HTML;
+        //     $html->charset = "utf-8";
+        //     $body = new Message();
+        //     $body->addPart($html);
+        //     $mail = new MailMessage();
+        //     $mail->setEncoding("UTF-8");
+        //     // $mail->addFrom($settingEntity->getCompanyEmailSender(), $settingEntity->getCompanyName());
+        //     $mail->setBody($body);
+        //     $mail->setFrom($settingEntity->getCompanyEmailSender(), $settingEntity->getCompanyName());
+        //     $mail->addTo($data["to"], $data["toName"]);
+        //     $mail->setSubject($data["subject"]);
 
-            $this->smtpTransport->setOptions($this->smtpOptions);
-            $this->smtpTransport->send($mail);
+        //     $this->smtpTransport->setOptions($this->smtpOptions);
+        //     $this->smtpTransport->send($mail);
+        // } catch (\Throwable $th) {
+        //     throw new \Exception($th->getMessage());
+        // }
+
+        try {
+            $res =  $this->mailService->send("admin", [
+                "template" => $data["template"],
+                "template_params" => $data["var"],
+                "to" => [$data["to"]],
+                "subject" => $data["subject"],
+
+            ]);
+            if ($res->isCancelled()) {
+            }
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
         }
@@ -197,6 +221,26 @@ class MailService
     public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of mailService
+     */
+    public function getMailService()
+    {
+        return $this->mailService;
+    }
+
+    /**
+     * Set the value of mailService
+     *
+     * @return  self
+     */
+    public function setMailService($mailService)
+    {
+        $this->mailService = $mailService;
 
         return $this;
     }

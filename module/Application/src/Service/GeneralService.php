@@ -10,6 +10,10 @@ class GeneralService {
 
     const COMPANY_NAME = "Advocate Insurance Brokers";
 
+    const COMPANY_URL = "https://aibltd.insure/";
+
+    const COMPANY_ADDRESS = "27a Babatunde Jose Off Adetokunbo Ademola, VI Lagos";
+
 
     /**
      * Undocumented variable

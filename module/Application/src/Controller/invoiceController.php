@@ -48,7 +48,8 @@ class InvoiceController extends AbstractActionController
 
         } catch (\Throwable $th) {
             $jsonModel->setVariables([
-                "messages"=>$th->getMessage()
+                "messages"=>$th->getMessage(),
+                "trace"=>$th->getTrace()
             ]);
             $response->setStatusCode(400);
         }

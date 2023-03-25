@@ -74,7 +74,7 @@ class TransactionService
              * @var Invoice
              */
             $invoiceEntity = $em->getRepository(Invoice::class)->findOneBy([
-                "invoiceUuid" => $data["invoice"]
+                "invoiceUid" => $data["invoice"]
             ]);
             if ($invoiceEntity != null) {
 
@@ -93,21 +93,21 @@ class TransactionService
                 $em->persist($transactionEntity);
 
                 // Send email notification for successful transaaction 
-                // $mailData["to"] = $invoiceEntity->getUser()->getEmail();
-                // $mailData["subject"] = self::MAIL_SUBJECT_SUCCESS;
-                // $mailData["toName"] = $invoiceEntity->getUser()->getFullname();
-                // $mailData["template"] = "transaction-success-email";
-                // $mailData["var"] = [
-                //     "delivery_to" => $invoiceEntity->getUser()->getFullname(),
-                //     "amount" => $invoiceEntity->getAmount(),
-                //     "tRef" => $transactionEntity->getTransactionUid(),
-                //     "description" => $invoiceEntity->getDescription(),
-                //     "company_name" => $data["company_name"],
-                //     "company_address" => $data["company_address"],
-                //     "company_email" => $data["company_email"],
-                //     "company_logo" => $data["company_logo"],
+                $mailData["to"] = $invoiceEntity->getUser()->getEmail();
+                $mailData["subject"] = self::MAIL_SUBJECT_SUCCESS;
+                $mailData["toName"] = $invoiceEntity->getUser()->getFullname();
+                $mailData["template"] = "transaction-success-email";
+                $mailData["var"] = [
+                    "delivery_to" => $invoiceEntity->getUser()->getFullname(),
+                    "amount" => $invoiceEntity->getAmount(),
+                    "tRef" => $transactionEntity->getTransactionUid(),
+                    "description" => $invoiceEntity->getDescription(),
+                    "company_name" => $data["company_name"],
+                    "company_address" => $data["company_address"],
+                    "company_email" => $data["company_email"],
+                    "company_logo" => $data["company_logo"],
 
-                // ];
+                ];
                 // $this->mailService->execute($mailData);
 
 

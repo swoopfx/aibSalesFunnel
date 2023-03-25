@@ -3,6 +3,26 @@
     <div class="w-100">
         <!--begin::Input group-->
 
+
+        <div class="d-flex flex-column mb-7 fv-row">
+            <!--begin::Label-->
+            <label class="required fs-6 fw-bold form-label mb-2">Vehicle Lisence Number</label>
+            <!--end::Label-->
+            <!--begin::Input wrapper-->
+            <div class="position-relative">
+                <!--begin::Input-->
+                <input type="text" v-model="vNumber"   class="form-control form-control-solid"  required />
+                <!--end::Input-->
+                <!--begin::Card logos-->
+
+                <!--end::Card logos-->
+            </div>
+
+             
+
+            <!--end::Input wrapper-->
+        </div>
+
         <!--end::Input group-->
         <!--begin::Input group-->
         <div class="d-flex flex-column mb-7 fv-row">
@@ -12,7 +32,7 @@
             <!--begin::Input wrapper-->
             <div class="position-relative">
                 <!--begin::Input-->
-                <input type="file" ref="tlicense" accept="image/*, application/pdf" @change="onFileChangeL"  class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
+                <input type="file" ref="tlicense" accept="image/*, application/pdf" @change="onFileChangeL" class="form-control form-control-solid" id='tlicense' name="tlicense" placeholder="Upload License" required />
                 <!--end::Input-->
                 <!--begin::Card logos-->
 
@@ -61,20 +81,7 @@
             <!--end::Input wrapper-->
         </div>
         <!--begin::Input group-->
-        <div class="d-flex flex-stack">
-            <!--begin::Label-->
-            <div class="me-5">
-                <label class="fs-6 fw-bold form-label">Save Card for further billing?</label>
-                <div class="fs-7 fw-bold text-muted">If you need more info, please check budget planning</div>
-            </div>
-            <!--end::Label-->
-            <!--begin::Switch-->
-            <label class="form-check form-switch form-check-custom form-check-solid">
-                <input class="form-check-input" type="checkbox" value="1" checked="checked" />
-                <span class="form-check-label fw-bold text-muted">Save Card</span>
-            </label>
-            <!--end::Switch-->
-        </div>
+
         <!--end::Input group-->
     </div>
 </div>

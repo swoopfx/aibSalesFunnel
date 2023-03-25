@@ -14,8 +14,11 @@ class TravelServiceFactory implements FactoryInterface
     {
         $xserv = new TravelService();
         $generalService = $container->get("general_service");
+        $funnelSession = $container->get("funnel_session");
         $transactionService = $container->get(TransactionService::class);
-        $xserv->setEntityManager($generalService->getEm())->setTransactionService($transactionService);
+        $xserv->setEntityManager($generalService->getEm())
+            ->setTransactionService($transactionService)
+            ->setFunnelSession($funnelSession);
         return $xserv;
     }
 }

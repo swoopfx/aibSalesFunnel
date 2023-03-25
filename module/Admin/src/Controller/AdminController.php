@@ -8,6 +8,7 @@ use Laminas\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Laminas\View\Model\JsonModel;
 
 class AdminController extends AbstractActionController
 {
@@ -15,7 +16,7 @@ class AdminController extends AbstractActionController
     {
         $response = parent::onDispatch($e);
         // $this->customerRedirectPlugin()->totalRedirection();
-        $this->layout()->setTemplate('layout/admin-login');
+        $this->layout()->setTemplate('layout/admin');
         return $response;
     }
 
@@ -58,8 +59,15 @@ class AdminController extends AbstractActionController
     public function loginAction()
     {
         $viewModel = new ViewModel();
-        // $viewModel->setTemplate("layout/admin-login");
+        $viewModel->setTemplate("layout/admin-login");
         return $viewModel;
+    }
+
+
+    public function loginjsonAction(){
+        $jsonModel = new JsonModel();
+
+        return $jsonModel;
     }
 
 

@@ -37,14 +37,14 @@ class PaystackService
     public function verifyTransaction($data)
     {
 
-        // var_dump($this->paystackDetails);
+
         $header = [];
         /**
          * @var Settings
          */
         $settings = $this->generalService->getSettings();
-        $secretKey = $this->paystackDetails[0]["paystackSecret"];
-        // $header["Content-Type"]= "";
+        $secretKey = $settings->getPaystackSecret();
+        // var_dump($secretKey);
         $header["Authorization"] = "Bearer {$secretKey}";
         //  var_dump($header);
         $client = new Client();

@@ -163,6 +163,13 @@ class MotorInsurance
      */
     private $isActive ;
 
+    /**
+     * Undocumented variable
+     * @ORM\Column(nullable=false)
+     * @var string
+     */
+    private $uuid;
+
 
     public function __construct()
     {
@@ -584,6 +591,30 @@ class MotorInsurance
     public function setIsActive(bool $isActive)
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  string
+     */ 
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  string  $uuid  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setUuid(string $uuid)
+    {
+        $this->uuid = $uuid;
 
         return $this;
     }

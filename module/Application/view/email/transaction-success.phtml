@@ -318,16 +318,16 @@ use Application\Service\GeneralService;
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Subtotal</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $this->myCurrencyHelper($orderTotal) ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $orderTotal ?></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Shipping
                                                                                     & Handling</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $this->myCurrencyHelper($shipping) ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $shipping ?></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 30px;">Total</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 30px;"><?php echo $this->myCurrencyHelper($total) ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 30px;"><?php echo $total ?></td>
                                                                             </tr>
                                                                         </table>
                                                                     </td>
@@ -409,7 +409,7 @@ use Application\Service\GeneralService;
                                         <tr>
                                             <td align="center" style="font-size: 0px; padding: 0px 20px 20px 20px;">
                                                 <p style="margin: 0px auto; color: #AAAAAA; font-family: Helvetica, Arial, sans-serif; font-size: 11px; line-height: 22px; padding: 0px;">
-                                                    <span class="address" style="text-decoration: none;"><?php echo GeneralService::APP_COMPANY_NAME ?> <?php echo GeneralService::COMPANY_ADDRESS ?></span>
+                                                    <span class="address" style="text-decoration: none;"><?php echo GeneralService::COMPANY_NAME ?> <?php echo GeneralService::COMPANY_ADDRESS ?></span>
                                                 </p>
                                             </td>
                                         </tr>

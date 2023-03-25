@@ -30,6 +30,7 @@ return [
     'Laminas\Diactoros',
     'DoctrineModule',
     'DoctrineORMModule',
+    'AcMailer',
     'Application',
     'Admin'
 ];

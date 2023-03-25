@@ -7,8 +7,14 @@ use Application\Entity\User;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use Application\Service\UploadService;
 use Doctrine\ORM\EntityManager;
 use Application\Service\FunnelSession;
+use Laminas\InputFilter\InputFilter;
+use Application\Service\MotorService;
+use Laminas\Validator\File\Extension;
+
+use Laminas\Validator\File\Size;
 
 class MotorController extends AbstractActionController
 {
@@ -19,6 +25,22 @@ class MotorController extends AbstractActionController
      * @var EntityManager
      */
     private $entityManager;
+
+
+    /**
+     * Undocumented variable
+     *
+     * @var UploadService
+     */
+    private $uploadService;
+
+
+    /**
+     * Undocumented variable
+     *
+     * @var MotorService
+     */
+    private $motorService;
 
 
     /**
@@ -40,6 +62,114 @@ class MotorController extends AbstractActionController
     public function initiateMotorAction()
     {
         $jsonModel = new JsonModel();
+        return $jsonModel;
+    }
+
+    public function thirdpartyAction()
+    {
+        $jsonModel = new JsonModel();
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+        if ($request->isPost()) {
+            $post = $request->getPost()->toArray();
+            $files = $request->getFiles()->toArray();
+            $merge = array_merge($post, $files);
+            $inputFilter = new InputFilter();
+            $inputFilter->add([
+                "name" => "ownership",
+                'required' => true,
+                'validators' => [      // Validators.
+                    [
+                        'name' => Extension::class,
+                        'options' => [
+                            'extension' => 'jpg, jpeg, png, pdf',
+                            'message' => 'File extension not match',
+                        ],
+                    ],
+                    // [
+                    //     'name' => MimeType::class,
+                    //     'options' => [
+                    //         'mimeType' => 'text/xls', 'text/xlsx',
+                    //         'message' => 'File type not match',
+                    //     ],
+                    // ],
+                    [
+                        'name' => Size::class,
+                        'options' => [
+                            'min' => '1kB',  // minimum of 1kB
+                            'max' => '4MB',
+                            'message' => 'File too large',
+                        ],
+                    ],
+                ]
+            ]);
+
+            $inputFilter->add([
+                "name" => "license",
+                'required' => true,
+                'validators' => [      // Validators.
+                    [
+                        'name' => Extension::class,
+                        'options' => [
+                            'extension' => 'jpg, jpeg, png, pdf',
+                            'message' => 'File extension not match',
+                        ],
+                    ],
+                    // [
+                    //     'name' => MimeType::class,
+                    //     'options' => [
+                    //         'mimeType' => 'text/xls', 'text/xlsx',
+                    //         'message' => 'File type not match',
+                    //     ],
+                    // ],
+                    [
+                        'name' => Size::class,
+                        'options' => [
+                            'min' => '1kB',  // minimum of 1kB
+                            'max' => '4MB',
+                            'message' => 'File too large',
+                        ],
+                    ],
+                ]
+            ]);
+            $inputFilter->setData($merge);
+            if ($inputFilter->isValid()) {
+                try {
+                    $data = $inputFilter->getValues();
+                    $responseData = $this->motorService->thirdparty($data);
+
+                    $jsonModel->setVariables([
+                        "data" => $responseData,
+                        "status" => "success"
+                    ]);
+                    $response->setStatusCode(201);
+                } catch (\Throwable $th) {
+                    $jsonModel->setVariables([
+                        "messages" => $th->getMessage(),
+                        "trace" => $th->getTrace(),
+                    ]);
+                    $response->setStatusCode(400);
+                }
+            } else {
+                $jsonModel->setVariables([
+                    "messages" => $inputFilter->getMessages(),
+                ]);
+                $response->setStatusCode(400);
+            }
+        }
+        return $jsonModel;
+    }
+
+    public function comprehensiveAction(){
+        $jsonModel = new JsonModel();
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+        if($request->isPost()){
+            $post = $request->getPost()->toArray();
+            $files = $request->getFiles()->toArray();
+            $merge = array_merge($post, $files);
+            $inputFilter = new InputFilter();
+        }
         return $jsonModel;
     }
 
@@ -106,6 +236,54 @@ class MotorController extends AbstractActionController
     public function setFunnelSession(FunnelSession $funnelSession)
     {
         $this->funnelSession = $funnelSession;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  UploadService
+     */
+    public function getUploadService()
+    {
+        return $this->uploadService;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  UploadService  $uploadService  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setUploadService(UploadService $uploadService)
+    {
+        $this->uploadService = $uploadService;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  MotorService
+     */
+    public function getMotorService()
+    {
+        return $this->motorService;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  MotorService  $motorService  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setMotorService(MotorService $motorService)
+    {
+        $this->motorService = $motorService;
 
         return $this;
     }

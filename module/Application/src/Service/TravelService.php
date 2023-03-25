@@ -29,6 +29,12 @@ class TravelService
     private $transactionService;
 
 
+    private $funnelSession;
+
+
+
+
+
 
 
     const DATE_FORMAT = "Y-m-d";
@@ -65,54 +71,59 @@ class TravelService
 
     public function initiateTravelinsurance($data)
     {
-        $em = $this->entityManager;
-        $payableIndividualPrice = $this->calculateIndividualTravelFee($data);
-        $payableListPrice = $this->calculateListPrice($data, $payableIndividualPrice);
-        $totalPrice = $payableIndividualPrice + $payableListPrice;
-        $userEntity = $em->getRepository(User::class)->findOneBy([
-            "uuid" => $data["user"]
-        ]);
-        $travelEntity = new TravelInsurance();
-        $destination = $em->find(Country::class, $data["destination"]);
-        $travelEntity->setCreatedOn(new \DateTime())
-            ->setUser($userEntity)
-            ->setIsActive(TRUE)
-            ->setTravelUuid(Uuid::uuid4())
-            ->setDepartureDate(DateTime::createFromFormat(self::DATE_FORMAT, $data["departureDate"]))
-            ->setReturnDate(\DateTime::createFromFormat(self::DATE_FORMAT, $data["returnDate"]))
-            ->setDestination($destination)
-            ->setNationality($em->find(Country::class, $data["nationality"]))
-            ->setDob(\DateTime::createFromFormat(self::DATE_FORMAT, $data["dob"]))
-            ->setTravelUid(self::genrateTravelUid());
-        if ($data["travelList"] != "") {
-            $travelList = json_decode($data["travelList"]);
-            foreach ($travelList as $listee) {
-                $travelListEntity = new TravelinsuranceList();
-                $travelListEntity->setSurname($listee->surname)
-                    ->setFirstname($listee->firstname)
-                    ->setPassport($listee->passport)
-                    ->setDob(\DateTime::createFromFormat(self::DATE_FORMAT, $listee->dob))
-                    ->setGender($em->find(Gender::class, $listee->gender))
-                    ->setTravelInsurance($travelEntity);
+        if (!$this->funnelSession->isExist()) {
+            throw new \Exception("Please login");
+        } else {
 
-                $em->persist($travelListEntity);
+            $em = $this->entityManager;
+            $payableIndividualPrice = $this->calculateIndividualTravelFee($data);
+            $payableListPrice = $this->calculateListPrice($data, $payableIndividualPrice);
+            $totalPrice = $payableIndividualPrice + $payableListPrice;
+            $userEntity = $em->getRepository(User::class)->findOneBy([
+                "uuid" => $data["user"]
+            ]);
+            $travelEntity = new TravelInsurance();
+            $destination = $em->find(Country::class, $data["destination"]);
+            $travelEntity->setCreatedOn(new \DateTime())
+                ->setUser($userEntity)
+                ->setIsActive(TRUE)
+                ->setTravelUuid(Uuid::uuid4())
+                ->setDepartureDate(DateTime::createFromFormat(self::DATE_FORMAT, $data["departureDate"]))
+                ->setReturnDate(\DateTime::createFromFormat(self::DATE_FORMAT, $data["returnDate"]))
+                ->setDestination($destination)
+                ->setNationality($em->find(Country::class, $data["nationality"]))
+                ->setDob(\DateTime::createFromFormat(self::DATE_FORMAT, $data["dob"]))
+                ->setTravelUid(self::genrateTravelUid());
+            if ($data["travelList"] != "") {
+                $travelList = json_decode($data["travelList"]);
+                foreach ($travelList as $listee) {
+                    $travelListEntity = new TravelinsuranceList();
+                    $travelListEntity->setSurname($listee->surname)
+                        ->setFirstname($listee->firstname)
+                        ->setPassport($listee->passport)
+                        ->setDob(\DateTime::createFromFormat(self::DATE_FORMAT, $listee->dob))
+                        ->setGender($em->find(Gender::class, $listee->gender))
+                        ->setTravelInsurance($travelEntity);
+
+                    $em->persist($travelListEntity);
+                }
             }
+
+            $invoiceData["amount"] = $totalPrice;
+            $invoiceData["user"] = $userEntity;
+            $invoiceData["desc"] = "Premium payment for travel insurance by {$userEntity->getFullname()} to  {$destination->getName()}";
+            $invoiceEntity = $this->transactionService->generateInvoice($invoiceData);
+            $travelEntity->setInvoice($invoiceEntity);
+
+            $em->persist($travelEntity);
+            $em->flush();
+
+            $invoice['uuid'] = $invoiceEntity->getInvoiceUuid();
+            $travel["uuid"] = $travelEntity->getTravelUuid();
+            $response["invoice"] = $invoice;
+            $response["travel"] = $travel;
+            return $response;
         }
-
-        $invoiceData["amount"] = $totalPrice;
-        $invoiceData["user"] = $userEntity;
-        $invoiceData["desc"] = "Premium payment for travel insurance by {$userEntity->getFullname()} to  {$destination->getName()}";
-        $invoiceEntity = $this->transactionService->generateInvoice($invoiceData);
-        $travelEntity->setInvoice($invoiceEntity);
-
-        $em->persist($travelEntity);
-        $em->flush();
-
-        $invoice['uuid'] = $invoiceEntity->getInvoiceUuid();
-        $travel["uuid"] = $travelEntity->getTravelUuid();
-        $response["invoice"] = $invoice;
-        $response["travel"] = $travel;
-        return $response;
     }
 
     public static function genrateTravelUid()
@@ -392,6 +403,26 @@ class TravelService
     public function setTransactionService(TransactionService $transactionService)
     {
         $this->transactionService = $transactionService;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of funnelSession
+     */ 
+    public function getFunnelSession()
+    {
+        return $this->funnelSession;
+    }
+
+    /**
+     * Set the value of funnelSession
+     *
+     * @return  self
+     */ 
+    public function setFunnelSession($funnelSession)
+    {
+        $this->funnelSession = $funnelSession;
 
         return $this;
     }

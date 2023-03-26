@@ -6,6 +6,8 @@ use Admin\Controller\AdminController;
 use Admin\Controller\AuthController;
 use Admin\Controller\Factory\AdminControllerFactory;
 use Admin\Controller\Factory\AuthControllerFactory;
+use Admin\Controller\MotorController;
+use Admin\Controller\TravelController;
 use Application\Entity\User;
 use Application\Service\Factory\AuthenticationFactory;
 use Doctrine\ORM\EntityManager;
@@ -27,6 +29,36 @@ return [
                     ),
                     'defaults' => [
                         'controller' => AdminController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
+            'admin-motor' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/motor-admin[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9_-]*'
+                    ),
+                    'defaults' => [
+                        'controller' => MotorController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
+            'admin-travel' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/travel-admin[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9_-]*'
+                    ),
+                    'defaults' => [
+                        'controller' => TravelController::class,
                         'action'     => 'index',
                     ],
                 ],

@@ -1,0 +1,29 @@
+<section id="customerMotor" class="section profile">
+   
+    <?= $this->partial("customer-invoice-partial") ?>
+
+</section>
+
+<script>
+    const customerMotorApp = Vue.createApp({
+        data() {
+            return {
+                isRevoking: false
+            }
+        },
+        methods: {
+            revokeMotor(e) {
+                let formData = new FormData();
+                formData.append("uuid", e);
+                axios.post("/motor-admin/revoke", formData).then(res => {
+                    if (res.status == 201) {
+                        window.location.reload();
+                    }
+                }).catch(err => {
+
+                });
+            }
+        },
+    });
+    customerMotorApp.mount("#customerMotor")
+</script>

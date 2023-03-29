@@ -280,7 +280,7 @@ class AuthController extends AbstractActionController
                     $sendInBlue["fullname"] = $userEntity->getFullname();
                     // $sendInBlue["sms"] = "234".$number;
 
-                    $this->sendInBlue->createContact($sendInBlue);
+                    //$this->sendInBlue->createContact($sendInBlue);
 
                     $em->flush();
 

@@ -88,17 +88,17 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        try {
-            $this->mailly->send("it", [
-                'from' => 'it@aibltd.insure',
-                'to' => ['ezekiel_a@yahoo.com'],
-                'subject' => 'Greetings!',
-                'body' => 'Hello!',
-            ]);
-        } catch (\Throwable $th) {
-            echo $th->getTrace()."<br>";
-            echo $th->getMessage();
-        }
+        // try {
+        //     $this->mailly->send("it", [
+        //         'from' => 'it@aibltd.insure',
+        //         'to' => ['ezekiel_a@yahoo.com'],
+        //         'subject' => 'Greetings!',
+        //         'body' => 'Hello!',
+        //     ]);
+        // } catch (\Throwable $th) {
+        //     echo $th->getTrace()."<br>";
+        //     echo $th->getMessage();
+        // }
 
         return new ViewModel();
     }

@@ -1,0 +1,72 @@
+<section class="section">
+
+
+    <div class="row">
+
+
+        <div class="col-lg-12">
+
+
+            <div class="card overflow-auto">
+                <div class="card-body">
+                    <h5 class="card-title">Travel Insurance</h5>
+
+                    <!-- Table with hoverable rows -->
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Customer</th>
+                                <th scope="col">Travel Details</th>
+                                <th scope="col">Transaction</th>
+                                <th scope="col">Initiated Date</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($data as $da) : ?>
+                                <tr>
+                                    <th scope="row"><?= $da["id"] ?></th>
+                                    <td>Full Name : <strong><?= $da["user"]["fullname"]; ?> </strong><br>
+                                        Phone Number : <strong><?= $da["user"]["phonenumber"]; ?><br></strong>
+                                        Email : <strong><?= $da["user"]["email"] ?></strong> 
+
+                                    </td>
+                                    <td><strong>Destination : </strong><?= $da["destination"]["name"] ?><br>
+                                        <strong>Departure:</strong> <?= $this->dateformat($da["departureDate"], IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE, "en_us"); ?><br>
+                                        <strong>Return:</strong><?= $this->dateformat($da["returnDate"], IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE, "en_us"); ?> <br>
+                                    </td>
+                                    <td><?= $this->adminInvoiceStatus($da["invoice"]["status"]["id"]) ?></td>
+                                    <td><?= $this->dateformat($da["createdOn"], IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM, "en_us"); ?></td>
+                                    <td>
+                                        <div class="filter">
+                                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-arrow-right-square-fill"></i></a>
+                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+
+
+                                                <li><a class="dropdown-item" href="<?= $this->url("admin-travel", ["action" => "view", "id" => $da["travelUuid"]]) ?>">View</a></li>
+
+                                                
+                                                <li><a class="dropdown-item" href="#">Revoke</a></li>
+
+
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach;  ?>
+
+                        </tbody>
+                    </table>
+                    <!-- End Table with hoverable rows -->
+
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</section>

@@ -97,6 +97,8 @@ class MotorService
                 $data["desc"] = "Premium payment for third party Motor insurance service";
                 $invoiceEntity =  $this->transactionService->generateInvoice($data);
 
+                $motorEntity->setinvoice($invoiceEntity);
+
                 $em->persist($motorEntity);
                 $em->persist($invoiceEntity);
 
@@ -147,6 +149,8 @@ class MotorService
                 $data["user"] = $userEntity;
                 $data["desc"] = "Premium payment for Comprehensive Motor insurance service";
                 $invoiceEntity =  $this->transactionService->generateInvoice($data);
+
+                $motorEntity->setInvoice($invoiceEntity);
 
                 $em->persist($motorEntity);
                 $em->persist($invoiceEntity);

@@ -9,31 +9,29 @@
 
             <div class="card overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title">Motor insurance</h5>
+                    <h5 class="card-title">All Customers</h5>
 
                     <!-- Table with hoverable rows -->
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Customer</th>
-                                <th scope="col">Cover Type</th>
-                                <th scope="col">Transaction</th>
-                                <th scope="col">Initiated Date</th>
+                                <th scope="col">Customer Details</th>
+
+                                <th scope="col">Registration Date</th>
                                 <th scope="col"></th>
+
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($data as $da) : ?>
                                 <tr>
-                                    <th scope="row"><?= $da["id"] ?></th>
-                                    <td>Full Name : <strong><?= $da["user"]["fullname"]; ?> </strong><br>
-                                        Phone Number : <strong><?= $da["user"]["phonenumber"]; ?><br></strong>
-                                        Email : <strong><?= $da["user"]["email"] ?></strong>
+                                    <th scope="row"><?= strtoupper($da["uuid"]) ?></th>
+                                    <td>Full Name : <strong><?= $da["fullname"]; ?> </strong><br>
+                                        Phone Number : <strong><?= $da["phonenumber"]; ?><br></strong>
+                                        Email : <strong><?= $da["email"] ?></strong>
 
                                     </td>
-                                    <td><?= $da["coverType"]["type"] ?></td>
-                                    <td><?= $this->adminInvoiceStatus($da["invoice"]["status"]["id"]) ?></td>
                                     <td><?= $this->dateformat($da["createdOn"], IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM, "en_us"); ?></td>
                                     <td>
                                         <div class="filter">
@@ -41,15 +39,15 @@
                                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 
 
-                                                <li><a class="dropdown-item" href="#">View</a></li>
-
-                                                <li><a class="dropdown-item" href="#">View Invoices</a></li>
-                                                <li><a class="dropdown-item" href="#">Revoke</a></li>
-
-
+                                                <li><a class="dropdown-item" href="#">Edit</a></li>
+                                                <li><a class="dropdown-item" href="<?= $this->url("admin-invoice", ["action" => "customer-invoice", "id" => $da["uuid"]]) ?>">View Invoices</a></li>
+                                                <li><a class="dropdown-item" href="<?= $this->url("admin-motor", ["action" => "customer-motor", "id" => $da["uuid"]]) ?>">View Motor Services</a></li>
+                                                <li><a class="dropdown-item" href="#">View Travel Service</a></li>
+                                                <li><a class="dropdown-item" href="#">View Marine Cargo Service</a></li>
                                             </ul>
                                         </div>
                                     </td>
+
                                 </tr>
                             <?php endforeach;  ?>
 

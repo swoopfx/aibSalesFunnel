@@ -28,6 +28,10 @@
                 <label class="form-check-label" for="rememberMe">Remember me</label>
             </div>
         </div>
+
+        <div class="col-12">
+            <a href="<?php echo $this->url("admin-auth", ["action" => "reset-password"]) ?>">Forgot password</a>
+        </div>
         <div class="col-12">
             <div v-if="isSubmitting">
                 <i class="fas fa-spinner fs-3x"></i>

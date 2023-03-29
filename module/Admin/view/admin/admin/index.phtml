@@ -1,0 +1,228 @@
+<section id="adminDash" class="section dashboard">
+    <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+            <div class="row">
+
+                <!-- Sales Card -->
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card sales-card">
+
+
+
+                        <div class="card-body">
+                            <h5 class="card-title">Motor <span>| Last 24Hrs</span></h5>
+
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="ri-car-fill"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{countMotor}}</h6>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div><!-- End Sales Card -->
+
+                <!-- Revenue Card -->
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card revenue-card">
+
+
+
+                        <div class="card-body">
+                            <h5 class="card-title">Travel <span>| Last 24Hrs</span></h5>
+
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="ri-plane-fill"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{countTravel}}</h6>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div><!-- End Revenue Card -->
+
+
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card sales-card">
+
+
+
+                        <div class="card-body">
+                            <h5 class="card-title">Marine Cargo <span>| Last 24Hrs</span></h5>
+
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="ri-ship-line"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{countMarine}}</h6>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div><!-- End Sales Card -->
+
+                <!-- Revenue Card -->
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card revenue-card">
+
+
+
+                        <div class="card-body">
+                            <h5 class="card-title">Customers <span>| Last 24Hrs</span></h5>
+
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="ri-file-user-fill"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{countCustomers}}</h6>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div><!-- End Revenue Card -->
+
+                <!-- Customers Card -->
+                
+
+                <!-- Reports -->
+                
+
+                <!-- Recent Sales -->
+                
+
+                <!-- Top Selling -->
+                <div class="col-12">
+                    
+                </div><!-- End Top Selling -->
+
+            </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+
+            <!-- Recent Activity -->
+            <div class="card">
+               
+
+                <div class="card-body">
+                    <h5 class="card-title">Recent Customers <span>| Last 24Hrs</span></h5>
+
+                    <div class="activity">
+
+                        <div v-if="customers.length" v-for="dat in customers" class="activity-item d-flex">
+                            
+                            <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                            <div class="activity-content">
+                               <a href="#" class="fw-bold text-dark">{{dat.fullname}}</a>  ({{dat.email}})
+                            </div>
+                        </div><!-- End activity item-->
+
+                        
+
+                    </div>
+
+                </div>
+            </div><!-- End Recent Activity -->
+
+            <!-- Budget Report -->
+            
+
+            <!-- Website Traffic -->
+            
+
+            <!-- News & Updates Traffic -->
+            
+
+        </div><!-- End Right side columns -->
+
+    </div>
+</section>
+
+
+<script>
+    const adminDash = Vue.createApp({
+        data() {
+            return {
+                countCustomers: 0,
+                customers: [],
+                countMotor: 0,
+                motor: [],
+                countTravel: 0,
+                travel: [],
+                countMarine: 0,
+                marine: []
+            }
+        },
+
+        mounted() {
+            this.getMotor();
+            this.getTravel();
+            this.getCustomers();
+        },
+
+        methods: {
+            getMotor() {
+                axios.get("/admin/recent-motor").then(res => {
+                    if (res.status == 200) {
+                        this.motor = res.data.data;
+                        // console.log(this.motor);
+                        this.countMotor = this.motor.length;
+                    }
+                }).catch(err => {
+
+                })
+            },
+
+            getTravel() {
+                axios.get("/admin/recent-travel").then(res => {
+                    if (res.status == 200) {
+                        this.travel = res.data.data;
+                        // console.log(this.motor);
+                        this.countTravel = this.travel.length;
+                    }
+                }).catch(err => {
+
+                })
+            },
+
+            getCustomers() {
+                axios.get("/admin/recent-customers").then(res => {
+                    if (res.status == 200) {
+                        this.customers = res.data.data;
+                        // console.log(this.motor);
+                        this.countCustomers = this.customers.length;
+                    }
+                }).catch(err => {
+
+                })
+            },
+
+            getMarine() {
+
+            }
+
+        },
+    });
+    adminDash.mount("#adminDash")
+</script>

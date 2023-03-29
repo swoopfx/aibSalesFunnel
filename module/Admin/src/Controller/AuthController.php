@@ -2,19 +2,32 @@
 
 namespace Admin\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Session\SessionManager;
 use Laminas\View\Model\ViewModel;
 use Application\Entity\User;
+use Application\Service\UserService;
 use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\Identical;
 use Laminas\View\Model\JsonModel;
 
 class AuthController extends AbstractActionController
 {
 
+    /**
+     * Undocumented variable
+     *
+     * @var EntityManager
+     */
     private $entityManager;
 
+    /**
+     * Undocumented variable
+     *
+     * @var 
+     */
     private $authService;
 
     public function onDispatch(\Laminas\Mvc\MvcEvent $e)
@@ -231,6 +244,262 @@ class AuthController extends AbstractActionController
         return $jsonModel;
 
         // 'navMenu' => $this->options->getNavMenu()
+    }
+
+    public function resetPasswordAction()
+    {
+        $viewmodel = new ViewModel();
+        return $viewmodel;
+    }
+
+    public function resetAction()
+    {
+        $jsonModel = new JsonModel();
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $email = $post["email"];
+            /**
+             * @var User
+             */
+            $userEntity = $this->entityManager->getRepository(User::class)->findOneBy([
+                "email" => $email
+            ]);
+            if ($userEntity == null) {
+                $response->setStatusCode(423);
+                return $jsonModel;
+            } else {
+                // generate new Token 
+                $token = md5(uniqid(mt_rand(), true));
+                // Hy
+                $userEntity->setRegistrationToken($token)->setUpdatedOn(new \Datetime());
+
+                $fullLink = $this->getBaseUrl() . $this->url()->fromRoute('admin-auth', array(
+                    'action' => 'newpassword',
+                    'id' => $userEntity->getRegistrationToken()
+
+                ));
+
+                // send email
+
+                $this->entityManager->persist($userEntity);
+
+                $this->entityManager->flush();
+                $response->setStatusCode(201);
+            }
+        }
+        return $jsonModel;
+    }
+
+    public function newpasswordAction()
+    {
+        $viewmodel = new ViewModel();
+        $token = $this->params()->fromRoute('id');
+        try {
+            $entityManager = $this->entityManager;
+            if ($token !== '' && $user = $entityManager->getRepository(User::class)->findOneBy(array(
+                'registrationToken' => $token
+            ))) {
+                $request = $this->getRequest();
+                if ($request->isPost()) {
+                    $post = $request->getPost();
+                    $inputFilter = new InputFilter();
+
+                    $inputFilter->add(array(
+                        'name' => 'password',
+                        'required' => true,
+                        'allow_empty' => false,
+                        'filters' => array(
+                            array(
+                                'name' => 'StripTags'
+                            ),
+                            array(
+                                'name' => 'StringTrim'
+                            )
+                        ),
+                        'validators' => array(
+                            array(
+                                'name' => 'NotEmpty',
+                                'options' => array(
+                                    'messages' => array(
+                                        'isEmpty' => 'password is required'
+                                    )
+                                )
+                            )
+                        )
+                    ));
+
+                    $inputFilter->add(array(
+                        'name' => 'token',
+                        'required' => true,
+                        'allow_empty' => false,
+                        'filters' => array(
+                            array(
+                                'name' => 'StripTags'
+                            ),
+                            array(
+                                'name' => 'StringTrim'
+                            )
+                        ),
+                        'validators' => array(
+                            array(
+                                'name' => 'NotEmpty',
+                                'options' => array(
+                                    'messages' => array(
+                                        'isEmpty' => 'Token is required'
+                                    )
+                                )
+                            )
+                        )
+                    ));
+
+                    $inputFilter->add(array(
+                        'name' => 'verifypassword',
+                        'required' => true,
+                        'allow_empty' => false,
+                        'filters' => array(
+                            array(
+                                'name' => 'StripTags'
+                            ),
+                            array(
+                                'name' => 'StringTrim'
+                            )
+                        ),
+                        'validators' => array(
+                            array(
+                                'name' => 'NotEmpty',
+                                'options' => array(
+                                    'messages' => array(
+                                        'isEmpty' => 'Verified Password is required'
+                                    )
+                                )
+                            ),
+                            array(
+                                'name' => 'Identical',
+                                'options' => array(
+                                    'token' => 'email',
+                                    "messages" => array(
+                                        Identical::NOT_SAME => "The Passwords are not identical"
+                                    )
+                                )
+                            )
+                        )
+                    ));
+                    $inputFilter->setData($post);
+                    if ($inputFilter->isValid()) {
+                        $data = $inputFilter->getValues();
+                        /**
+                         * @var User
+                         */
+                        $userEntity = $entityManager->getRepository(User::class)->findOneBy(array(
+                            'registrationToken' => $data["token"]
+                        ));
+                        if ($userEntity) {
+                            $userEntity->setPassword(UserService::encryptPassword($data["password"]))->setUpdatedOn(new \Datetime());
+
+                            $entityManager->persist($userEntity);
+                            $entityManager->flush();
+
+                            // Send a success mail
+
+                            return $this->redirect()->toRoute("login");
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        // var_dump($token);
+        // $viewmodel->setVariables([
+        //     "tok" => $token
+        // ]);
+        $viewmodel->setVariables([
+            // "data"=>[
+                "token"=>$token,
+               
+            // ]
+        ]);
+        return $viewmodel;
+    }
+
+
+
+    // public function submitnewPasswordAction(){
+    //     $jsonModel = new JsonModel();
+    //     $request = $this->getRequest();
+    //     if ($request->isPost()) {
+    //         // $post 
+    //     }
+    //     return $jsonModel;
+    // }
+
+    /**
+     * Confirm Email Change Action
+     *
+     * Confirms password change through given token
+     *
+     * @return Laminas\View\Model\ViewModel
+     */
+    public function confirmEmailChangePasswordAction()
+    {
+        $token = $this->params()->fromRoute('id');
+        try {
+            $entityManager = $this->entityManager;
+            if ($token !== '' && $user = $entityManager->getRepository(User::class)->findOneBy(array(
+                'registrationToken' => $token
+            ))) {
+                $user->setRegistrationToken(md5(uniqid(mt_rand(), true)));
+                $password = $this->generatePassword();
+                $user->setPassword(UserService::encryptPassword($password));
+                $email = $user->getEmail();
+                $fullLink = $this->getBaseUrl() . $this->url()->fromRoute('user-index', array(
+                    'action' => 'login'
+                ));
+
+                // send email here
+                // $this->sendEmail($user->getEmail(), 'Your password has been changed!', sprintf($this->translator->translate('Hello again %s. Your new password is: %s. Please, follow this link %s to log in with your new password.'), $user->getUsername(), $password, $fullLink));
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $viewModel = new ViewModel(array(
+                    'email' => $email,
+
+                ));
+                return $viewModel;
+            } else {
+                return $this->redirect()->toRoute('admin');
+            }
+        } catch (\Exception $e) {
+            // return $this->getServiceLocator()->get('csnuser_error_view')->createErrorView(
+            // $this->getTranslatorHelper()->translate('An error occured during the confirmation of your password change! Please, try again later.'),
+            // $e,
+            // $this->options->getDisplayExceptions(),
+            // $this->options->getNavMenu()
+            // );
+        }
+    }
+
+
+    public function logoutAction()
+    {
+        $auth = $this->authService;
+        if ($auth->hasIdentity()) {
+            $auth->clearIdentity();
+            $sessionManager = new SessionManager();
+            $sessionManager->forgetMe();
+            $sessionManager->destroy();
+        }
+
+        return $this->redirect()->toRoute("login");
+    }
+
+    private function getBaseUrl()
+    {
+        $uri = $this->getRequest()->getUri();
+        return sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
     }
 
     /**

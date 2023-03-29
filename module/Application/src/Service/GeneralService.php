@@ -3,6 +3,7 @@ namespace Application\Service;
 
 use Application\Entity\Settings;
 use Doctrine\ORM\EntityManager;
+use Laminas\Authentication\AuthenticationService;
 
 
 class GeneralService {
@@ -25,6 +26,8 @@ class GeneralService {
     private $mail;
 
     private $authService;
+
+   
 
     /**
      * Undocumented function

@@ -2,7 +2,11 @@
 
 namespace Admin\Controller;
 
+use Application\Entity\MarineCargoInsurance;
+use Application\Entity\MotorInsurance;
+use Application\Entity\TravelInsurance;
 use Application\Entity\User;
+use Application\Service\UserService;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
@@ -12,32 +16,34 @@ use Laminas\View\Model\JsonModel;
 
 class AdminController extends AbstractActionController
 {
-    public function onDispatch(\Laminas\Mvc\MvcEvent $e)
-    {
-        $response = parent::onDispatch($e);
-        // $this->customerRedirectPlugin()->totalRedirection();
-        $this->layout()->setTemplate('layout/admin');
-        return $response;
-    }
 
-    public function indexAction()
-    {
-        $viewModel = new ViewModel();
-        return $viewModel;
-    }
+
+
+
 
     /**
      * Undocumented variable
      *
-     * @var [type]
+     * @var EntityManager
      */
     private $entityManager;
 
-    public function getAllCustomerAction()
+    public function allCustomersAction()
     {
         $viewModel = new ViewModel();
         $pageCount = 100;
-        $query = $this->entityManager->createQueryBuilder()->select(["a"])->from(User::class, "a")->orderBy("a.id", "DESC")->getQuery()->setHydrationMode(Query::HYDRATE_ARRAY);
+        $query = $this->entityManager->createQueryBuilder()->select(["a", "r"])
+            ->from(User::class, "a")
+            ->leftJoin("a.role", "r")
+            ->where("a.isActive = :active")
+            ->andWhere("a.role = :role")
+            ->setParameters([
+                "active" => TRUE,
+                "role" => UserService::USER_ROLE_CUSTOMER
+            ])
+            ->orderBy("a.id", "DESC")
+            ->getQuery()
+            ->setHydrationMode(Query::HYDRATE_ARRAY);
         $paginator = new Paginator($query);
         $totalItems = count($paginator);
         $params = $this->params()->fromQuery("page", null);
@@ -55,6 +61,152 @@ class AdminController extends AbstractActionController
         return $viewModel;
     }
 
+    public function recentMotorAction()
+    {
+        $jsonModel = new JsonModel();
+        $dateObject = new \Datetime();
+        $dateObject->modify("-24 hour");
+
+        $data = $this->entityManager->createQueryBuilder()
+            ->select(["a"])
+            ->from(MotorInsurance::class, "a")
+            ->where("a.createdOn > :date")
+            ->andWhere("a.isActive = :active")
+            ->setParameters([
+                "date" => $dateObject,
+                "active" => TRUE
+            ])->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+
+        $jsonModel->setVariables([
+            "data" => $data
+        ]);
+        return $jsonModel;
+    }
+
+    public function recentTravelAction()
+    {
+        $jsonModel = new JsonModel();
+        $dateObject = new \Datetime();
+        $dateObject->modify("-24 hour");
+
+        $data = $this->entityManager->createQueryBuilder()
+            ->select(["a"])
+            ->from(TravelInsurance::class, "a")
+            ->where("a.createdOn > :date")
+            ->setParameters([
+                "date" => $dateObject
+            ])->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+
+        $jsonModel->setVariables([
+            "data" => $data
+        ]);
+        return $jsonModel;
+    }
+
+
+    public function recentCargoAction()
+    {
+        $jsonModel = new JsonModel();
+        $dateObject = new \Datetime();
+        $dateObject->modify("-24 hour");
+
+        $data = $this->entityManager->createQueryBuilder()
+            ->select(["a"])
+            ->from(MarineCargoInsurance::class, "a")
+            ->where("a.createdOn > :date")
+            ->andWhere("a.isActive = :active")
+            ->setParameters([
+                "date" => $dateObject,
+                "active" => TRUE
+            ])->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+
+        $jsonModel->setVariables([
+            "data" => $data
+        ]);
+        return $jsonModel;
+    }
+
+    public function recentCustomersAction()
+    {
+        $jsonModel = new JsonModel();
+        $dateObject = new \Datetime();
+        $dateObject->modify("-24 hour");
+
+        $data = $this->entityManager->createQueryBuilder()
+            ->select(["a"])
+            ->from(User::class, "a")
+            ->where("a.createdOn > :date")
+            ->andWhere("a.role = :role")
+            ->setParameters([
+                "date" => $dateObject,
+                "role" => UserService::USER_ROLE_CUSTOMER
+            ])->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+
+        $jsonModel->setVariables([
+            "data" => $data
+        ]);
+        return $jsonModel;
+    }
+
+
+    public function recentSalesAction(){
+        $jsonModel = new JsonModel();
+    }
+
+
+    public function recentSupportAction()
+    {
+    }
+
+
+
+    public function onDispatch(\Laminas\Mvc\MvcEvent $e)
+    {
+        $response = parent::onDispatch($e);
+        // $this->redirectPlugin()->redirectToLogout();
+        $this->layout()->setTemplate('layout/admin');
+        return $response;
+    }
+
+    public function indexAction()
+    {
+        $viewModel = new ViewModel();
+        return $viewModel;
+    }
+
+    public function viewerAction()
+    {
+        $viewModel = new ViewModel();
+        $image  = $this->params()->fromRoute("id", NULL);
+        $viewModel->setVariables([
+            "data" => $image
+        ]);
+        return $viewModel;
+    }
+
+
+    public function disableUserAction()
+    {
+        $jsonModel = new JsonModel();
+        return $jsonModel;
+    }
+
+
+    public function enableUserAction()
+    {
+        $jsonModel = new JsonModel();
+        return $jsonModel;
+    }
+
+
+    public function editUserAction()
+    {
+    }
+
 
     public function loginAction()
     {
@@ -64,7 +216,8 @@ class AdminController extends AbstractActionController
     }
 
 
-    public function loginjsonAction(){
+    public function loginjsonAction()
+    {
         $jsonModel = new JsonModel();
 
         return $jsonModel;

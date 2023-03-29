@@ -87,7 +87,7 @@ class TransactionService
                     ->setTransactionStatus($em->find(TransactionStatus::class, self::TRANSACTION_STATUS_SUCCESS))
                     ->setPaystackTransaction($data["pTrans"]);
 
-                $invoiceEntity->setStatus($em->find(InvoiceStatus::class, self::INVOICE_STATUS_SETTLED));
+                $invoiceEntity->setStatus($em->find(InvoiceStatus::class, self::INVOICE_STATUS_SETTLED))->setIsOpen(FALSE);
 
                 $em->persist($invoiceEntity);
                 $em->persist($transactionEntity);

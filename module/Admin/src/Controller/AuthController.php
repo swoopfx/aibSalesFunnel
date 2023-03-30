@@ -187,7 +187,7 @@ class AuthController extends AbstractActionController
                         $authService->getStorage()->write($identity);
 
                         // Last Login Date
-                        $this->lastLogin($this->identity());
+                        // $this->lastLogin($this->identity());
                         $userEntity = $this->identity();
                         if ($this->params()->fromPost('rememberme')) {
                             $time = 1209600; // 14 days (1209600/3600 = 336 hours => 336/24 = 14 days)
@@ -204,7 +204,7 @@ class AuthController extends AbstractActionController
                          * to display the required form to fill the profile
                          * if required redirect to the copletinfg profile Page
                          */
-                        $redirect = $fullUrl . "/admin/dashboard";
+                        $redirect = $fullUrl . "/admin";
 
                         $response->setStatusCode(201);
                         $jsonModel->setVariables([
@@ -295,130 +295,146 @@ class AuthController extends AbstractActionController
     public function newpasswordAction()
     {
         $viewmodel = new ViewModel();
+        $jsonmodel = new JsonModel();
+        $response = $this->getResponse();
         $token = $this->params()->fromRoute('id');
         try {
             $entityManager = $this->entityManager;
-            if ($token !== '' && $user = $entityManager->getRepository(User::class)->findOneBy(array(
-                'registrationToken' => $token
-            ))) {
-                $request = $this->getRequest();
-                if ($request->isPost()) {
-                    $post = $request->getPost();
-                    $inputFilter = new InputFilter();
+            // if ($token !== '' && $user = $entityManager->getRepository(User::class)->findOneBy(array(
+            //     'registrationToken' => $token
+            // ))) {
+            $request = $this->getRequest();
+            if ($request->isPost()) {
+                $post = $request->getPost();
+                // var_dump($post);
+                $inputFilter = new InputFilter();
 
-                    $inputFilter->add(array(
-                        'name' => 'password',
-                        'required' => true,
-                        'allow_empty' => false,
-                        'filters' => array(
-                            array(
-                                'name' => 'StripTags'
-                            ),
-                            array(
-                                'name' => 'StringTrim'
-                            )
+                $inputFilter->add(array(
+                    'name' => 'password',
+                    'required' => true,
+                    'allow_empty' => false,
+                    'filters' => array(
+                        array(
+                            'name' => 'StripTags'
                         ),
-                        'validators' => array(
-                            array(
-                                'name' => 'NotEmpty',
-                                'options' => array(
-                                    'messages' => array(
-                                        'isEmpty' => 'password is required'
-                                    )
+                        array(
+                            'name' => 'StringTrim'
+                        )
+                    ),
+                    'validators' => array(
+                        array(
+                            'name' => 'NotEmpty',
+                            'options' => array(
+                                'messages' => array(
+                                    'isEmpty' => 'password is required'
                                 )
                             )
                         )
-                    ));
+                    )
+                ));
 
-                    $inputFilter->add(array(
-                        'name' => 'token',
-                        'required' => true,
-                        'allow_empty' => false,
-                        'filters' => array(
-                            array(
-                                'name' => 'StripTags'
-                            ),
-                            array(
-                                'name' => 'StringTrim'
-                            )
+                $inputFilter->add(array(
+                    'name' => 'token',
+                    'required' => true,
+                    'allow_empty' => false,
+                    'filters' => array(
+                        array(
+                            'name' => 'StripTags'
                         ),
-                        'validators' => array(
-                            array(
-                                'name' => 'NotEmpty',
-                                'options' => array(
-                                    'messages' => array(
-                                        'isEmpty' => 'Token is required'
-                                    )
+                        array(
+                            'name' => 'StringTrim'
+                        )
+                    ),
+                    'validators' => array(
+                        array(
+                            'name' => 'NotEmpty',
+                            'options' => array(
+                                'messages' => array(
+                                    'isEmpty' => 'Token is required'
                                 )
                             )
                         )
-                    ));
+                    )
+                ));
 
-                    $inputFilter->add(array(
-                        'name' => 'verifypassword',
-                        'required' => true,
-                        'allow_empty' => false,
-                        'filters' => array(
-                            array(
-                                'name' => 'StripTags'
-                            ),
-                            array(
-                                'name' => 'StringTrim'
+                $inputFilter->add(array(
+                    'name' => 'verifypassword',
+                    'required' => true,
+                    'allow_empty' => false,
+                    'filters' => array(
+                        array(
+                            'name' => 'StripTags'
+                        ),
+                        array(
+                            'name' => 'StringTrim'
+                        )
+                    ),
+                    'validators' => array(
+                        array(
+                            'name' => 'NotEmpty',
+                            'options' => array(
+                                'messages' => array(
+                                    'isEmpty' => 'Verified Password is required'
+                                )
                             )
                         ),
-                        'validators' => array(
-                            array(
-                                'name' => 'NotEmpty',
-                                'options' => array(
-                                    'messages' => array(
-                                        'isEmpty' => 'Verified Password is required'
-                                    )
-                                )
-                            ),
-                            array(
-                                'name' => 'Identical',
-                                'options' => array(
-                                    'token' => 'email',
-                                    "messages" => array(
-                                        Identical::NOT_SAME => "The Passwords are not identical"
-                                    )
+                        array(
+                            'name' => 'Identical',
+                            'options' => array(
+                                'token' => 'password',
+                                "messages" => array(
+                                    Identical::NOT_SAME => "The Passwords are not identical"
                                 )
                             )
                         )
+                    )
+                ));
+                $inputFilter->setData($post);
+                if ($inputFilter->isValid()) {
+                    $data = $inputFilter->getValues();
+                    /**
+                     * @var User
+                     */
+                    $userEntity = $entityManager->getRepository(User::class)->findOneBy(array(
+                        'registrationToken' => $data["token"]
                     ));
-                    $inputFilter->setData($post);
-                    if ($inputFilter->isValid()) {
-                        $data = $inputFilter->getValues();
-                        /**
-                         * @var User
-                         */
-                        $userEntity = $entityManager->getRepository(User::class)->findOneBy(array(
-                            'registrationToken' => $data["token"]
-                        ));
-                        if ($userEntity) {
-                            $userEntity->setPassword(UserService::encryptPassword($data["password"]))->setUpdatedOn(new \Datetime());
+                    if ($userEntity) {
+                        $userEntity->setPassword(UserService::encryptPassword($data["password"]))->setUpdatedOn(new \Datetime());
 
-                            $entityManager->persist($userEntity);
-                            $entityManager->flush();
+                        $entityManager->persist($userEntity);
+                        $entityManager->flush();
 
-                            // Send a success mail
+                        // Send a success mail
 
-                            return $this->redirect()->toRoute("login");
-                        }
+                        // return $this->redirect()->toRoute("login");
+                        $response->setStatusCode(201);
+                        // $jsonmodel->setVariables([
+
+                        // ]);
+                        return  $jsonmodel;
                     }
+                } else {
+                    $response->setStatusCode(400);
+                    $jsonmodel->setVariables([
+                        "messages" => $inputFilter->getMessages()
+                    ]);
+                    return  $jsonmodel;
                 }
             }
+            // }
         } catch (\Throwable $th) {
             //throw $th;
+            $response->setStatusCode(400);
+            $jsonmodel->setVariables([
+                "messages" => $th->getMessage()
+            ]);
+            return  $jsonmodel;
         }
-        // var_dump($token);
-        // $viewmodel->setVariables([
-        //     "tok" => $token
-        // ]);
+
         $viewmodel->setVariables([
             // "data"=>[
-                "token"=>$token,
-               
+            "token" => $token,
+
             // ]
         ]);
         return $viewmodel;

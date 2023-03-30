@@ -106,7 +106,7 @@ return [
             'login' => array(
                 'type' => Literal::class,
                 'options' => array(
-                    'route' => '/admin/login',
+                    'route' => '/admins/login',
                     'defaults' => array(
                         // '__NAMESPACE__' => 'CsnUser\Controller',
                         'controller' => AuthController::class,
@@ -118,7 +118,7 @@ return [
             'logout' => array(
                 'type' => Literal::class,
                 'options' => array(
-                    'route' => '/admin/logout',
+                    'route' => '/admins/logout',
                     'defaults' => array(
 
                         'controller' => AuthController::class,

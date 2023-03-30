@@ -167,7 +167,7 @@ class AdminController extends AbstractActionController
     public function onDispatch(\Laminas\Mvc\MvcEvent $e)
     {
         $response = parent::onDispatch($e);
-        // $this->redirectPlugin()->redirectToLogout();
+        $this->redirectPlugin()->redirectToLogout();
         $this->layout()->setTemplate('layout/admin');
         return $response;
     }

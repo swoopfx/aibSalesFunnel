@@ -114,7 +114,7 @@ use Application\Service\GeneralService;
 
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="<?= $this->url("logout")?>">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Sign Out</span>
                             </a>
@@ -211,7 +211,7 @@ use Application\Service\GeneralService;
 
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.html">
+                <a class="nav-link collapsed" href="<?= $this->url("logout")?>">
                     <i class="bi bi-person"></i>
                     <span>Logout</span>
                 </a>

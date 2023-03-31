@@ -64,12 +64,6 @@ class TravelController extends AbstractActionController
     public function customerTravelAction()
     {
         $viewModel = new ViewModel();
-        return $viewModel;
-    }
-
-    public function viewAction()
-    {
-        $viewModel = new ViewModel();
         $em = $this->entityManager;
         $id = $this->params()->fromRoute("id", NULL);
         if ($id == NULL) {
@@ -82,6 +76,37 @@ class TravelController extends AbstractActionController
                 ->leftJoin("a.destination", "t")
                 ->leftJoin("a.nationality", "v")
                 ->leftJoin("i.status", "s")
+                ->where("a.travelUuid = :uuid")
+                ->setParameters([
+                    "uuid" => $id,
+                ])
+                ->getQuery()
+                ->setHydrationMode(Query::HYDRATE_ARRAY)
+                ->getArrayResult();
+
+            $viewModel->setVariables([
+                "data" => $data[0]
+            ]);
+        }
+        return $viewModel;
+    }
+
+    public function viewAction()
+    {
+        $viewModel = new ViewModel();
+        $em = $this->entityManager;
+        $id = $this->params()->fromRoute("id", NULL);
+        if ($id == NULL) {
+            return $this->redirect()->toRoute("admin");
+        } else {
+            $data = $em->createQueryBuilder()->select(["a", "i", "u", "t", "v", "s", "iu"])
+                ->from(TravelInsurance::class, "a")
+                ->leftJoin("a.invoice", "i")
+                ->leftJoin("a.user", "u")
+                ->leftJoin("a.destination", "t")
+                ->leftJoin("a.nationality", "v")
+                ->leftJoin("i.status", "s")
+                ->leftJoin("i.user", "iu")
                 ->where("a.travelUuid = :uuid")
                 ->setParameters([
                     "uuid" => $id,

@@ -27,10 +27,13 @@
                         <li class="nav-item">
                             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
                         </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Invoice</button>
+                        </li>
                         <?php if (count($data["travelList"]) > 0) : ?>
 
                             <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Travelers List</button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Travelers List</button>
                             </li>
                         <?php endif; ?>
                         <!--
@@ -82,9 +85,15 @@
 
 
                         </div>
+                        <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+                            <!-- Profile Edit Form -->
+                            <?php echo $this->partial("invoice-view-partial", ["data" => $data["invoice"]]) ?>
+
+                        </div>
 
                         <?php if (count($data["travelList"]) > 0) : ?>
-                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                            <div class="tab-pane fade profile-edit pt-3" id="profile-settings">
 
                                 List all Travelers list
 

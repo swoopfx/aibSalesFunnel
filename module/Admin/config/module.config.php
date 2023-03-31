@@ -133,6 +133,11 @@ return [
             "layout/admin" => __DIR__ . '/../view/layout/adminlayout.phtml',
             "layout/admin-login" => __DIR__ . '/../view/layout/adminlogin.phtml',
             "customer-invoice-partial" => __DIR__ . '/../view/partial/customer-invoice-partial.phtml',
+            "invoice-view-partial" => __DIR__ . '/../view/partial/invoice-view-partial.phtml',
+
+            // Mail
+            "reset-password-mail" => __DIR__ . '/../view/mail/reset-password-mail.phtml',
+
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',

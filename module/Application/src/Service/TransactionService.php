@@ -100,6 +100,9 @@ class TransactionService
                 $mailData["var"] = [
                     "delivery_to" => $invoiceEntity->getUser()->getFullname(),
                     "amount" => $invoiceEntity->getAmount(),
+                    "total" => $invoiceEntity->getAmount(),
+                    "desc" => $invoiceEntity->getDescription(),
+                    "fullname" => $invoiceEntity->getUser()->getFullname(),
                     "tRef" => $transactionEntity->getTransactionUid(),
                     "description" => $invoiceEntity->getDescription(),
                     "company_name" => $data["company_name"],
@@ -108,7 +111,7 @@ class TransactionService
                     "company_logo" => $data["company_logo"],
 
                 ];
-                // $this->mailService->execute($mailData);
+                $this->mailService->execute($mailData);
 
 
                 $em->flush();

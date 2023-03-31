@@ -12,6 +12,7 @@ use Application\Service\UserService;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\Identical;
 use Laminas\View\Model\JsonModel;
+use Application\Service\MailService;
 
 class AuthController extends AbstractActionController
 {
@@ -29,6 +30,14 @@ class AuthController extends AbstractActionController
      * @var 
      */
     private $authService;
+
+
+    /**
+     * Undocumented variable
+     *
+     * @var MailService
+     */
+    private $mailService;
 
     public function onDispatch(\Laminas\Mvc\MvcEvent $e)
     {
@@ -256,6 +265,7 @@ class AuthController extends AbstractActionController
     {
         $jsonModel = new JsonModel();
         $request = $this->getRequest();
+
         $response = $this->getResponse();
         if ($request->isPost()) {
             $post = $request->getPost();
@@ -270,23 +280,40 @@ class AuthController extends AbstractActionController
                 $response->setStatusCode(423);
                 return $jsonModel;
             } else {
-                // generate new Token 
-                $token = md5(uniqid(mt_rand(), true));
-                // Hy
-                $userEntity->setRegistrationToken($token)->setUpdatedOn(new \Datetime());
+                try {
+                    // generate new Token 
+                    $token = md5(uniqid(mt_rand(), true));
+                    // Hy
+                    $userEntity->setRegistrationToken($token)->setUpdatedOn(new \Datetime());
 
-                $fullLink = $this->getBaseUrl() . $this->url()->fromRoute('admin-auth', array(
-                    'action' => 'newpassword',
-                    'id' => $userEntity->getRegistrationToken()
+                    $fullLink = $this->getBaseUrl() . $this->url()->fromRoute('admin-auth', array(
+                        'action' => 'newpassword',
+                        'id' => $userEntity->getRegistrationToken()
 
-                ));
+                    ));
 
-                // send email
+                    // send email
 
-                $this->entityManager->persist($userEntity);
+                    $this->entityManager->persist($userEntity);
+                    $mailData["to"] = $userEntity->getEmail();
+                    $mailData["subject"] = "AIB Reset Password";
+                    $mailData["toName"] = $userEntity->getFullname();
+                    $mailData["template"] = "reset-password-mail";
+                    $mailData["var"] = [
+                        "link" => $fullLink
+                    ];
 
-                $this->entityManager->flush();
-                $response->setStatusCode(201);
+                    $this->mailService->execute($mailData);
+
+                    $this->entityManager->flush();
+                    $response->setStatusCode(201);
+                } catch (\Throwable $th) {
+                    $response->setStatusCode(400);
+                    $jsonModel->setVariables([
+                        "messages" => $th->getMessage(),
+                        "data" => $th->getTrace()
+                    ]);
+                }
             }
         }
         return $jsonModel;
@@ -554,6 +581,30 @@ class AuthController extends AbstractActionController
     public function setAuthService($authService)
     {
         $this->authService = $authService;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  MailService
+     */
+    public function getMailService()
+    {
+        return $this->mailService;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  MailService  $mailService  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setMailService(MailService $mailService)
+    {
+        $this->mailService = $mailService;
 
         return $this;
     }

@@ -1,0 +1,100 @@
+<section id="customerMotor" class="section profile">
+    <div class="row">
+        <div class="col-xl-4">
+
+            <div class="card">
+                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                    <img src="/svg/avatar.svg" alt="Profile" class="rounded-circle">
+                    <h2><?= strtoupper($data[0]["user"]["fullname"]) ?></h2>
+                    <h3><?= $data[0]["user"]["phonenumber"] ?></h3>
+                    <h3><?= $data[0]["user"]["email"] ?></h3>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xl-8">
+
+            <div class="card overflow-auto">
+                <div class="card-body pt-3">
+                    <!-- Bordered Tabs -->
+
+                    <h5 class="card-title">Travel Insurance</h5>
+
+                    <!-- Table with hoverable rows -->
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Cover Type</th>
+                                <th scope="col">Transaction</th>
+                                <th scope="col">Intiated Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($data as $da) : ?>
+                                <tr>
+                                    <th scope="row"><?= $da["id"] ?></th>
+
+                                    <td>
+                                        <a href="<?= $this->url("admin-motor", ["action" => "view", "id" => $da["uid"]]) ?>"><?= $da["uid"] ?></a> <br>
+                                        <?= $da["coverType"]["type"] ?>
+                                    </td>
+                                    <td><?= $this->adminInvoiceStatus($da["invoice"]["status"]["id"]) ?></td>
+                                    <td><?= $this->dateformat($da["createdOn"], IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM, "en_us"); ?></td>
+                                    <td>
+                                        <div class="filter">
+                                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-arrow-right-square-fill"></i></a>
+                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+
+
+                                                <li><a class="dropdown-item" href="<?= $this->url("admin-motor", ["action" => "view", "id" => $da["uid"]]) ?>">View</a></li>
+
+                                                <li><a class="dropdown-item" href="#">View Invoices</a></li>
+                                                <li><a class="dropdown-item" @click="revokeMotor('<?= $da['uuid'] ?>')">Revoke</a></li>
+
+
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach;  ?>
+
+                        </tbody>
+                    </table>
+                    <!-- End Table with hoverable rows -->
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    </div>
+</section>
+
+<script>
+    const customerMotorApp = Vue.createApp({
+        data() {
+            return {
+                isRevoking: false
+            }
+        },
+        methods: {
+            revokeMotor(e) {
+                let formData = new FormData();
+                formData.append("uuid", e);
+                axios.post("/motor-admin/revoke", formData).then(res => {
+                    if (res.status == 201) {
+                        window.location.reload();
+                    }
+                }).catch(err=>{
+
+                });
+            }
+        },
+    });
+    customerMotorApp.mount("#customerMotor")
+</script>

@@ -269,7 +269,7 @@ use Application\Service\GeneralService;
 
                                                                             <!-- Container Cell -->
                                                                             <tr>
-                                                                                <td style="padding: 0px 0px 30px 0px; text-align: center;" align="left"><a target="_blank" href="<?php echo GeneralService::COMPANY_URL ?>"><img style="border: none; border-width: 0px;" src="<?php echo $logo ?>" width="57" alt="logo" /></a></td>
+                                                                                <td style="padding: 0px 0px 30px 0px; text-align: center;" align="left"><a target="_blank" href="<?php echo GeneralService::COMPANY_URL ?>"><img style="border: none; border-width: 0px;" src="<?php echo $logo ?>" width="57" alt="AIB logo" /></a></td>
                                                                             </tr>
 
                                                                             <!-- Container Cell -->
@@ -284,9 +284,8 @@ use Application\Service\GeneralService;
 
                                                                             <!-- Container Cell -->
                                                                             <tr>
-                                                                                <td style="padding: 0px 0px 20px 0px; text-align: center; color: #6D6D6D; line-height: 26px; font-family: Helvetica, Arial, sans-serif;" align="left"><span> Your order's in. We're working
-                                                                                        to get it packed up and out the door—expect a
-                                                                                        dispatch confirmation email soon. </span></td>
+                                                                                <td style="padding: 0px 0px 20px 0px; text-align: center; color: #6D6D6D; line-height: 26px; font-family: Helvetica, Arial, sans-serif;" align="left"><span> Your request is in. 
+                                                                                    Our System is automating your certificate generation, which will get to you very soon </span></td>
                                                                             </tr>
                                                                         </table>
                                                                     </td>
@@ -309,25 +308,29 @@ use Application\Service\GeneralService;
                                                                     <td align="center" style="color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px; padding: 40px 0px 40px 0px;">
                                                                         <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" style="padding: 0px; Margin: 0px; border-collapse: collapse;" role="presentation">
                                                                             <tr>
-                                                                                <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Payment</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $paymentType ?></td>
+                                                                                <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Description</td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $desc ?></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Transaction Ref</td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $tRef ?></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Payment</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $paymentType ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"> &#8358; <?php echo $amount ?></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Subtotal</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $orderTotal ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"> &#8358; <?php echo $amount ?></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Shipping
                                                                                     & Handling</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $shipping ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"> &#8358; 0 </td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 30px;">Total</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 30px;"><?php echo $total ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 30px;"> &#8358; <?php echo $total ?></td>
                                                                             </tr>
                                                                         </table>
                                                                     </td>

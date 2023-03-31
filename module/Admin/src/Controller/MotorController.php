@@ -116,7 +116,7 @@ class MotorController extends AbstractActionController
         if ($id == NULL) {
             return $this->redirect()->toRoute("admin");
         } else {
-            $data = $em->createQueryBuilder()->select(["a", "i", "u", "t", "v", "p", "s"])
+            $data = $em->createQueryBuilder()->select(["a", "i", "u", "t", "v", "p", "s", "iu"])
                 ->from(MotorInsurance::class, "a")
                 ->leftJoin("a.invoice", "i")
                 ->leftJoin("a.user", "u")
@@ -124,6 +124,7 @@ class MotorController extends AbstractActionController
                 ->leftJoin("a.vehicleLicense", "v")
                 ->leftJoin("a.proofOfOwnership", "p")
                 ->leftJoin("i.status", "s")
+                ->leftJoin("i.user", "iu")
                 ->where("a.uid = :uuid")
                 ->setParameters([
 

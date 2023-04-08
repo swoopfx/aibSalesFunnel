@@ -277,15 +277,15 @@ use Application\Service\GeneralService;
                                                                                 <td style="padding: 0px 0px 15px 0px; text-align: center;" align="left">
                                                                                     <h1 style="color: #111111; font-size: 28px; line-height: 34px; font-family: Helvetica, Arial, sans-serif; margin: 0px;">
                                                                                         <span style="color: #111111; font-size: 28px; line-height: 34px; font-family: 'Nike TG', Helvetica, Arial, sans-serif !important;">Thanks,
-                                                                                            <?php echo $fullname ?>! We're&nbsp;On&nbsp;It.</span>
+                                                                                            !{{fullname}} We're&nbsp;On&nbsp;It.</span>
                                                                                     </h1>
                                                                                 </td>
                                                                             </tr>
 
                                                                             <!-- Container Cell -->
                                                                             <tr>
-                                                                                <td style="padding: 0px 0px 20px 0px; text-align: center; color: #6D6D6D; line-height: 26px; font-family: Helvetica, Arial, sans-serif;" align="left"><span> Your request is in. 
-                                                                                    Our System is automating your certificate generation, which will get to you very soon </span></td>
+                                                                                <td style="padding: 0px 0px 20px 0px; text-align: center; color: #6D6D6D; line-height: 26px; font-family: Helvetica, Arial, sans-serif;" align="left"><span> Your request is in.
+                                                                                        Our System is automating your certificate generation, which will get to you very soon </span></td>
                                                                             </tr>
                                                                         </table>
                                                                     </td>
@@ -309,19 +309,19 @@ use Application\Service\GeneralService;
                                                                         <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" style="padding: 0px; Margin: 0px; border-collapse: collapse;" role="presentation">
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Description</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $desc ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"> {{desc}}</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Transaction Ref</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"><?php echo $tRef ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">{{tRef}}</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Payment</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"> &#8358; <?php echo $amount ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"> &#8358; {{amount}}</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Subtotal</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"> &#8358; <?php echo $amount ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;"> &#8358; {{amount}}</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px; color: #6D6D6D; font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 24px;">Shipping
@@ -330,7 +330,7 @@ use Application\Service\GeneralService;
                                                                             </tr>
                                                                             <tr>
                                                                                 <td width="60%" align="left" style="padding: 10px 0px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 30px;">Total</td>
-                                                                                <td width="40%" align="right" style="padding: 10px 0px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 30px;"> &#8358; <?php echo $total ?></td>
+                                                                                <td width="40%" align="right" style="padding: 10px 0px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 30px;"> &#8358; {{total}}</td>
                                                                             </tr>
                                                                         </table>
                                                                     </td>

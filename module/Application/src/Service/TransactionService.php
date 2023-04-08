@@ -9,7 +9,8 @@ use Application\Entity\TransactionStatus;
 use Doctrine\ORM\EntityManager;
 use Ramsey\Uuid\Uuid;
 use Application\Service\MailService;
-use Exception;
+use Application\Service\MailtrapService;
+use \Exception;
 
 class TransactionService
 {
@@ -31,6 +32,14 @@ class TransactionService
      * @var MailService
      */
     private $mailService;
+
+
+    /**
+     * Undocumented variable
+     *
+     * @var MailtrapService
+     */
+    private $mailtrap;
 
     const INVOICE_STATUS_INITIATED = 10;
 
@@ -97,7 +106,22 @@ class TransactionService
                 $mailData["subject"] = self::MAIL_SUBJECT_SUCCESS;
                 $mailData["toName"] = $invoiceEntity->getUser()->getFullname();
                 $mailData["template"] = "transaction-success-email";
-                $mailData["var"] = [
+                // $mailData["var"] = [
+                //     "delivery_to" => $invoiceEntity->getUser()->getFullname(),
+                //     "amount" => $invoiceEntity->getAmount(),
+                //     "total" => $invoiceEntity->getAmount(),
+                //     "desc" => $invoiceEntity->getDescription(),
+                //     "fullname" => $invoiceEntity->getUser()->getFullname(),
+                //     "tRef" => $transactionEntity->getTransactionUid(),
+                //     "description" => $invoiceEntity->getDescription(),
+                //     "company_name" => $data["company_name"],
+                //     "company_address" => $data["company_address"],
+                //     "company_email" => $data["company_email"],
+                //     "company_logo" => $data["company_logo"],
+
+                // ];
+                $mail = [
+                    "to"=>$invoiceEntity->getUser()->getEmail(),
                     "delivery_to" => $invoiceEntity->getUser()->getFullname(),
                     "amount" => $invoiceEntity->getAmount(),
                     "total" => $invoiceEntity->getAmount(),
@@ -105,11 +129,6 @@ class TransactionService
                     "fullname" => $invoiceEntity->getUser()->getFullname(),
                     "tRef" => $transactionEntity->getTransactionUid(),
                     "description" => $invoiceEntity->getDescription(),
-                    "company_name" => $data["company_name"],
-                    "company_address" => $data["company_address"],
-                    "company_email" => $data["company_email"],
-                    "company_logo" => $data["company_logo"],
-
                 ];
                 $this->mailService->execute($mailData);
 
@@ -171,6 +190,30 @@ class TransactionService
     public function setMailService($mailService)
     {
         $this->mailService = $mailService;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  MailtrapService
+     */ 
+    public function getMailtrap()
+    {
+        return $this->mailtrap;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  MailtrapService  $mailtrap  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setMailtrap(MailtrapService $mailtrap)
+    {
+        $this->mailtrap = $mailtrap;
 
         return $this;
     }

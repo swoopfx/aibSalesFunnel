@@ -69,7 +69,7 @@ class MailtrapService
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://send.api.mailtrap.io/api/send',
+                CURLOPT_URL => $config["url"],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -79,7 +79,67 @@ class MailtrapService
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => json_encode($param), //'{"from":{"email":"no-reply@aibltd.insure","name":"Advocate Insurance Brokers"},"to":[{"email":"ezekiel_a@yahoo.com"}],"template_uuid":"17608483-803f-4acc-842d-d340bf1c2cff","template_variables":{"user_email":"Test_User_email","pass_reset_link":"Test_Pass_reset_link"}}',
                 CURLOPT_HTTPHEADER => array(
-                    'Authorization: Bearer 8c74bd5ea48c5f3f7662a22be746915d',
+                    'Authorization: Bearer '.$config["token"],
+                    'Content-Type: application/json'
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            // echo $response;
+        } catch (\Throwable $th) {
+            throw new \Exception($th->getMessage());
+        }
+    }
+
+
+    public function sendReceiptMail($data)
+    {
+        $config = $this->mailtrapconfig;
+
+        try {
+            $param = [
+
+                "from" => [
+                    "email" => "no-reply@aibltd.insure",
+                    "name" => "Advocate Insurance Brokers",
+                ],
+                "to" => [
+                    ["email" => $data["to"]]
+                ],
+                "template_uuid" => "6bb4715f-380e-4ea8-9855-bf394762796b",
+                "template_variables" => [
+
+                    "company_url" => GeneralService::COMPANY_URL,
+                    "logo" => $data["logo"],
+                    "fullname" => $data["fullname"],
+                    "desc" => $data["dec"],
+                    "tRef" => $data["tRef"],
+                    "amount" => $data["amount"],
+                    "total" => $data["total"],
+                    "company_name" => GeneralService::COMPANY_NAME,
+                    "company_address" => GeneralService::COMPANY_ADDRESS,
+
+                ]
+
+            ];
+
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $config["url"],
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($param), //'{"from":{"email":"no-reply@aibltd.insure","name":"Advocate Insurance Brokers"},"to":[{"email":"ezekiel_a@yahoo.com"}],"template_uuid":"17608483-803f-4acc-842d-d340bf1c2cff","template_variables":{"user_email":"Test_User_email","pass_reset_link":"Test_Pass_reset_link"}}',
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: Bearer '.$config["token"],
                     'Content-Type: application/json'
                 ),
             ));

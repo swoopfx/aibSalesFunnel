@@ -1,3 +1,10 @@
+<?php
+
+use Application\Service\GeneralService;
+
+$this->headMeta($description ?? GeneralService::APP_DESCRIPTION, "description");
+$this->headMeta($description ?? GeneralService::APP_KEYWORDS, "keywords");
+?>
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
 	<!--begin::Aside-->
 	<div id="kt_aside" class="aside card" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle" data-kt-sticky="true" data-kt-sticky-name="aside-sticky" data-kt-sticky-offset="{default: false, lg: '200px'}" data-kt-sticky-width="{lg: '265px'}" data-kt-sticky-left="auto" data-kt-sticky-top="95px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
@@ -243,8 +250,8 @@
 
 										<div class="flex-row-fluid py-lg-5 px-lg-15">
 											<!--begin::Form-->
-											<form class="form" novalidate="novalidate" id="kt_modal_create_app_form">
-												<fieldset>
+											<form autocomplete="off" class="form" novalidate="novalidate" id="kt_modal_create_app_form">
+												<fieldset :disabled="sessionDetails == null">
 													<!--begin::Step 1-->
 													<div class="current" data-kt-stepper-element="content">
 														<div class="w-100">
@@ -328,8 +335,8 @@
 				minReturnDate: "",
 
 				sessionUid: null,
-				sessionDetails: {},
-				sessionDetailsStrigify: "{}",
+				sessionDetails: null,
+				sessionDetailsStrigify: null,
 
 				isFaniliazedLoginFetch: false,
 			}
@@ -350,7 +357,7 @@
 
 		computed: {
 			loginStatus() {
-				if (this.sessionDetailsStrigify !== "{}") {
+				if (this.sessionDetailsStrigify !== null) {
 
 					this.isSessionAvailable = true;
 					return true;

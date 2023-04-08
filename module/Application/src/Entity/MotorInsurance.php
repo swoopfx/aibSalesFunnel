@@ -124,6 +124,14 @@ class MotorInsurance
 
 
     /**
+     * Undocumented variable
+     * @ORM\COlumn(nullable=true)
+     * @var string
+     */
+    private $licenseNumber;
+
+
+    /**
      * Currency Car was bought
      * @ORM\ManyToOne(targetEntity="Currency")
      * @var Currency
@@ -161,7 +169,7 @@ class MotorInsurance
      * @ORM\Column(type="boolean", options={"default" : 1})
      * @var bool
      */
-    private $isActive ;
+    private $isActive;
 
     /**
      * Undocumented variable
@@ -527,7 +535,7 @@ class MotorInsurance
      * Get undocumented variable
      *
      * @return  User
-     */ 
+     */
     public function getUser()
     {
         return $this->user;
@@ -539,7 +547,7 @@ class MotorInsurance
      * @param  User  $user  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setUser(User $user)
     {
         $this->user = $user;
@@ -551,7 +559,7 @@ class MotorInsurance
      * Get the value of invoice
      *
      * @return  Invoice
-     */ 
+     */
     public function getInvoice()
     {
         return $this->invoice;
@@ -563,7 +571,7 @@ class MotorInsurance
      * @param  Invoice  $invoice
      *
      * @return  self
-     */ 
+     */
     public function setInvoice(Invoice $invoice)
     {
         $this->invoice = $invoice;
@@ -575,7 +583,7 @@ class MotorInsurance
      * Get undocumented variable
      *
      * @return  bool
-     */ 
+     */
     public function getIsActive()
     {
         return $this->isActive;
@@ -587,7 +595,7 @@ class MotorInsurance
      * @param  bool  $isActive  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setIsActive(bool $isActive)
     {
         $this->isActive = $isActive;
@@ -599,7 +607,7 @@ class MotorInsurance
      * Get undocumented variable
      *
      * @return  string
-     */ 
+     */
     public function getUuid()
     {
         return $this->uuid;
@@ -611,10 +619,34 @@ class MotorInsurance
      * @param  string  $uuid  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setUuid(string $uuid)
     {
         $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  string
+     */ 
+    public function getLicenseNumber()
+    {
+        return $this->licenseNumber;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  string  $licenseNumber  Undocumented variable
+     *
+     * @return  self
+     */ 
+    public function setLicenseNumber(string $licenseNumber)
+    {
+        $this->licenseNumber = $licenseNumber;
 
         return $this;
     }

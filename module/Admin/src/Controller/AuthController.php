@@ -13,6 +13,7 @@ use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\Identical;
 use Laminas\View\Model\JsonModel;
 use Application\Service\MailService;
+use Application\Service\MailtrapService;
 
 class AuthController extends AbstractActionController
 {
@@ -30,6 +31,13 @@ class AuthController extends AbstractActionController
      * @var 
      */
     private $authService;
+
+    /**
+     * Undocumented variable
+     *
+     * @var  MailtrapService
+     */
+    private $mailtrap;
 
 
     /**
@@ -299,11 +307,14 @@ class AuthController extends AbstractActionController
                     $mailData["subject"] = "AIB Reset Password";
                     $mailData["toName"] = $userEntity->getFullname();
                     $mailData["template"] = "reset-password-mail";
-                    $mailData["var"] = [
-                        "link" => $fullLink
-                    ];
+                    $mailData["fulllink"] = $fullLink;
+                    // $mailData["var"] = [
+                    //     "link" => $fullLink
+                    // ];
 
-                    $this->mailService->execute($mailData);
+                    // $this->mailService->execute($mailData);
+
+                    $this->mailtrap->passwordResetMail($mailData);
 
                     $this->entityManager->flush();
                     $response->setStatusCode(201);
@@ -605,6 +616,30 @@ class AuthController extends AbstractActionController
     public function setMailService(MailService $mailService)
     {
         $this->mailService = $mailService;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  MailtrapService
+     */
+    public function getMailtrap()
+    {
+        return $this->mailtrap;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  [type]  $mailtrap  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setMailtrap($mailtrap)
+    {
+        $this->mailtrap = $mailtrap;
 
         return $this;
     }

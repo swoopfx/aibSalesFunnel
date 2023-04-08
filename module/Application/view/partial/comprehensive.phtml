@@ -14,11 +14,32 @@
                 <!--begin::Input wrapper-->
                 <div class="position-relative">
                     <!--begin::Input-->
-                    <input type="text" ref="license" class="form-control form-control-solid" placeholder="Price of Vehicle" required />
+                    <input type="text"  @keypress="isNumber($event)" ref="vehichle_price" class="form-control form-control-solid" placeholder="Price of Vehicle" required />
                     <!--end::Input-->
                     <!--begin::Card logos-->
 
                     <!--end::Card logos-->
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+
+        <div class="row">
+
+            <div class="d-flex flex-column mb-7 fv-row">
+                <!--begin::Label-->
+                <label class="required fs-6 fw-bold form-label mb-2">Vehicle License Number</label>
+                <!--end::Label-->
+                <!--begin::Input wrapper-->
+                <div class="position-relative">
+                    <!--begin::Input-->
+                    <input type="text" ref="vNumber" class="form-control form-control-solid" placeholder="Vehicle License Number" required />
+                    <!--end::Input-->
+
                 </div>
 
             </div>
@@ -40,7 +61,7 @@
                     <!--begin::Input wrapper-->
                     <div class="position-relative">
                         <!--begin::Input-->
-                        <input type="file" ref="license" @change="onCFileChangeL" class="form-control form-control-solid" id='file' name="file" placeholder="Upload License" required />
+                        <input type="file" ref="cLicense" @change="onCFileChangeL" class="form-control form-control-solid" id='file' name="file" placeholder="Upload License" required />
                         <!--end::Input-->
                         <!--begin::Card logos-->
 
@@ -73,7 +94,7 @@
                     <!--begin::Input wrapper-->
                     <div class="position-relative">
                         <!--begin::Input-->
-                        <input type="file" ref="license" @change="onCFileChangeP" class="form-control form-control-solid" id='file' name="file" placeholder="Upload Proof Of ownership" required />
+                        <input type="file" ref="cProofOwner" @change="onCFileChangeP" class="form-control form-control-solid" id='file' name="file" placeholder="Upload Proof Of ownership" required />
                         <!--end::Input-->
                         <!--begin::Card logos-->
 
@@ -106,7 +127,7 @@
                     <!--begin::Input wrapper-->
                     <div class="position-relative">
                         <!--begin::Input-->
-                        <input type="file" ref="license" @change="onCFileChangeM" class="form-control form-control-solid" id='file' name="file" placeholder="Upload License" required />
+                        <input type="file" ref="cMeansOfId" @change="onCFileChangeM" class="form-control form-control-solid" id='file' name="file" placeholder="Upload License" required />
                         <!--end::Input-->
                         <!--begin::Card logos-->
 
@@ -145,7 +166,7 @@
                     <!--begin::Input wrapper-->
                     <div class="position-relative">
                         <!--begin::Input-->
-                        <input type="file" ref="license" @change="onCFileChangeFI" class="form-control form-control-solid" id='file' name="file" placeholder="Upload License" required />
+                        <input type="file" ref="vFrontImage" @change="onCFileChangeFI" class="form-control form-control-solid" id='file' name="file" placeholder="Upload License" required />
                         <!--end::Input-->
                         <!--begin::Card logos-->
 
@@ -284,20 +305,7 @@
 
 
         <!--begin::Input group-->
-        <div class="d-flex flex-stack">
-            <!--begin::Label-->
-            <div class="me-5">
-                <label class="fs-6 fw-bold form-label">Save Card for further billing?</label>
-                <div class="fs-7 fw-bold text-muted">If you need more info, please check budget planning</div>
-            </div>
-            <!--end::Label-->
-            <!--begin::Switch-->
-            <label class="form-check form-switch form-check-custom form-check-solid">
-                <input class="form-check-input" type="checkbox" value="1" checked="checked" />
-                <span class="form-check-label fw-bold text-muted">Save Card</span>
-            </label>
-            <!--end::Switch-->
-        </div>
+
         <!--end::Input group-->
     </div>
 </div>

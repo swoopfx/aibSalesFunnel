@@ -137,14 +137,31 @@ class MotorService
                 $vl = $uploadService->upload($data["license"]);
                 $motorEntity->setVehicleLicense($entityManager->find(Uploads::class, $vl->getId()));
 
-                $own = $uploadService->upload($data["ownership"]);
+                $own = $uploadService->upload($data["proofOfOwnership"]);
                 $motorEntity->setProofOfOwnership($entityManager->find(Uploads::class, $own->getId()));
+
+                $md = $uploadService->upload($data["meansOfId"]);
+                $motorEntity->setMeansOfId($entityManager->find(Uploads::class, $md->getId()));
+
+                $fi = $uploadService->upload($data["frontImage"]);
+                $motorEntity->setFrontImage($entityManager->find(Uploads::class, $fi->getId()));
+
+                $bi = $uploadService->upload($data["backImage"]);
+                $motorEntity->setBackImage($entityManager->find(Uploads::class, $bi->getId()));
+
+                $im = $uploadService->upload($data["interiorImage"]);
+                $motorEntity->setInteriorImage($entityManager->find(Uploads::class, $im->getId()));
+
+                $dm = $uploadService->upload($data["dashboardImage"]);
+                $motorEntity->setDashboardImage($entityManager->find(Uploads::class, $dm->getId()));
+
+                $motorEntity->setValueOfCar($data["valueOfCar"])->setLicenseNumber($data["vNumber"]);
 
                 $motorEntity->setCreatedOn(new \Datetime())
                     ->setCoverType($entityManager->find(MotorinsuranceCoverType::class, self::COVERT_TYPE_COMPREHENSIVE))
                     ->setUid(self::motorUid())->setUser($userEntity)->setUuid(Uuid::uuid4())->setIsActive(TRUE);
 
-                $amountPayable = $this->companySettings->getThirdPartyRate();
+                $amountPayable = $this->standardComprehensivePremium($data["valueOfCar"]);
                 $data["amount"] = $amountPayable;
                 $data["user"] = $userEntity;
                 $data["desc"] = "Premium payment for Comprehensive Motor insurance service";
@@ -168,6 +185,14 @@ class MotorService
                 throw new \Exception($th->getMessage());
             }
         }
+    }
+
+
+    public function standardComprehensivePremium($data)
+    {
+        $premiumRatio = $this->companySettings->getComprehensiveRate();
+        $premiumValue = ($premiumRatio * $data) / 100;
+        return number_format((float)$premiumValue, 2, '.', '');
     }
 
     public static function motorUid()

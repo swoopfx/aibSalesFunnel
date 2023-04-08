@@ -27,6 +27,7 @@ use Laminas\Validator\EmailAddress;
 use Laminas\Validator\Regex;
 use Laminas\Validator\StringLength;
 use Application\Service\MailService;
+use Application\Service\MailtrapService;
 
 class IndexController extends AbstractActionController
 {
@@ -68,6 +69,13 @@ class IndexController extends AbstractActionController
 
     private $mailly;
 
+    /**
+     * Undocumented variable
+     *
+     * @var MailtrapServ
+     */
+    private $mailtrap;
+
 
     /**
      * Undocumented variable
@@ -88,17 +96,17 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        // try {
-        //     $this->mailly->send("it", [
-        //         'from' => 'it@aibltd.insure',
-        //         'to' => ['ezekiel_a@yahoo.com'],
-        //         'subject' => 'Greetings!',
-        //         'body' => 'Hello!',
-        //     ]);
-        // } catch (\Throwable $th) {
-        //     echo $th->getTrace()."<br>";
-        //     echo $th->getMessage();
-        // }
+        try {
+            $this->mailly->send("it", [
+                'from' => 'it@aibltd.insure',
+                'to' => ['otabayomi@gmail.com'],
+                'subject' => 'Mail Jet Greetings!',
+                'body' => 'Inside Trading',
+            ]);
+        } catch (\Throwable $th) {
+            // var_dump($th->getTraceAsString())."<br>";
+            echo $th->getMessage();
+        }
 
         return new ViewModel();
     }

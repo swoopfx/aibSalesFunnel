@@ -1,4 +1,4 @@
-<div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true">
+<div id="rtlMenu" class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true">
     <div class="menu-item">
         <a class="menu-link" href="<?= $this->url("home") ?>" data-kt-page="pro">
             <span class="menu-icon">
@@ -82,7 +82,7 @@
                     <span class="menu-title">New</span>
                 </a>
             </div>
-            <div class="menu-item">
+            <div v-if="sessionDetails != null" class="menu-item">
                 <a class="menu-link" href="">
                     <span class="menu-bullet">
                         <span class="bullet bullet-dot"></span>
@@ -119,7 +119,7 @@
                     <span class="menu-title">New</span>
                 </a>
             </div>
-            <div class="menu-item">
+            <div v-if="sessionDetails != null" class="menu-item">
                 <a class="menu-link" href="<?= $this->url("travel", ["action" => "view-all"]) ?>">
                     <span class="menu-bullet">
                         <span class="bullet bullet-dot"></span>
@@ -181,7 +181,7 @@
 
 
 
-    <div class="menu-item">
+    <div v-if="sessionDetails != null" class="menu-item">
         <a class="menu-link" href="<?= $this->url("auth", ["action" => "logout"]) ?>">
             <span class="menu-icon">
                 <!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
@@ -199,3 +199,35 @@
         </a>
     </div>
 </div>
+
+<script>
+    const rtlmenuApp = Vue.createApp({
+        data() {
+            return {
+                session: "",
+                sessionDetails: null,
+                sessionDetailsStrigify: null,
+                sessionUid: null
+            }
+        },
+        mounted() {
+            this.getSession();
+        },
+
+        methods: {
+            getSession() {
+                axios.get("/auth/session").then(res => {
+                    if (res.status == 200) {
+
+                        this.sessionDetails = res.data.data;
+                        this.sessionDetailsStrigify = JSON.stringify(res.data.data);
+                        this.sessionUid = res.data.data.uid;
+                        // console.log(this.sessionUid);
+                        // return ;
+
+                    }
+                }).catch();
+            },
+        },
+    }).mount("#rtlMenu")
+</script>

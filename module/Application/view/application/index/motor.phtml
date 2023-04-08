@@ -1,4 +1,8 @@
 <?php
+use Application\Service\GeneralService;
+
+$this->headMeta($description ?? GeneralService::APP_DESCRIPTION, "description");
+$this->headMeta($description ?? GeneralService::APP_KEYWORDS, "keywords");
 ?>
 
 
@@ -125,7 +129,7 @@
 								<!--begin::Body-->
 								<div id="kt_job_4_2" class="collapse fs-6 ms-1">
 									<!--begin::Text-->
-									<div class="mb-4 text-gray-600 fw-bold fs-6 ps-10">First, a disclaimer – the entire process of writing a blog post often takes more than a couple of hours, even if you can type eighty words as per minute and your writing skills are sharp.</div>
+									<div class="mb-4 text-gray-600 fw-bold fs-6 ps-10">Fill all required fields and upload all required documents</div>
 									<!--end::Text-->
 								</div>
 								<!--end::Content-->
@@ -167,7 +171,7 @@
 								<!--begin::Body-->
 								<div id="kt_job_4_3" class="collapse fs-6 ms-1">
 									<!--begin::Text-->
-									<div class="mb-4 text-gray-600 fw-bold fs-6 ps-10">First, a disclaimer – the entire process of writing a blog post often takes more than a couple of hours, even if you can type eighty words as per minute and your writing skills are sharp.</div>
+									<div class="mb-4 text-gray-600 fw-bold fs-6 ps-10">Click the continue button to see generate your premium and respective invoice, Make paymentby providing your card details</div>
 									<!--end::Text-->
 								</div>
 								<!--end::Content-->
@@ -209,7 +213,7 @@
 								<!--begin::Body-->
 								<div id="kt_job_4_4" class="collapse fs-6 ms-1">
 									<!--begin::Text-->
-									<div class="mb-4 text-gray-600 fw-bold fs-6 ps-10">First, a disclaimer – the entire process of writing a blog post often takes more than a couple of hours, even if you can type eighty words as per minute and your writing skills are sharp.</div>
+									<div class="mb-4 text-gray-600 fw-bold fs-6 ps-10">Once payment is successfull, an transaction receipt will be issued to you , and our system will begin printing the certificate </div>
 									<!--end::Text-->
 								</div>
 								<!--end::Content-->
@@ -241,120 +245,122 @@
 
 								<div class="flex-row-fluid py-lg-5 px-lg-15">
 									<!--begin::Form-->
-									<form class="form" novalidate="novalidate" id="kt_modal_create_app_form">
-										<!--begin::Step 1-->
-										<div class="current" data-kt-stepper-element="content">
-											<div class="w-100">
+									<form autocomplete="off" class="form" novalidate="novalidate" id="kt_modal_create_app_form">
+										<fieldset :disabled="sessionDetails == null">
+											<!--begin::Step 1-->
+											<div class="current" data-kt-stepper-element="content">
+												<div class="w-100">
 
-												<!--begin::Input group-->
-												<div class="fv-row">
-													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-														<span class="required">Select Prefered Service</span>
-														<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Select your app category"></i>
-													</label>
-													<!--end::Label-->
-													<!--begin:Options-->
+													<!--begin::Input group-->
 													<div class="fv-row">
+														<!--begin::Label-->
+														<label class="d-flex align-items-center fs-5 fw-bold mb-4">
+															<span class="required">Select Prefered Service</span>
+															<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Select your app category"></i>
+														</label>
+														<!--end::Label-->
+														<!--begin:Options-->
+														<div class="fv-row">
 
 
 
 
 
-														<div class="row fv-row" id="pService">
-															<!--begin::Col-->
-															<div class="col-xl-6 col-xs-12">
-																<label class="d-flex flex-stack mb-5 cursor-pointer">
-																	<!--begin:Label-->
-																	<span class="d-flex align-items-center me-2">
-																		<!--begin:Icon-->
-																		<span class="symbol symbol-50px me-6">
-																			<span class="symbol-label bg-light-primary">
-																				<!--begin::Svg Icon | path: icons/duotune/maps/map004.svg-->
-																				<span class="svg-icon svg-icon-1 svg-icon-primary">
-																					<img alt="Logo" src="/svg/comprehensive.svg" class="h-30px h-lg-30px logo-default" />
+															<div class="row fv-row" id="pService">
+																<!--begin::Col-->
+																<div class="col-xl-6 col-xs-12">
+																	<label class="d-flex flex-stack mb-5 cursor-pointer">
+																		<!--begin:Label-->
+																		<span class="d-flex align-items-center me-2">
+																			<!--begin:Icon-->
+																			<span class="symbol symbol-50px me-6">
+																				<span class="symbol-label bg-light-primary">
+																					<!--begin::Svg Icon | path: icons/duotune/maps/map004.svg-->
+																					<span class="svg-icon svg-icon-1 svg-icon-primary">
+																						<img alt="Logo" src="/svg/comprehensive.svg" class="h-30px h-lg-30px logo-default" />
 
+																					</span>
+																					<!--end::Svg Icon-->
 																				</span>
-																				<!--end::Svg Icon-->
 																			</span>
+																			<!--end:Icon-->
+																			<!--begin:Info-->
+																			<span class="d-flex flex-column">
+																				<span class="fw-bolder fs-6">Comprehensive Insurance </span>
+
+																			</span>
+																			<!--end:Info-->
 																		</span>
-																		<!--end:Icon-->
-																		<!--begin:Info-->
-																		<span class="d-flex flex-column">
-																			<span class="fw-bolder fs-6">Comprehensive Insurance </span>
-
+																		<!--end:Label-->
+																		<!--begin:Input-->
+																		<span class="form-check form-check-custom form-check-solid">
+																			<input class="form-check-input" v-model="motortype" value="comprehensive" type="radio" name="auto-category" value="0" />
 																		</span>
-																		<!--end:Info-->
-																	</span>
-																	<!--end:Label-->
-																	<!--begin:Input-->
-																	<span class="form-check form-check-custom form-check-solid">
-																		<input class="form-check-input" v-model="motortype" value="comprehensive" type="radio" name="auto-category" value="0" />
-																	</span>
-																	<!--end:Input-->
-																</label>
+																		<!--end:Input-->
+																	</label>
 
 
 
-															</div>
-															<!--end::Col-->
-															<!--begin::Col-->
-															<div class="col-xl-6 col-xs-12">
-																<label class="d-flex flex-stack mb-5 cursor-pointer">
-																	<!--begin:Label-->
-																	<span class="d-flex align-items-center me-2">
-																		<!--begin:Icon-->
-																		<span class="symbol symbol-50px me-6">
-																			<span class="symbol-label bg-light-primary">
-																				<!--begin::Svg Icon | path: icons/duotune/maps/map004.svg-->
-																				<span class="svg-icon svg-icon-1 svg-icon-primary">
-																					<img alt="Logo" src="/svg/thrid-party.svg" class="h-30px h-lg-30px logo-default" />
+																</div>
+																<!--end::Col-->
+																<!--begin::Col-->
+																<div class="col-xl-6 col-xs-12">
+																	<label class="d-flex flex-stack mb-5 cursor-pointer">
+																		<!--begin:Label-->
+																		<span class="d-flex align-items-center me-2">
+																			<!--begin:Icon-->
+																			<span class="symbol symbol-50px me-6">
+																				<span class="symbol-label bg-light-primary">
+																					<!--begin::Svg Icon | path: icons/duotune/maps/map004.svg-->
+																					<span class="svg-icon svg-icon-1 svg-icon-primary">
+																						<img alt="Logo" src="/svg/thrid-party.svg" class="h-30px h-lg-30px logo-default" />
 
+																					</span>
+																					<!--end::Svg Icon-->
 																				</span>
-																				<!--end::Svg Icon-->
 																			</span>
+																			<!--end:Icon-->
+																			<!--begin:Info-->
+																			<span class="d-flex flex-column">
+																				<span class="fw-bolder fs-6">Third Party Insurance</span>
+																			</span>
+																			<!--end:Info-->
 																		</span>
-																		<!--end:Icon-->
-																		<!--begin:Info-->
-																		<span class="d-flex flex-column">
-																			<span class="fw-bolder fs-6">Third Party Insurance</span>
+																		<!--end:Label-->
+																		<!--begin:Input-->
+																		<span class="form-check form-check-custom form-check-solid">
+																			<input class="form-check-input" v-model="motortype" value="thirdparty" type="radio" id="auto-category" name="auto-category" value="1" />
 																		</span>
-																		<!--end:Info-->
-																	</span>
-																	<!--end:Label-->
-																	<!--begin:Input-->
-																	<span class="form-check form-check-custom form-check-solid">
-																		<input class="form-check-input" v-model="motortype" value="thirdparty" type="radio" id="auto-category" name="auto-category" value="1" />
-																	</span>
-																	<!--end:Input-->
-																</label>
+																		<!--end:Input-->
+																	</label>
+																</div>
+																<!--end::Col-->
 															</div>
-															<!--end::Col-->
+
+
+
+
+
+
 														</div>
-
-
-
-
-
-
+														<!--end:Options-->
 													</div>
-													<!--end:Options-->
+													<!--end::Input group-->
 												</div>
-												<!--end::Input group-->
 											</div>
-										</div>
-										<hr>
+											<hr>
 
-										<div v-if="motortype == 'thirdparty'">
-											<?php echo $this->partial("partials-form-thirdparty") ?>
-										</div>
-										<div v-else-if="motortype == 'comprehensive'">
-											<?php echo $this->partial("partials-form-comprehensive"); ?>
-										</div>
+											<div v-if="motortype == 'thirdparty'">
+												<?php echo $this->partial("partials-form-thirdparty") ?>
+											</div>
+											<div v-else-if="motortype == 'comprehensive'">
+												<?php echo $this->partial("partials-form-comprehensive"); ?>
+											</div>
 
-										<br>
-										<br>
-										<!--end::Actions-->
+											<br>
+											<br>
+											<!--end::Actions-->
+										</fieldset>
 									</form>
 									<!--end::Form-->
 								</div>
@@ -421,8 +427,15 @@
 				isProcessingCom: false,
 				isProcessingThird: false,
 
+				sessionUid: null,
+				sessionDetails: null,
+				sessionDetailsStrigify: null,
+
 
 			}
+		},
+		mounted() {
+			this.getSession();
 		},
 		computed: {
 			name() {
@@ -430,6 +443,26 @@
 			}
 		},
 		methods: {
+			isNumber(evt) {
+				evt = (evt) ? evt : window.event;
+				var charCode = (evt.which) ? evt.which : evt.keyCode;
+				if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+					evt.preventDefault();;
+				} else {
+					return true;
+				}
+			},
+			getSession() {
+				axios.get("/auth/session").then(res => {
+					if (res.status == 200) {
+						// this.isFaniliazedLoginFetch = true;
+						this.sessionDetails = res.data.data;
+						this.sessionDetailsStrigify = JSON.stringify(res.data.data);
+						// console.log(this.sessionDetailsStrigify);
+					}
+				}).catch();
+			},
+
 			checkThirdPartyValidity() {
 				if (this.noFiles = !this.$refs.tlicense.files.length) {
 					return true;
@@ -444,76 +477,6 @@
 			},
 			sendthrirdparty() {
 
-				if (this.checkThirdPartyValidity()) {
-
-					this.$toast.open({
-						message: "A required file is empty please check and upload required document",
-						type: "error",
-						position: "top-right",
-						duration: 20000,
-						dismissible: true
-					})
-				} else {
-					let tLicFile = this.$refs.tlicense.files[0];
-					let townFile = this.$refs.ownership.files[0];
-
-					if (tLicFile.size > 1024 * 1024 * 2) {
-						this.$toast.open({
-							message: "License file should notbe more than 2MB",
-							type: "error",
-							position: "top-right",
-							duration: 30000,
-							dismissible: true
-						});
-					} else if (townFile.size > 1024 * 1024 * 2) {
-						this.$toast.open({
-							message: "Proof of ownership file should notbe more than 2MB",
-							type: "error",
-							position: "top-right",
-							duration: 30000,
-							dismissible: true
-						});
-					}  else {
-						this.isProcessingThird = true;
-						let formData = new FormData();
-
-
-
-						formData.append("vNumber", this.vNumber);
-						formData.append("license", this.$refs.tlicense.files[0]);
-						formData.append("ownership", this.$refs.ownership.files[0]);
-
-						axios.post("/motor/thirdparty", formData, {
-							headers: {
-								"Content-Type": "multipart/form-data"
-							}
-						}).then(response => {
-							if (response.status == 201) {
-								this.isProcessingThird = false;
-								let responseData = response.data.data;
-								window.location.href = "/app/invoice/" + responseData.invoice.uuid;
-
-							}
-						}).catch(err => {
-							this.$toast.open({
-								message: err.response.data.messages,
-								type: "error",
-								position: "top-right",
-								duration: 30000,
-								dismissible: true
-							});
-							this.isProcessingThird = false;
-						});
-
-					}
-
-				}
-
-
-
-			},
-
-			sendcomprehensive() {
 				if (this.checkThirdPartyValidity()) {
 
 					this.$toast.open({
@@ -573,6 +536,148 @@
 								dismissible: true
 							});
 							this.isProcessingThird = false;
+						});
+
+					}
+
+				}
+
+
+
+			},
+
+			sendcomprehensive() {
+				if (!this.$refs.cLicense.files.length ||
+					
+					!this.$refs.cProofOwner.files.length ||
+					!this.$refs.cMeansOfId.files.length ||
+					!this.$refs.vFrontImage.files.length ||
+					!this.$refs.rBackView.files.length ||
+					!this.$refs.rInterior.files.length ||
+					!this.$refs.cDash.files.length) {
+
+					this.$toast.open({
+						message: "A required file is empty please check and upload required document",
+						type: "error",
+						position: "top-right",
+						duration: 20000,
+						dismissible: true
+					})
+				} else {
+					let cLicFile = this.$refs.cLicense.files[0];
+					// let townFile = this.$refs.ownership.files[0];
+
+					if (this.$refs.vehichle_price.value == "") {
+						this.$toast.open({
+							message: "Cost of vehicle is required",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else if (this.$refs.vNumber.value == "") {
+						this.$toast.open({
+							message: "License Number is required",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+
+					} else if (cLicFile.size > 1024 * 1024 * 2) {
+						this.$toast.open({
+							message: "License file should notbe more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else if (this.$refs.cProofOwner.files[0].size > 1024 * 1024 * 2) {
+						this.$toast.open({
+							message: "Proof of Ownership file should not be more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else if (this.$refs.cMeansOfId.files[0].size > 1028 * 1024 * 2) {
+						this.$toast.open({
+							message: "Means of ID file should not be more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else if (this.$refs.vFrontImage.files[0].size > 1024 * 1024 * 2) {
+						this.$toast.open({
+							message: "Vehicle Front Image file should not be more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else if (this.$refs.rBackView.files[0].size > 1024 * 1024 * 2) {
+
+						this.$toast.open({
+							message: "Vehicle Back Image file should not be more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+
+					} else if (this.$refs.rInterior.files[0].size > 1024 * 1024 * 2) {
+						this.$toast.open({
+							message: "Vehicle Interior Image file should not be more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else if (this.$refs.cDash.files[0].size > 1024 * 1024 * 2) {
+						this.$toast.open({
+							message: "Vehicle Dashboard Image file should not be more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else {
+						this.isProcessingCom = true;
+						let formData = new FormData();
+
+
+
+						formData.append("vNumber", this.$refs.vNumber.value);
+						formData.append("license", this.$refs.cLicense.files[0]);
+						formData.append("proofOfOwnership", this.$refs.cProofOwner.files[0]);
+						formData.append("meansOfId", this.$refs.cMeansOfId.files[0]);
+						formData.append("frontImage", this.$refs.vFrontImage.files[0]);
+						formData.append("backImage", this.$refs.rBackView.files[0]);
+						formData.append("interiorImage", this.$refs.rInterior.files[0]);
+						formData.append("dashboardImage", this.$refs.cDash.files[0]);
+						formData.append("valueOfCar", this.$refs.vehichle_price.value);
+
+						axios.post("/motor/comprehensive", formData, {
+							headers: {
+								"Content-Type": "multipart/form-data"
+							}
+						}).then(response => {
+							if (response.status == 201) {
+								this.isProcessingThird = false;
+								let responseData = response.data.data;
+								window.location.href = "/app/invoice/" + responseData.invoice.uuid;
+
+							}
+						}).catch(err => {
+							this.$toast.open({
+								message: err.response.data.messages,
+								type: "error",
+								position: "top-right",
+								duration: 30000,
+								dismissible: true
+							});
+							this.isProcessingCom = false;
 						});
 
 					}

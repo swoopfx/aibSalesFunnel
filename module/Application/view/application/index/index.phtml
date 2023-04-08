@@ -2,6 +2,11 @@
 	<!--begin::Root-->
 
 	<?php
+
+use Application\Service\GeneralService;
+
+	$this->headMeta($description ?? GeneralService::APP_DESCRIPTION, "description");
+	$this->headMeta($description ?? GeneralService::APP_KEYWORDS, "keywords");
 	$flashMessenger = $this->flashMessenger()
 		->setMessageOpenFormat('<div%s>
  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
@@ -29,7 +34,7 @@
 					<!--begin::Post-->
 					<div class="content flex-row-fluid" id="kt_content">
 						<!--begin::About card-->
-						<div class="card">
+						<div id="indexApp" class="card">
 							<!--begin::Body-->
 							<div class="card-body p-lg-17">
 
@@ -157,7 +162,7 @@
 											<!--begin::Publications post-->
 											<div class="card-xl-stretch ms-md-6">
 												<!--begin::Overlay-->
-												<a href="<?= $this->url("application", ["action" => 'marine-cargo']) ?>">
+												<a href="#" @click="OnMarineClick()">
 													<!--begin::Item-->
 													<div class="rectangle d-flex flex-center h-200px w-300px bg-light mx-2">
 														<!--begin::Content-->
@@ -324,15 +329,22 @@
 	<!--end::Scrolltop-->
 	<!--end::Main-->
 	<script>
-		var hostUrl = "assets/";
+		const indexApp = Vue.createApp({
+			data() {
+				return {
+					key: ""
+				}
+			},
+			methods: {
+				OnMarineClick() {
+					Swal.fire({
+						icon: 'info',
+						title: 'Coming Soon',
+						text: 'Working on geting this ready for you',
+
+					})
+				}
+			},
+		});
+		indexApp.mount("#indexApp")
 	</script>
-	<!--begin::Javascript-->
-	<!--begin::Global Javascript Bundle(used by all pages)-->
-	<script src="assets/plugins/global/plugins.bundle.js"></script>
-	<script src="assets/js/scripts.bundle.js"></script>
-	<!--end::Global Javascript Bundle-->
-	<!--begin::Page Vendors Javascript(used by this page)-->
-	<script src="assets/plugins/custom/fslightbox/fslightbox.bundle.js"></script>
-	<!--end::Page Vendors Javascript-->
-	<!--begin::Page Custom Javascript(used by this page)-->
-	<script src="assets/js/custom/widgets.js"></script>

@@ -67,12 +67,12 @@ class AuthController extends AbstractActionController
         // $this->
         $request = $this->getRequest();
         $cookie = $request->getHeaders()->get("Cookie");
-        $sessionUid = "";
-        if (isset($cookie->igibber)) {
-            $sessionUid = $cookie->igibber;
-        } else {
+        $sessionUid = null;
+        // if (isset($cookie->igibber)) {
+        //     $sessionUid = $cookie->igibber;
+        // } else {
             $sessionUid = $this->funnelSession->getSessionUid();
-        }
+        // }
         $data = $this->entityManager->getRepository(User::class)->findOneBy([
             "uuid" => $sessionUid,
         ]);

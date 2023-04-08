@@ -19,6 +19,7 @@ class IndexControllerFactory implements FactoryInterface
         $generalService = $container->get("general_service");
         $paystackService = $container->get("paystack_service");
         $funnelSession = $container->get("funnel_session");
+        // $mailtrap = $container->get("mailtrap_service");
         $mailService = $container->get(MailService::class);
         $mailly = $container->get("acmailer.mailservice.default");
         $inputfilterPlugin = $container->get(InputFilterPluginManager::class);

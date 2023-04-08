@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Service;
 
 use Application\Entity\Settings;
@@ -6,7 +7,8 @@ use Doctrine\ORM\EntityManager;
 use Laminas\Authentication\AuthenticationService;
 
 
-class GeneralService {
+class GeneralService
+{
 
 
     const COMPANY_NAME = "Advocate Insurance Brokers";
@@ -14,6 +16,10 @@ class GeneralService {
     const COMPANY_URL = "https://aibltd.insure/";
 
     const COMPANY_ADDRESS = "27a Babatunde Jose Off Adetokunbo Ademola, VI Lagos";
+
+    const APP_DESCRIPTION = "Advocate insurance innovative service, providing quick motor, travel, nmarince cargo insurance";
+
+    const APP_KEYWORDS = "Insurance online, Motor insurance, Travel insurance, Marine Cargo insurance, Life Insurance, Nigeria Insurance, NAICOM, NSRIB , Insurance, Nigeria";
 
 
     /**
@@ -27,7 +33,7 @@ class GeneralService {
 
     private $authService;
 
-   
+
 
     /**
      * Undocumented function
@@ -36,14 +42,15 @@ class GeneralService {
      */
     private $companySettings;
 
-    
-    public function getSettings(){
-      return  $this->em->find(Settings::class, 1);
+
+    public function getSettings()
+    {
+        return  $this->em->find(Settings::class, 1);
     }
 
     /**
      * Get the value of em
-     */ 
+     */
     public function getEm()
     {
         return $this->em;
@@ -53,7 +60,7 @@ class GeneralService {
      * Set the value of em
      *
      * @return  self
-     */ 
+     */
     public function setEm($em)
     {
         $this->em = $em;
@@ -63,7 +70,7 @@ class GeneralService {
 
     /**
      * Get the value of mail
-     */ 
+     */
     public function getMail()
     {
         return $this->mail;
@@ -73,7 +80,7 @@ class GeneralService {
      * Set the value of mail
      *
      * @return  self
-     */ 
+     */
     public function setMail($mail)
     {
         $this->mail = $mail;
@@ -83,7 +90,7 @@ class GeneralService {
 
     /**
      * Get the value of authService
-     */ 
+     */
     public function getAuthService()
     {
         return $this->authService;
@@ -93,7 +100,7 @@ class GeneralService {
      * Set the value of authService
      *
      * @return  self
-     */ 
+     */
     public function setAuthService($authService)
     {
         $this->authService = $authService;
@@ -103,7 +110,7 @@ class GeneralService {
 
     /**
      * Get undocumented function
-     */ 
+     */
     public function getCompanySettings()
     {
         return $this->companySettings;
@@ -113,7 +120,7 @@ class GeneralService {
      * Set undocumented function
      *
      * @return  self
-     */ 
+     */
     public function setCompanySettings($companySettings)
     {
         $this->companySettings = $companySettings;

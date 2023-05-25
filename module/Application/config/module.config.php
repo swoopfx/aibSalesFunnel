@@ -26,6 +26,7 @@ use Application\Service\Factory\PaystackServiceFactory;
 use Application\Service\Factory\SendInBlueMarketingFactory;
 use Application\Service\Factory\TransactionServiceFactory;
 use Application\Service\Factory\TravelServiceFactory;
+use Application\Service\Factory\TwilioSendgridServiceFactory;
 use Application\Service\Factory\UploadServiceFactory;
 use Application\Service\FunnelSession;
 use Application\Service\GeneralService;
@@ -36,6 +37,7 @@ use Application\Service\PaystackService;
 use Application\Service\SendInBlueMarketing;
 use Application\Service\TransactionService;
 use Application\Service\TravelService;
+use Application\Service\TwilioSendgridService;
 use Application\Service\UploadService;
 use Application\ViewHelper\InvoiceStatusHelper;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -266,7 +268,8 @@ return [
             TravelService::class => TravelServiceFactory::class,
             SendInBlueMarketing::class => SendInBlueMarketingFactory::class,
             MailService::class => MailServiceFactory::class,
-            MailtrapService::class => MailtrapServiceFactory::class
+            MailtrapService::class => MailtrapServiceFactory::class,
+            TwilioSendgridService::class => TwilioSendgridServiceFactory::class
         ],
         "aliases" => [
             "general_service" => GeneralService::class,

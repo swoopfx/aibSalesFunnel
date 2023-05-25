@@ -18,6 +18,7 @@ use Laminas\Http\Header\SetCookie;
 use Laminas\InputFilter\InputFilter;
 use Laminas\View\Model\ViewModel;
 use Application\Service\SendInBlueMarketing;
+use Application\Service\TwilioSendgridService;
 
 class AuthController extends AbstractActionController
 {
@@ -61,6 +62,13 @@ class AuthController extends AbstractActionController
      */
     private $sendInBlue;
 
+    /**
+     * Undocumented variable
+     *
+     * @var TwilioSendgridService
+     */
+    private $twilioSendgrid;
+
     public function sessionAction()
     {
         $jsonModel = new JsonModel();
@@ -71,7 +79,7 @@ class AuthController extends AbstractActionController
         // if (isset($cookie->igibber)) {
         //     $sessionUid = $cookie->igibber;
         // } else {
-            $sessionUid = $this->funnelSession->getSessionUid();
+        $sessionUid = $this->funnelSession->getSessionUid();
         // }
         $data = $this->entityManager->getRepository(User::class)->findOneBy([
             "uuid" => $sessionUid,
@@ -137,8 +145,8 @@ class AuthController extends AbstractActionController
 
                     if (count($res) > 0) {
                         $cookie =  $this->createSession($res[0]);
-                       
-                       
+
+
                         $response->getHeaders()->addHeader($cookie);
                         $jsonModel->setVariables([
                             "isRegister" => false,
@@ -270,19 +278,20 @@ class AuthController extends AbstractActionController
 
 
                     $em->persist($userEntity);
-                   
+
 
                     $cookie = $this->createSession($userEntity);
                     $response->getHeaders()->addHeader($cookie);
 
-                    // $number = intval($userEntity->getPhonenumber());
+                    $number = $userEntity->getPhonenumber();
                     $sendInBlue["email"] = $userEntity->getEmail();
                     $sendInBlue["fullname"] = $userEntity->getFullname();
-                    // $sendInBlue["sms"] = "234".$number;
+                    $sendInBlue["phone"] = $number;
 
                     //$this->sendInBlue->createContact($sendInBlue);
 
                     $em->flush();
+                    $this->twilioSendgrid->createContact($sendInBlue);
 
                     // register user email and phone on sendInblue for email marketing or any campaign tool
 
@@ -318,7 +327,7 @@ class AuthController extends AbstractActionController
         $cookie = $this->getRequest()->getCookie();
         if ($cookie->offsetExists('igibber')) {
             $new_cookie = new SetCookie('igibber', ''); //<---empty value and the same 'name'
-            
+
             $response->getHeaders()->addHeader($new_cookie);
         }
         $this->funnelSession->closeSession();
@@ -442,7 +451,7 @@ class AuthController extends AbstractActionController
      * Get undocumented variable
      *
      * @return  SendInBlueMarketing
-     */ 
+     */
     public function getSendInBlue()
     {
         return $this->sendInBlue;
@@ -454,10 +463,30 @@ class AuthController extends AbstractActionController
      * @param  SendInBlueMarketing  $sendInBlue  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setSendInBlue(SendInBlueMarketing $sendInBlue)
     {
         $this->sendInBlue = $sendInBlue;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of twilioSendgrid
+     */
+    public function getTwilioSendgrid()
+    {
+        return $this->twilioSendgrid;
+    }
+
+    /**
+     * Set the value of twilioSendgrid
+     *
+     * @return  self
+     */
+    public function setTwilioSendgrid($twilioSendgrid)
+    {
+        $this->twilioSendgrid = $twilioSendgrid;
 
         return $this;
     }

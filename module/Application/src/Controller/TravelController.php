@@ -66,6 +66,8 @@ class TravelController extends AbstractActionController
             if ($inputFilter->isValid()) {
                 try {
                     $data = $inputFilter->getValues();
+                    // var_dump($post["travelList"]);
+                    $data["travelList"] = json_decode($post["travelList"]);
                     $travelService = $this->travelService;
                     // var_dump($data);
                     $responseData = $travelService->initiateTravelinsurance($data);
@@ -100,7 +102,7 @@ class TravelController extends AbstractActionController
         ]);
         $data = $this->entityManager->getRepository(TravelInsurance::class)->findBy([
             "user" => $userEntity->getId(),
-            "isActive"=>TRUE
+            "isActive" => TRUE
         ], [
             "id" => "DESC",
         ], 100);

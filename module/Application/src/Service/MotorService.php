@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Entity\MotorCategory;
 use Application\Entity\MotorInsurance;
 use Application\Entity\MotorinsuranceCoverType;
 use Application\Entity\Uploads;
@@ -64,6 +65,22 @@ class MotorService
 
     const COVERT_TYPE_COMPREHENSIVE = 200;
 
+    const MOTOR_CATEGORY_PRIVATE = 100;
+
+    const MOTOR_CATEGORY_PICKUP = 200;
+
+    const MOTOR_CATEGORY_STAFF_BUS = 300;
+
+    const MOTOR_CATEGORY_TRUCKS = 400;
+
+    const MOTOR_CATEGORY_TRICYCLE = 500;
+
+    const MOTOR_CATEGORY_MOTOR_CYCLE = 600;
+
+    const MOTOR_CATEGORY_SPECIAL = 700;
+
+
+
 
 
     public function thirdparty($data)
@@ -87,14 +104,26 @@ class MotorService
                 $own = $uploadService->upload($data["ownership"]);
                 $motorEntity->setProofOfOwnership($entityManager->find(Uploads::class, $own->getId()));
 
+                /**
+                 * @var MotorCategory
+                 */
+                $motorCategoryEntity = $em->find(MotorCategory::class, $data["category"]);
+
+                $motorEntity->setLicenseNumber($data["vNumber"])->setMotorCategory($motorCategoryEntity);
+
                 $motorEntity->setCreatedOn(new \Datetime())
                     ->setCoverType($entityManager->find(MotorinsuranceCoverType::class, self::COVER_TYPE_THIRD_PARTY))
                     ->setUid(self::motorUid())->setUser($userEntity)->setUuid(Uuid::uuid4())->setIsActive(TRUE);
 
-                $amountPayable = $this->companySettings->getThirdPartyRate();
+                $amountPayable = 15000;
+                if ($motorCategoryEntity != NULL) {
+                    $amountPayable = $motorCategoryEntity->getThirdpartyPremium();
+                }
+                // $this->companySettings->getThirdPartyRate();
                 $data["amount"] = $amountPayable;
                 $data["user"] = $userEntity;
-                $data["desc"] = "Premium payment for third party Motor insurance service";
+                $data["desc"] = "Premium payment for third party Motor insurance service for {$motorCategoryEntity->getCategory()}";
+                $data["invcode"] = "QMT";
                 $invoiceEntity =  $this->transactionService->generateInvoice($data);
 
                 $motorEntity->setinvoice($invoiceEntity);
@@ -165,6 +194,7 @@ class MotorService
                 $data["amount"] = $amountPayable;
                 $data["user"] = $userEntity;
                 $data["desc"] = "Premium payment for Comprehensive Motor insurance service";
+                $data["invcode"] = "QMC";
                 $invoiceEntity =  $this->transactionService->generateInvoice($data);
 
                 $motorEntity->setInvoice($invoiceEntity);
@@ -187,6 +217,75 @@ class MotorService
         }
     }
 
+    //  private function thirdPartyPrivateCar(): float
+    // {
+    //     $premium = 15000;
+    //     $em = $this->entityManager;
+    //     // $em->find(MotorCateg)
+    //     return $premium;
+    // }
+
+    // /**
+    //  * Calculates value for pickups, Vans, Uber, Taxis, Car hire and Hilux
+    //  *
+    //  * @return float
+    //  */
+    // private function thirdPartyPickup(): float
+    // {
+    //     $premium = 20000.00;
+    //     return $premium;
+    // }
+
+    // /**
+    //  * Calculates value for staff buses
+    //  *
+    //  * @return float
+    //  */
+    // private function thirdPartyStaffBus(): float
+    // {
+    //     $premium = 20000.00;
+    //     return $premium;
+    // }
+
+
+    // /**
+    //  * Calculates value Trucks and general cartage
+    //  *
+    //  * @return float
+    //  */
+    // private function thirdPartyTrucks(): float
+    // {
+    //     $premium = 100000.00;
+    //     return $premium;
+    // }
+
+    // /**
+    //  * Calculates value for tricycle
+    //  *
+    //  * @return float
+    //  */
+    // private function thirdPartyTricycle(): float
+    // {
+    //     $premium = 5000.00;
+    //     return $premium;
+    // }
+
+    // /**
+    //  * Calculates value for motorCycle
+    //  *
+    //  * @return float
+    //  */
+    // private function thirdPartyMotorCycle(): float
+    // {
+    //     $premium = 3000.00;
+    //     return $premium;
+    // }
+
+    // public function thirdPartySpecial(): float
+    // {
+    //     $premium = 20000.0;
+    //     return $premium;
+    // }
 
     public function standardComprehensivePremium($data)
     {

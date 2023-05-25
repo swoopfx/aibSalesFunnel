@@ -96,17 +96,17 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        try {
-            $this->mailly->send("it", [
-                'from' => 'it@aibltd.insure',
-                'to' => ['otabayomi@gmail.com'],
-                'subject' => 'Mail Jet Greetings!',
-                'body' => 'Inside Trading',
-            ]);
-        } catch (\Throwable $th) {
-            // var_dump($th->getTraceAsString())."<br>";
-            echo $th->getMessage();
-        }
+        // try {
+        //     $this->mailly->send("it", [
+        //         'from' => 'it@aibltd.insure',
+        //         'to' => ['otabayomi@gmail.com'],
+        //         'subject' => 'Mail Jet Greetings!',
+        //         'body' => 'Inside Trading',
+        //     ]);
+        // } catch (\Throwable $th) {
+        //     // var_dump($th->getTraceAsString())."<br>";
+        //     echo $th->getMessage();
+        // }
 
         return new ViewModel();
     }
@@ -342,6 +342,12 @@ class IndexController extends AbstractActionController
         return $viewModel;
     }
 
+
+    public function contactAction(){
+        $viewModel = new ViewModel();
+        return $viewModel;
+    }
+
     public function getsexAction()
     {
         $em = $this->entityManager;
@@ -363,6 +369,14 @@ class IndexController extends AbstractActionController
             "data" => $data,
         ]);
         return $jsonModel;
+    }
+
+
+
+    public function termsAndCOnditionsAction(){
+        $viewModel = new ViewModel();
+
+        return $viewModel;
     }
 
 

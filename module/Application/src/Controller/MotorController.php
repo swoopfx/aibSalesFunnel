@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\MotorCategory;
 use Application\Entity\MotorInsurance;
 use Application\Entity\User;
 use Laminas\Mvc\Controller\AbstractActionController;
@@ -12,6 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Application\Service\FunnelSession;
 use Laminas\InputFilter\InputFilter;
 use Application\Service\MotorService;
+use Doctrine\ORM\Query;
 use Laminas\Filter\StringTrim;
 use Laminas\Filter\StripTags;
 use Laminas\Validator\File\Extension;
@@ -132,6 +134,56 @@ class MotorController extends AbstractActionController
                             'message' => 'File too large',
                         ],
                     ],
+                ]
+            ]);
+            $inputFilter->add([
+                "name" => "vNumber",
+                'required' => true,
+                "allow_empty" => false,
+                "filters" => [
+                    [
+                        "name" => StripTags::class
+                    ],
+                    [
+                        "name" => StringTrim::class
+                    ]
+                ],
+                'validators' => [      // Validators.
+
+
+                    array(
+                        'name' => 'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                'isEmpty' => 'Please provide  Vehicle Reg. number'
+                            )
+                        )
+                    ),
+                ]
+            ]);
+            $inputFilter->add([
+                "name" => "category",
+                'required' => true,
+                "allow_empty" => false,
+                "filters" => [
+                    [
+                        "name" => StripTags::class
+                    ],
+                    [
+                        "name" => StringTrim::class
+                    ]
+                ],
+                'validators' => [      // Validators.
+
+
+                    array(
+                        'name' => 'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                'isEmpty' => 'Please provide the category'
+                            )
+                        )
+                    ),
                 ]
             ]);
             $inputFilter->setData($merge);
@@ -449,6 +501,61 @@ class MotorController extends AbstractActionController
                 ]);
                 $response->setStatusCode(400);
             }
+        }
+        return $jsonModel;
+    }
+
+
+    public function motorCategoryAction()
+    {
+        $jsonModel = new JsonModel();
+        $response = $this->getResponse();
+        try {
+            $em = $this->entityManager;
+            $data = $em->getRepository(MotorCategory::class)
+                ->createQueryBuilder("a")
+                ->select("a")
+                ->getQuery()
+                ->setHydrationMode(Query::HYDRATE_ARRAY)
+                ->getArrayResult();;
+            $jsonModel->setVariables([
+                "data" => $data
+            ]);
+        } catch (\Throwable $th) {
+            $response->setStatusCode(400);
+            $jsonModel->setVariables([
+                "messages" => "Motor Caegory Could not be retirved",
+                "data" => $th->getMessage()
+            ]);
+        }
+        return $jsonModel;
+    }
+    public function getCategortyDetailsAction()
+    {
+        $jsonModel = new JsonModel();
+        $response = $this->getResponse();
+        try {
+            $id = $this->params()->fromRoute("id");
+            $em = $this->entityManager;
+            $data = $em->getRepository(MotorCategory::class)
+                ->createQueryBuilder("a")
+                ->select("a")
+                ->where("a.id = :id")
+                ->setParameters([
+                    "id" => $id
+                ])
+                ->getQuery()
+                ->setHydrationMode(Query::HYDRATE_ARRAY)
+                ->getArrayResult();;
+            $jsonModel->setVariables([
+                "data" => $data
+            ]);
+        } catch (\Throwable $th) {
+            $response->setStatusCode(400);
+            $jsonModel->setVariables([
+                "messages" => "Motor Caegory Could not be retirved",
+                "data" => $th->getMessage()
+            ]);
         }
         return $jsonModel;
     }

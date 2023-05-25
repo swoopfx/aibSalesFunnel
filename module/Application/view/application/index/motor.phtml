@@ -1,4 +1,5 @@
 <?php
+
 use Application\Service\GeneralService;
 
 $this->headMeta($description ?? GeneralService::APP_DESCRIPTION, "description");
@@ -408,6 +409,11 @@ $this->headMeta($description ?? GeneralService::APP_KEYWORDS, "keywords");
 				own: null,
 				noFiles: true,
 				vNumber: "",
+				motorCategory: null,
+				categoryMessage: "Something",
+				categoryType: "Private Car",
+				categoryId: 0,
+				categoryImage: "",
 
 
 				// comprehensive va
@@ -436,6 +442,7 @@ $this->headMeta($description ?? GeneralService::APP_KEYWORDS, "keywords");
 		},
 		mounted() {
 			this.getSession();
+			this.getMotorCategory();
 		},
 		computed: {
 			name() {
@@ -451,6 +458,31 @@ $this->headMeta($description ?? GeneralService::APP_KEYWORDS, "keywords");
 				} else {
 					return true;
 				}
+			},
+			getMotorCategory() {
+				axios.get("/motor/motor-category").then(res => {
+					if (res.status == 200) {
+						this.motorCategory = res.data.data;
+					}
+				}).catch();
+			},
+
+			getCategoryDetails(e) {
+
+
+			},
+			changeCategory(evt) {
+				//evt.target.value
+				// alert(mess); 
+				let id = evt.target.value;
+				axios.get("/motor/get-categorty-details/" + id).then(res => {
+					if (res.status == 200) {
+						this.categoryId = evt.target.value;
+						this.categoryMessage = res.data.data[0].benefits;
+						this.categoryType = res.data.data[0].category;
+						this.categoryImage = res.data.data[0].sampleImage;
+					}
+				})
 			},
 			getSession() {
 				axios.get("/auth/session").then(res => {
@@ -498,9 +530,25 @@ $this->headMeta($description ?? GeneralService::APP_KEYWORDS, "keywords");
 							duration: 30000,
 							dismissible: true
 						});
+					} else if (this.categoryId == 0) {
+						this.$toast.open({
+							message: "Please select a category",
+							type: "error",
+							position: "top-right",
+							duration: 20000,
+							dismissible: true
+						})
 					} else if (townFile.size > 1024 * 1024 * 2) {
 						this.$toast.open({
 							message: "Proof of ownership file should notbe more than 2MB",
+							type: "error",
+							position: "top-right",
+							duration: 30000,
+							dismissible: true
+						});
+					} else if (this.vNumber == "") {
+						this.$toast.open({
+							message: "Please provide enter vehicle registration number",
 							type: "error",
 							position: "top-right",
 							duration: 30000,
@@ -514,6 +562,7 @@ $this->headMeta($description ?? GeneralService::APP_KEYWORDS, "keywords");
 
 						formData.append("vNumber", this.vNumber);
 						formData.append("license", this.$refs.tlicense.files[0]);
+						formData.append("category", this.categoryId);
 						formData.append("ownership", this.$refs.ownership.files[0]);
 
 						axios.post("/motor/thirdparty", formData, {
@@ -548,7 +597,7 @@ $this->headMeta($description ?? GeneralService::APP_KEYWORDS, "keywords");
 
 			sendcomprehensive() {
 				if (!this.$refs.cLicense.files.length ||
-					
+
 					!this.$refs.cProofOwner.files.length ||
 					!this.$refs.cMeansOfId.files.length ||
 					!this.$refs.vFrontImage.files.length ||

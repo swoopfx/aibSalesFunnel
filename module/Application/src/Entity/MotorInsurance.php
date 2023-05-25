@@ -178,6 +178,13 @@ class MotorInsurance
      */
     private $uuid;
 
+    /**
+     * vehichle category
+     * @ORM\ManyToOne(targetEntity="MotorCategory")
+     * @var MotorCategory
+     */
+    private $motorCategory;
+
 
     public function __construct()
     {
@@ -647,6 +654,30 @@ class MotorInsurance
     public function setLicenseNumber(string $licenseNumber)
     {
         $this->licenseNumber = $licenseNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get vehichle category
+     *
+     * @return  MotorCategory
+     */ 
+    public function getMotorCategory()
+    {
+        return $this->motorCategory;
+    }
+
+    /**
+     * Set vehichle category
+     *
+     * @param  MotorCategory  $motorCategory  vehichle category
+     *
+     * @return  self
+     */ 
+    public function setMotorCategory(MotorCategory $motorCategory)
+    {
+        $this->motorCategory = $motorCategory;
 
         return $this;
     }

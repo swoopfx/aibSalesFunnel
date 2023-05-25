@@ -87,7 +87,7 @@ class MailtrapService
             $response = curl_exec($curl);
 
             curl_close($curl);
-            // echo $response;
+            echo $response;
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
         }
@@ -114,7 +114,7 @@ class MailtrapService
                     "company_url" => GeneralService::COMPANY_URL,
                     "logo" => $data["logo"],
                     "fullname" => $data["fullname"],
-                    "desc" => $data["dec"],
+                    "desc" => $data["desc"],
                     "tRef" => $data["tRef"],
                     "amount" => $data["amount"],
                     "total" => $data["total"],
@@ -147,7 +147,7 @@ class MailtrapService
             $response = curl_exec($curl);
 
             curl_close($curl);
-            // echo $response;
+            echo $response;
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
         }

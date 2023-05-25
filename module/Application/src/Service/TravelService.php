@@ -112,9 +112,12 @@ class TravelService
             $invoiceData["amount"] = $totalPrice;
             $invoiceData["user"] = $userEntity;
             $invoiceData["desc"] = "Premium payment for travel insurance by {$userEntity->getFullname()} to  {$destination->getName()}";
+            $data["invcode"] = "QTV";
             $invoiceEntity = $this->transactionService->generateInvoice($invoiceData);
+            // $invoiceEntity->setInvoiceUid($invoiceEntity->getInvoiceUid()."QT");
+            
             $travelEntity->setInvoice($invoiceEntity);
-
+            // $em->persist($invoiceEntity);
             $em->persist($travelEntity);
             $em->flush();
 
@@ -341,12 +344,16 @@ class TravelService
 
     private function calculateListPrice($data, $individualPrice)
     {
-        $numberOfList = count($data["tavelList"]);
-        if ($numberOfList > 0) {
-            return $numberOfList * $individualPrice;
-        } else {
-            return 0;
+        // var_dump($data["travelList"]);
+        if(!is_null($data["travelList"])){
+            $numberOfList = count($data["tavelList"]);
+            if ($numberOfList > 0) {
+                return $numberOfList * $individualPrice;
+            } else {
+                return 0;
+            }
         }
+       
     }
 
     private function durationOfTravel($data)

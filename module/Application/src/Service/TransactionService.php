@@ -59,11 +59,11 @@ class TransactionService
     {
         $invoiceEntity = new Invoice();
         $entityManager = $this->entityManager;
-
+        $uid = self::invoiceUid();
         $invoiceEntity->setAmount($data['amount'])
             ->setCreatedOn(new \Datetime())
             ->setInvoiceUuid(self::invoiceUuid())
-            ->setInvoiceUid(self::invoiceUid())
+            ->setInvoiceUid($uid.$data["invcode"])
             ->setDescription($data["desc"])
             ->setIsOpen(TRUE)
             ->setUser($data["user"])
@@ -71,6 +71,7 @@ class TransactionService
             ->setGeneratedOn(new \Datetime());
 
         $entityManager->persist($invoiceEntity);
+        // $invoiceEntity->setInvoiceUid($uid)
         return $invoiceEntity;
     }
 
@@ -121,7 +122,7 @@ class TransactionService
 
                 // ];
                 $mail = [
-                    "to"=>$invoiceEntity->getUser()->getEmail(),
+                    "to" => $invoiceEntity->getUser()->getEmail(),
                     "delivery_to" => $invoiceEntity->getUser()->getFullname(),
                     "amount" => $invoiceEntity->getAmount(),
                     "total" => $invoiceEntity->getAmount(),
@@ -130,7 +131,7 @@ class TransactionService
                     "tRef" => $transactionEntity->getTransactionUid(),
                     "description" => $invoiceEntity->getDescription(),
                 ];
-                $this->mailService->execute($mailData);
+                $this->mailtrap->sendReceiptMail($mail);
 
 
                 $em->flush();
@@ -198,7 +199,7 @@ class TransactionService
      * Get undocumented variable
      *
      * @return  MailtrapService
-     */ 
+     */
     public function getMailtrap()
     {
         return $this->mailtrap;
@@ -210,7 +211,7 @@ class TransactionService
      * @param  MailtrapService  $mailtrap  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setMailtrap(MailtrapService $mailtrap)
     {
         $this->mailtrap = $mailtrap;

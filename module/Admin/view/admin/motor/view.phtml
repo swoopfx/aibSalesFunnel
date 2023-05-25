@@ -1,5 +1,8 @@
 <?php
 // var_dump($data[0]["user"]["fullname"]);
+
+use Application\Service\MotorService;
+
 ?>
 <section class="section profile">
     <div class="row">
@@ -44,7 +47,7 @@
                     <div class="tab-content pt-2">
 
                         <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                          
+
                             <h5 class="card-title">Motor Insurance Details</h5>
 
                             <div class="row">
@@ -53,8 +56,13 @@
                             </div>
 
                             <div class="row">
+                                <div class="col-lg-3 col-md-4 label ">Vehicle reg. No.</div>
+                                <div class="col-lg-9 col-md-8"><strong><?= strtoupper($data["licenseNumber"]) ?></strong></div>
+                            </div>
+
+                            <div class="row">
                                 <div class="col-lg-3 col-md-4 label">Car Value</div>
-                                <div class="col-lg-9 col-md-8">&#8358; <?= $data["valueOfCar"] ?></div>
+                                <div class="col-lg-9 col-md-8"> <?= $this->currencyFormat($data["valueOfCar"], "NGN") ?></div>
                             </div>
 
                             <div class="row">
@@ -64,42 +72,109 @@
 
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 label">Vehichle License </div>
-                                <div class="col-lg-9 col-md-8"><a target="_blank" href="<?= $data["vehicleLicense"]["docUrl"] ?>" class="btn btn-sm"> Vehicle License Image</a>
+                                <div class="col-lg-9 col-md-8"><a target="_blank" href="<?= $data["vehicleLicense"]["docUrl"] ?>" class="btn btn-sm btn-primary"> Download Reg. Doc.</a>| <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
                                     <?php if ($data["vehicleLicense"]["mimeType"] == "image/png" || $data["vehicleLicense"]["mimeType"] == "image/jpeg") : ?>
                                         <div class="col-md-4">
                                             <br><br> <img height="200" src="<?= $data["vehicleLicense"]["docUrl"] ?>" alt="Profile" class="img-fluid rounded-start">
                                         </div>
                                     <?php else : ?>
-                                        <a href="<?= $data["vehicleLicense"]["docUrl"] ?>" target="_blank"><i class="fa fa-download"></i></a>
+                                        <a href="<?= $data["vehicleLicense"]["docUrl"] ?>" target="_blank"><i class="fa fa-file-pdf-o"></i></a>
                                     <?php endif; ?>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 label">Proof of Ownership</div>
-                                <?php if ($data["proofOfOwnership"]["mimeType"] == "image/png" || $data["proofOfOwnership"]["mimeType"] == "image/jpeg") : ?>
-                                    <br><br>
-                                    <div class="col-md-4">
-                                        <img src="<?= $data["proofOfOwnership"]["docUrl"] ?>" class="img-fluid rounded-start" alt="...">
-                                    </div>
-                                <?php else : ?>
-                                    <a href="<?= $data["proofOfOwnership"]["docUrl"] ?>"><i class="fa fa-download"></i></a>
-                                <?php endif; ?>
-
+                                <div class="col-lg-9 col-md-8"><a target="_blank" href="<?= $data["proofOfOwnership"]["docUrl"] ?>" class="btn btn-sm btn-primary"> Download Ownership Doc.</a>| <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                    <?php if ($data["proofOfOwnership"]["mimeType"] == "image/png" || $data["proofOfOwnership"]["mimeType"] == "image/jpeg") : ?>
+                                        <br><br>
+                                        <div class="col-md-4">
+                                            <img src="<?= $data["proofOfOwnership"]["docUrl"] ?>" class="img-fluid rounded-start" alt="...">
+                                        </div>
+                                    <?php else : ?>
+                                        <a href="<?= $data["proofOfOwnership"]["docUrl"] ?>"><i class="fa fa-download fa-xl"></i></a>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Means Of Identification </div>
-                                <?php if ($data["meansOfId"]["mimeType"] == "image/png" || $data["meansOfId"]["mimeType"] == "image/jpeg") : ?>
-                                    <br><br>
-                                    <div class="col-md-4">
-                                        <img src="<?= $data["meansOfId"]["docUrl"] ?>" class="img-fluid rounded-start" alt="...">
+                            <?php if ($data["coverType"]["id"] == MotorService::COVERT_TYPE_COMPREHENSIVE) : ?>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Means Of Identification </div>
+                                    <div class="col-lg-9 col-md-8"><a target="_blank" href="<?= $data["meansOfId"]["docUrl"] ?>" class="btn btn-sm btn-primary"> Download Customer ID</a>| <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                        <?php if ($data["meansOfId"]["mimeType"] == "image/png" || $data["meansOfId"]["mimeType"] == "image/jpeg") : ?>
+                                            <br><br>
+                                            <div class="col-md-4">
+                                                <img src="<?= $data["meansOfId"]["docUrl"] ?>" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                        <?php else : ?>
+                                            <a href="<?= $data["meansOfId"]["docUrl"] ?>"><i class="fa fa-download"></i></a>
+                                        <?php endif; ?>
                                     </div>
-                                <?php else : ?>
-                                    <a href="<?= $data["meansOfId"]["docUrl"] ?>"><i class="fa fa-download"></i></a>
-                                <?php endif; ?>
-                            </div>
+                                </div>
 
+                                <hr>
+                                <h3> Vehicle Image</h3>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Front Image </div>
+                                    <div class="col-lg-9 col-md-8"><a target="_blank" href="<?= $data["frontImage"]["docUrl"] ?>" class="btn btn-sm btn-primary"> Download Front Image</a>| <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+
+                                        <?php if ($data["frontImage"]["mimeType"] == "image/png" || $data["frontImage"]["mimeType"] == "image/jpeg") : ?>
+                                            <br><br>
+                                            <div class="col-md-4">
+                                                <img src="<?= $data["frontImage"]["docUrl"] ?>" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                        <?php else : ?>
+                                            <a href="<?= $data["frontImage"]["docUrl"] ?>"><i class="fa fa-download"></i></a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Back Image </div>
+                                    <div class="col-lg-9 col-md-8"><a target="_blank" href="<?= $data["backImage"]["docUrl"] ?>" class="btn btn-sm btn-primary"> Download Front Image</a>| <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+
+                                        <?php if ($data["backImage"]["mimeType"] == "image/png" || $data["backImage"]["mimeType"] == "image/jpeg") : ?>
+                                            <br><br>
+                                            <div class="col-md-4">
+                                                <img src="<?= $data["backImage"]["docUrl"] ?>" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                        <?php else : ?>
+                                            <a href="<?= $data["backImage"]["docUrl"] ?>"><i class="fa fa-download"></i></a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Dashboard Image </div>
+                                    <div class="col-lg-9 col-md-8"><a target="_blank" href="<?= $data["dashboardImage"]["docUrl"] ?>" class="btn btn-sm btn-primary"> Download Dashboard Image</a> | <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+
+                                        <?php if ($data["dashboardImage"]["mimeType"] == "image/png" || $data["dashboardImage"]["mimeType"] == "image/jpeg") : ?>
+                                            <br><br>
+                                            <div class="col-md-4">
+                                                <img src="<?= $data["dashboardImage"]["docUrl"] ?>" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                        <?php else : ?>
+                                            <a href="<?= $data["dashboardImage"]["docUrl"] ?>"><i class="fa fa-download"></i></a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Interior Image </div>
+                                    <div class="col-lg-9 col-md-8"><a target="_blank" href="<?= $data["interiorImage"]["docUrl"] ?>" class="btn btn-sm btn-primary"> Download Interior Image</a>| <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+
+                                        <?php if ($data["interiorImage"]["mimeType"] == "image/png" || $data["backImage"]["mimeType"] == "image/jpeg") : ?>
+                                            <br><br>
+                                            <div class="col-md-4">
+                                                <img src="<?= $data["interiorImage"]["docUrl"] ?>" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                        <?php else : ?>
+                                            <a href="<?= $data["interiorImage"]["docUrl"] ?>"><i class="fa fa-download"></i></a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+
+                            <?php endif; ?>
+                            <!--
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 label">Address</div>
                                 <div class="col-lg-9 col-md-8">A108 Adam Street, New York, NY 535022</div>
@@ -114,6 +189,8 @@
                                 <div class="col-lg-3 col-md-4 label">Email</div>
                                 <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
                             </div>
+
+                                    -->
 
                         </div>
 

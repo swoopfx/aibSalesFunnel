@@ -99,7 +99,7 @@ class TravelController extends AbstractActionController
         if ($id == NULL) {
             return $this->redirect()->toRoute("admin");
         } else {
-            $data = $em->createQueryBuilder()->select(["a", "i", "u", "t", "v", "s", "iu"])
+            $data = $em->createQueryBuilder()->select(["a", "i", "u", "t", "v", "s", "iu", "lii"])
                 ->from(TravelInsurance::class, "a")
                 ->leftJoin("a.invoice", "i")
                 ->leftJoin("a.user", "u")
@@ -107,6 +107,7 @@ class TravelController extends AbstractActionController
                 ->leftJoin("a.nationality", "v")
                 ->leftJoin("i.status", "s")
                 ->leftJoin("i.user", "iu")
+                ->leftJoin("a.travelList", "lii")
                 ->where("a.travelUuid = :uuid")
                 ->setParameters([
                     "uuid" => $id,

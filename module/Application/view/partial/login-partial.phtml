@@ -9,7 +9,7 @@
             <div class="card-header cursor-pointer">
                 <!--begin::Card title-->
                 <div class="card-title m-0">
-                    <h3 class="fw-bolder m-0">Login Details</h3>
+                    <h3 class="fw-bolder m-0"> {{loginOrRegister}}</h3>
                 </div>
                 <!--end::Card title-->
                 <!--begin::Action-->
@@ -84,7 +84,7 @@
                 <!--end::Input group-->
                 <!--begin::Input group-->
 
-               
+
                 <!--end::Notice-->
             </div>
         </div>
@@ -95,6 +95,31 @@
     <!--begin::Chart widget 2-->
 
     <!--end::List Widget 4-->
+    <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed p-6">
+    <!--begin::Icon-->
+    <!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
+    <span class="svg-icon svg-icon-2tx svg-icon-warning me-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="black" />
+            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="black" />
+            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="black" />
+        </svg>
+    </span>
+    <!--end::Svg Icon-->
+    <!--end::Icon-->
+    <!--begin::Wrapper-->
+    <div class="d-flex flex-stack flex-grow-1">
+        <!--begin::Content-->
+        <div class="fw-bold">
+           
+            <div class="fs-8 text-gray-700">An individual who assists an applicant to complete this proposal form for insurance shall be deemed to have done so as the agent of the applicant in accordance with section 54(2), insurance act, 2023
+                <!--<a class="fw-bolder" href="../dist/account/billing.html">Add Payment Method</a>. -->
+            </div>
+        </div>
+        <!--end::Content-->
+    </div>
+    <!--end::Wrapper-->
+</div>
 </div>
 
 
@@ -110,6 +135,7 @@
                 isSubmitRegister: false,
                 isSubmitEmailStatus: false,
                 userREmail: "",
+                loginOrRegister: "Login Details",
             }
         },
 
@@ -139,6 +165,7 @@
                             if (res.data.isRegister) {
                                 this.isRegisterForm = true;
                                 this.userREmail = this.$refs.vEmail.value;
+                                this.loginOrRegister = "Registration Details"
                             } else if (!res.data.isRegister) {
                                 // this.sessionUid = res.data.data.uid;
                                 // this.$sessionDetails = res.data.data;

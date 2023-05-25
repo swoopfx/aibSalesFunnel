@@ -89,13 +89,33 @@ class Settings
     private $companyEmailSender;
 
     /**
+     * QoreId / VerifyMe CientId
+     * @ORM\Column(nullable=true)
+     * @var string
+     */
+    private $qoreIdClientId;
+
+    /**
+     * QoreId / VerifyMe Secret Key
+     * @ORM\Column(nullable=true)
+     * @var string
+     */
+    private $qoreIdSecretKey;
+
+    /**
      * Undocumented variable
      * @ORM\Column(nullable=true)
      * @var string
      */
     private $baseUrl;
 
-    // private 
+    /**
+     * Undocumented variable
+     * @ORM\Column(type="text", nullable=true)
+     * @var string
+     */
+    private  $terms;
+
 
 
     // private $
@@ -307,7 +327,7 @@ class Settings
      * Get platforms like sendInBlue
      *
      * @return  string
-     */ 
+     */
     public function getCompanyEmailSender()
     {
         return $this->companyEmailSender;
@@ -319,7 +339,7 @@ class Settings
      * @param  string  $companyEmailSender  platforms like sendInBlue
      *
      * @return  self
-     */ 
+     */
     public function setCompanyEmailSender(string $companyEmailSender)
     {
         $this->companyEmailSender = $companyEmailSender;
@@ -331,7 +351,7 @@ class Settings
      * Get undocumented variable
      *
      * @return  string
-     */ 
+     */
     public function getBaseUrl()
     {
         return $this->baseUrl;
@@ -343,10 +363,82 @@ class Settings
      * @param  string  $baseUrl  Undocumented variable
      *
      * @return  self
-     */ 
+     */
     public function setBaseUrl(string $baseUrl)
     {
         $this->baseUrl = $baseUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  string
+     */
+    public function getTerms()
+    {
+        return $this->terms;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  string  $terms  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setTerms(string $terms)
+    {
+        $this->terms = $terms;
+
+        return $this;
+    }
+
+    /**
+     * Get qoreId / VerifyMe Secret Key
+     *
+     * @return  string
+     */
+    public function getQoreIdSecretKey()
+    {
+        return $this->qoreIdSecretKey;
+    }
+
+    /**
+     * Set qoreId / VerifyMe Secret Key
+     *
+     * @param  string  $qoreIdSecretKey  QoreId / VerifyMe Secret Key
+     *
+     * @return  self
+     */
+    public function setQoreIdSecretKey(string $qoreIdSecretKey)
+    {
+        $this->qoreIdSecretKey = $qoreIdSecretKey;
+
+        return $this;
+    }
+
+    /**
+     * Get qoreId / VerifyMe CientId
+     *
+     * @return  string
+     */
+    public function getQoreIdClientId()
+    {
+        return $this->qoreIdClientId;
+    }
+
+    /**
+     * Set qoreId / VerifyMe CientId
+     *
+     * @param  string  $qoreIdClientId  QoreId / VerifyMe CientId
+     *
+     * @return  self
+     */
+    public function setQoreIdClientId(string $qoreIdClientId)
+    {
+        $this->qoreIdClientId = $qoreIdClientId;
 
         return $this;
     }

@@ -6,6 +6,7 @@ namespace Application\Controller;
 
 use Application\Entity\Country;
 use Application\Entity\Gender;
+use Application\Entity\Identification;
 use Application\Entity\Invoice;
 use Application\Entity\Settings;
 use Application\Entity\User;
@@ -110,6 +111,9 @@ class IndexController extends AbstractActionController
 
         return new ViewModel();
     }
+
+
+    
 
     public function editProfileAction()
     {
@@ -343,7 +347,8 @@ class IndexController extends AbstractActionController
     }
 
 
-    public function contactAction(){
+    public function contactAction()
+    {
         $viewModel = new ViewModel();
         return $viewModel;
     }
@@ -372,8 +377,24 @@ class IndexController extends AbstractActionController
     }
 
 
+    public function getIdentificationsAction()
+    {
+        $jsonModel = new JsonModel();
+        $data = $this->entityManager
+            ->getRepository(Identification::class)
+            ->createQueryBuilder("s")
+            ->getQuery()
+            ->getArrayResult();
+        $jsonModel->setVariables([
+            "data" => $data
+        ]);
+        return $jsonModel;
+    }
 
-    public function termsAndCOnditionsAction(){
+
+
+    public function termsAndCOnditionsAction()
+    {
         $viewModel = new ViewModel();
 
         return $viewModel;

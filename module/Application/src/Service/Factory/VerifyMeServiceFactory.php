@@ -31,6 +31,7 @@ class VerifyMeServiceFactory implements FactoryInterface
             "clientId" => $clientId,
             "secret" => $secretKey,
         ];
+        $qoreIdInstance->setHeaders($header);
         $qoreIdInstance->setRawBody(json_encode($data));
         $res = $qoreIdInstance->send();
         if ($res->isSuccess()) {

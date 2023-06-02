@@ -1,56 +1,6 @@
-<div class="row mb-7">
-    <!--begin::Label-->
-    <label class="col-lg-4 fw-bold text-muted">Customer BVN or CAC Number</label>
-    <!--end::Label-->
-    <!--begin::Col-->
-    <div class="col-lg-8">
-        <input type="text"  ref="rBVN" class="form-control form-control-solid"  placeholder="Customer BVN" required />
-    </div>
-    <!--end::Col-->
-</div>
+<?= $this->partial("partials-identity-form-logic"); ?>
 
-<div class="row mb-7">
-    <!--begin::Label-->
-    <label class="col-lg-4 fw-bold text-muted">User Email</label>
-    <!--end::Label-->
-    <!--begin::Col-->
-    <div class="col-lg-8">
-        <input type="text" v-model="userREmail" ref="vREmail" class="form-control form-control-solid" id='lEmail' name="lEmail" placeholder="Email Address" required />
-    </div>
-    <!--end::Col-->
-</div>
 
-<div class="row mb-7">
-    <!--begin::Label-->
-    <label class="col-lg-4 fw-bold text-muted">Verify Email</label>
-    <!--end::Label-->
-    <!--begin::Col-->
-    <div class="col-lg-8">
-        <input type="text" ref="vvREmail" onpaste="return false;" ondrop="return false;" autocomplete="off" class="form-control form-control-solid" id='vvREmail' name="vvREmail" placeholder="Verify Email" required />
-    </div>
-    <!--end::Col-->
-</div>
-
-<div class="row mb-7">
-    <!--begin::Label-->
-    <label class="col-lg-4 fw-bold text-muted">User Phone Number</label>
-    <!--end::Label-->
-    <!--begin::Col-->
-    <div class="col-lg-8">
-        <input type="text" ref="vRPhone" class="form-control form-control-solid" id='vRPhone' name="vRPhone" placeholder="08012121212" required />
-    </div>
-    <!--end::Col-->
-</div>
-<div class="row mb-7">
-    <!--begin::Label-->
-    <label class="col-lg-4 fw-bold text-muted">User Full Name <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="This must be your legal name as it would be used as reference in all certificate issued"></i></label>
-    <!--end::Label-->
-    <!--begin::Col-->
-    <div class="col-lg-8">
-        <input type="text" ref="vRFullName" class="form-control form-control-solid" id='vRFullName' name="vRFullName" placeholder="Segun Chukwu Hasan" required />
-    </div>
-    <!--end::Col-->
-</div>
 <div class="row mb-7">
 
     <label class="form-check form-switch form-check-custom form-check-solid">
@@ -75,7 +25,7 @@
     <!--end::Col-->
 </div>
 <div class="row mb-7">
-    <button v-if="!isSubmitRegister" @click="registerUser()" type="button" class="btn btn-lg block btn-primary" data-kt-stepper-action="next">Register
+    <button v-if="!isSubmitRegister" @click="registerWithVerifyMe()" type="button" class="btn btn-lg block btn-primary" data-kt-stepper-action="next">Register
         <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
         <span class="svg-icon svg-icon-3 ms-1 me-0">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

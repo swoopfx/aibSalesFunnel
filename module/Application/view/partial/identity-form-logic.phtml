@@ -1,0 +1,40 @@
+<div class="row mb-7">
+    <!--begin::Label-->
+    <label class=" col-lg-4  required fs-6 fw-bold form-label mb-2">Identification Type</label>
+    <!--end::Label-->
+    <!--begin::Col-->
+    <div class="col-lg-8">
+        <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" @change="selectIdentification($event)" data-placeholder="Select a Motor category">
+            <option value="0">Select Identification</option>
+            <option v-for="nat  in identifications" :value="nat.id">{{nat.type}}
+
+            </option>
+
+
+        </select>
+    </div>
+    <!--end::Col-->
+</div>
+
+<div class="row mb-7">
+    <!--begin::Label-->
+    <label class="col-lg-4 fw-bold text-muted">Identification Number</label>
+    <!--end::Label-->
+    <!--begin::Col-->
+    <div class="col-lg-8">
+        <input type="text" ref="rId" class="form-control form-control-solid" placeholder="Customer Identity" required />
+    </div>
+    <!--end::Col-->
+</div>
+
+<div class="row mb-7">
+    <!--begin::Label-->
+    <label class="col-lg-4 fw-bold text-muted">User Email</label>
+    <!--end::Label-->
+    <!--begin::Col-->
+    <div class="col-lg-8">
+        <input type="text" v-model="userREmail" ref="vREmail" class="form-control form-control-solid" id='lEmail' name="lEmail" placeholder="Email Address" required />
+    </div>
+    <!--end::Col-->
+</div>
+

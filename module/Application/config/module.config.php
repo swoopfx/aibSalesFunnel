@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Application;
 
+use Application\Controller\AppController;
 use Application\Controller\AuthController;
+use Application\Controller\Factory\AppControllerFactory;
 use Application\Controller\Factory\AuthControllerFactory;
 use Application\Controller\Factory\IndexControllerFactory;
 use Application\Controller\Factory\InvoiceControllerFactory;
@@ -28,6 +30,7 @@ use Application\Service\Factory\TransactionServiceFactory;
 use Application\Service\Factory\TravelServiceFactory;
 use Application\Service\Factory\TwilioSendgridServiceFactory;
 use Application\Service\Factory\UploadServiceFactory;
+use Application\Service\Factory\VerifyMeServiceFactory;
 use Application\Service\FunnelSession;
 use Application\Service\GeneralService;
 use Application\Service\MailService;
@@ -39,6 +42,7 @@ use Application\Service\TransactionService;
 use Application\Service\TravelService;
 use Application\Service\TwilioSendgridService;
 use Application\Service\UploadService;
+use Application\Service\VerifyMeService;
 use Application\ViewHelper\InvoiceStatusHelper;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Laminas\Router\Http\Literal;
@@ -68,6 +72,21 @@ return [
                     ),
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
+            'api' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/apii[/:action[/:id]]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9_-]*'
+                    ),
+                    'defaults' => [
+                        'controller' => AppController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -176,7 +195,7 @@ return [
             TravelController::class => TravelControllerFactory::class,
             MotorController::class => MotorControllerFactory::class,
             InvoiceController::class => InvoiceControllerFactory::class,
-
+            AppController::class => AppControllerFactory::class
         ],
     ],
     'view_manager' => [
@@ -199,6 +218,7 @@ return [
             "partials-login" => __DIR__ . '/../view/partial/login-partial.phtml',
             "partials-form-login" => __DIR__ . '/../view/partial/login-form-partial.phtml',
             "partials-form-register" => __DIR__ . '/../view/partial/register-form-partial.phtml',
+            "partials-identity-form-logic" => __DIR__ . '/../view/partial/identity-form-logic.phtml',
 
             // mail configuration 
             "transaction-success-email" => __DIR__ . '/../view/email/transaction-success.phtml',
@@ -269,7 +289,8 @@ return [
             SendInBlueMarketing::class => SendInBlueMarketingFactory::class,
             MailService::class => MailServiceFactory::class,
             MailtrapService::class => MailtrapServiceFactory::class,
-            TwilioSendgridService::class => TwilioSendgridServiceFactory::class
+            TwilioSendgridService::class => TwilioSendgridServiceFactory::class,
+            VerifyMeService::class => VerifyMeServiceFactory::class
         ],
         "aliases" => [
             "general_service" => GeneralService::class,
@@ -280,7 +301,8 @@ return [
             "send_in_blue" => SendInBlueMarketing::class,
             "motor_service" => MotorService::class,
             "mailtrap_service" => MailtrapService::class,
-            
+            "verify_me_service" => VerifyMeService::class,
+
         ]
     ],
 

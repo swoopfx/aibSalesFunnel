@@ -96,30 +96,30 @@
 
     <!--end::List Widget 4-->
     <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed p-6">
-    <!--begin::Icon-->
-    <!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
-    <span class="svg-icon svg-icon-2tx svg-icon-warning me-4">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="black" />
-            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="black" />
-            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="black" />
-        </svg>
-    </span>
-    <!--end::Svg Icon-->
-    <!--end::Icon-->
-    <!--begin::Wrapper-->
-    <div class="d-flex flex-stack flex-grow-1">
-        <!--begin::Content-->
-        <div class="fw-bold">
-           
-            <div class="fs-8 text-gray-700">An individual who assists an applicant to complete this proposal form for insurance shall be deemed to have done so as the agent of the applicant in accordance with section 54(2), insurance act, 2023
-                <!--<a class="fw-bolder" href="../dist/account/billing.html">Add Payment Method</a>. -->
+        <!--begin::Icon-->
+        <!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
+        <span class="svg-icon svg-icon-2tx svg-icon-warning me-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="black" />
+                <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="black" />
+                <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="black" />
+            </svg>
+        </span>
+        <!--end::Svg Icon-->
+        <!--end::Icon-->
+        <!--begin::Wrapper-->
+        <div class="d-flex flex-stack flex-grow-1">
+            <!--begin::Content-->
+            <div class="fw-bold">
+
+                <div class="fs-8 text-gray-700">An individual who assists an applicant to complete this proposal form for insurance shall be deemed to have done so as the agent of the applicant in accordance with section 54(2), insurance act, 2023
+                    <!--<a class="fw-bolder" href="../dist/account/billing.html">Add Payment Method</a>. -->
+                </div>
             </div>
+            <!--end::Content-->
         </div>
-        <!--end::Content-->
+        <!--end::Wrapper-->
     </div>
-    <!--end::Wrapper-->
-</div>
 </div>
 
 
@@ -127,6 +127,8 @@
     const loginApp = Vue.createApp({
         data() {
             return {
+                identifications: [],
+                selectedIdentification: "",
                 sessionUid: null,
                 sessionDetails: {},
                 sessionDetailsStrigify: "{}",
@@ -142,9 +144,55 @@
         mounted() {
             // this.welcome();
             this.getSession();
+            this.getIdentifications();
         },
 
         methods: {
+
+            getIdentifications() {
+                axios.get("/app/get-identifications").then(res => {
+                    if (res.status == 200) {
+                        this.identifications = res.data.data;
+                    }
+                })
+            },
+
+            selectIdentification(evt) {
+                this.selectedIdentification = evt.target.value;
+            },
+
+            /**
+             * This function  requests for identification details based on unique ID 
+             */
+            registerWithVerifyMe() {
+                this.isSubmitRegister = true;
+                if (this.$refs.rId.value == "" || this.$refs.vREmail.value == "" || this.selectIdentification == "") {
+                    this.$toast.open({
+                        message: "A required  field is empty",
+                        type: "error",
+                        position: "top-right",
+                        duration: 30000,
+                        dismissible: true
+                    });
+                    this.isSubmitRegister = false;
+                } else {
+                    let formData = new FormData();
+                    formData.append("type", this.selectedIdentification);
+                    formData.append("value", this.$refs.rId.value);
+                    formData.append("email", this.$refs.vREmail.value);
+
+                    axios.post("/apii/request-identity-data", formData).then(res => {
+                        if (res.status == 201) {
+                            console.log(res.data.data);
+                            this.isSubmitRegister = false;
+                        }
+                    }).catch(err => {
+                        console.log(err.response.data.messages)
+                        this.isSubmitRegister = false;
+                    });
+                }
+
+            },
 
             emailStatus() {
                 this.isSubmitEmailStatus = true;

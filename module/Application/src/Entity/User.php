@@ -3,6 +3,8 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Application\Entity\Identification;
+use Application\Entity\UserCategory;
 
 /**
  * @ORM\Entity
@@ -32,6 +34,13 @@ class User
      * @ORM\Column(length=30, nullable=false, unique=true)
      */
     protected $phonenumber;
+
+    /**
+     * Undocumented variable
+     * @ORM\ManyToOne(targetEntity="Application\Entity\UserCategory")
+     * @var UserCategory
+     */
+    protected $userCategory;
 
 
     /**
@@ -93,6 +102,20 @@ class User
      */
 
     private $uuid;
+
+    /**
+     * This is the activce idenfier being used 
+     * @ORM\ManyToOne(targetEntity="Identification")
+     * @var Identification
+     */
+    private $identifier;
+
+    /**
+     * Undocumented variable
+     * @ORM\Column(type="boolean", nullable=true, options={"default" : 0})
+     * @var bool
+     */
+    private $isIdentifier;
 
     /**
      * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
@@ -379,6 +402,54 @@ class User
     public function setUuid($uuid)
     {
         $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  Identification
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  Identification  $identifier  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setIdentifier(Identification $identifier)
+    {
+        $this->identifier = $identifier;
+
+        return $this;
+    }
+
+    /**
+     * Get undocumented variable
+     *
+     * @return  boolean
+     */
+    public function getIsIdentifier()
+    {
+        return $this->isIdentifier;
+    }
+
+    /**
+     * Set undocumented variable
+     *
+     * @param  boolean  $isIdentifier  Undocumented variable
+     *
+     * @return  self
+     */
+    public function setIsIdentifier(bool $isIdentifier)
+    {
+        $this->isIdentifier = $isIdentifier;
 
         return $this;
     }
